@@ -4,18 +4,59 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>1. Khởi động – Trạm kiểm soát vũ trụ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <link rel="stylesheet" href="../assets/style.css">
+<style>
+  video { width:100%; border-radius:12px; border:1px solid var(--vien); background:#000; display:block; }
+</style>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="../assets/chung.js"></script>
 </head>
 <body>
 <main>
   <div class="nhan">Trạm kiểm soát vũ trụ · Hoạt động 1/4</div>
   <h1>1. Khởi động</h1>
-  <p class="phu">5 phút</p>
+  <p class="phu">5 phút · xem tình huống mở đầu và trả lời câu hỏi</p>
 
-  <div class="khung-trong">
-    <b>Trang này sẽ có:</b>
-    <ul><li>Video tình huống mở đầu</li><li>Câu hỏi để học sinh trả lời ngay trên web</li></ul>
-  </div>
+  <section class="khoi">
+    <h2>Tình huống mở đầu</h2>
+    <!-- Đặt file video tên video.mp4 vào cùng thư mục này -->
+    <video id="video" controls preload="metadata" playsinline src="video.mp4"></video>
+    <p class="phu" id="khong-co-video" hidden>Video được chiếu trên màn hình chính của lớp.</p>
+  </section>
+
+  <section class="khoi">
+    <h2>Trả lời câu hỏi</h2>
+    <p class="de-bai">Câu 1. Khi phác thảo bản vẽ, người kỹ sư dùng hình ảnh gì để tượng trưng cho đường đi?</p>
+    <textarea id="tl-1" placeholder="Câu trả lời của em"></textarea>
+    <p class="de-bai" style="margin-top:16px">Câu 2. Vì sao bản thảo trong thực tế lại không thi công hoàn chỉnh?</p>
+    <textarea id="tl-2" placeholder="Câu trả lời của em"></textarea>
+    <p class="phu" id="da-luu" style="font-size:.85rem;margin-top:8px">&nbsp;</p>
+  </section>
+
+  <section class="khoi">
+    <h2>Vào bài</h2>
+    <button class="nut chinh" data-hien="vao-bai">Nhận nhiệm vụ của trạm</button>
+    <div id="vao-bai" hidden>
+      <div class="chot">
+        <p><b>Trạm kiểm soát vũ trụ.</b> Mỗi em là một nhân viên của trung tâm kiểm soát dự báo vũ trụ; mỗi trung tâm quan sát hàng trăm vệ tinh nhỏ xung quanh.</p>
+        <p>Một siêu tân tinh vừa nổ. Hàng trăm thiên thạch đang lao vào không phận, nguy cơ va chạm giữa thiên thạch và vệ tinh ngày càng cao. Nhiệm vụ của các trạm: dự báo hướng đi của thiên thạch; thiên thạch nào có khả năng va chạm với vệ tinh thì báo cáo ngay về trụ sở chính.</p>
+        <p>Vũ trụ được mô phỏng bởi không gian $Oxyz$. Mỗi thiên thạch hoặc vệ tinh di chuyển trên một đường thẳng, xuất phát từ điểm $M_0(x_0;y_0;z_0)$, theo hướng của vectơ $\vec u = (a;b;c)$.</p>
+        <p><b>Muốn dự báo va chạm, trước hết phải viết được phương trình của đường thẳng đó.</b></p>
+      </div>
+      <h3>Luật tính điểm</h3>
+      <table class="bang">
+        <tr><th>Mức độ câu hỏi</th><th>Radar Points (RP)</th></tr>
+        <tr><td>Nhận biết</td><td>+10 RP mỗi câu</td></tr>
+        <tr><td>Thông hiểu</td><td>+20 RP mỗi câu</td></tr>
+        <tr><td>Vận dụng, thực tế</td><td>+40 RP mỗi câu</td></tr>
+      </table>
+      <h3>Thẻ kỹ năng của mỗi trạm</h3>
+      <p><b>Thẻ Cứu hộ chuyên môn:</b> được hỏi giáo viên gợi ý một bước mà không bị trừ điểm.</p>
+      <p><b>Thẻ Tăng tốc:</b> nhân đôi điểm của một câu vận dụng nếu giải đúng trong vòng 60 giây.</p>
+    </div>
+  </section>
 
   <nav class="dieu-huong">
     <span class="trong"></span>
@@ -23,5 +64,29 @@
     <a href="../noi-dung-1-2/">2. Nội dung 1 và 2 →</a>
   </nav>
 </main>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const video = document.getElementById('video');
+  const baoLoi = () => { video.hidden = true; document.getElementById('khong-co-video').hidden = false; };
+  video.addEventListener('error', baoLoi);
+  if (video.error) baoLoi();
+
+  const KHOA = 'tkv-khoi-dong';
+  const da = docMay(KHOA, {});
+  const ghi = document.getElementById('da-luu');
+  let hen = null;
+  ['tl-1', 'tl-2'].forEach(id => {
+    const o = document.getElementById(id);
+    o.value = da[id] || '';
+    o.addEventListener('input', () => {
+      da[id] = o.value;
+      luuMay(KHOA, da);
+      ghi.textContent = 'Đã lưu trên máy này.';
+      clearTimeout(hen);
+      hen = setTimeout(() => { ghi.innerHTML = '&nbsp;'; }, 1500);
+    });
+  });
+});
+</script>
 </body>
 </html>

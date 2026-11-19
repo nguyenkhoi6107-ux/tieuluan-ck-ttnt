@@ -4,18 +4,153 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>3. Báo động thật hay giả? – Trạm kiểm soát vũ trụ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 <link rel="stylesheet" href="../assets/style.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="../assets/chung.js"></script>
+<script defer src="tram.js"></script>
 </head>
 <body>
-<main>
+<main class="rong">
   <div class="nhan">Trạm kiểm soát vũ trụ · Hoạt động 3/4</div>
   <h1>3. Báo động thật hay giả?</h1>
-  <p class="phu">10 phút · vị trí tương đối của hai đường thẳng</p>
+  <p class="phu">10 phút · Nội dung 3: vị trí tương đối của hai đường thẳng</p>
 
-  <div class="khung-trong">
-    <b>Trang này sẽ có:</b>
-    <ul><li>Radar 2D: thiên thạch T1 và bốn vệ tinh V1–V4</li><li>Mô phỏng 3D xoay được, bật/tắt từng vệ tinh</li><li>Ô để mỗi trạm nộp kết luận</li></ul>
-  </div>
+  <section class="khoi">
+    <h2>Tình huống</h2>
+    <p>Radar của trung tâm vừa phát <b>hai cảnh báo va chạm</b> tại $(6;1)$ và $(8;2)$. Radar chỉ đo được hai tọa độ $x, y$, nên chưa thể khẳng định cả hai cảnh báo đều đúng. Mỗi trạm nhận một vệ tinh, kiểm tra quỹ đạo của vệ tinh đó với thiên thạch T1 trong không gian $Oxyz$, rồi báo cáo về trụ sở.</p>
+    <table class="bang" id="bang-quy-dao">
+      <thead><tr><th>Quỹ đạo</th><th>Đi qua điểm</th><th>Vectơ chỉ phương</th></tr></thead>
+      <tbody>
+        <tr><td><span class="cham" style="background:var(--t1)"></span>Thiên thạch T1</td><td>$A(2;-1;3)$</td><td>$\vec u = (2;1;-2)$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v1)"></span>Vệ tinh V1</td><td>$B(0;2;1)$</td><td>$\vec v_1 = (-4;-2;4)$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v2)"></span>Vệ tinh V2</td><td>$C(4;0;1)$</td><td>$\vec v_2 = (-2;-1;2)$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v3)"></span>Vệ tinh V3</td><td>$D(5;1;-2)$</td><td>$\vec v_3 = (1;0;1)$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v4)"></span>Vệ tinh V4</td><td>$E(5;2;-2)$</td><td>$\vec v_4 = (1;0;1)$</td></tr>
+      </tbody>
+    </table>
+    <p class="phu" style="margin-top:10px">T1 chính là đường thẳng $d$ ở Ví dụ 1.</p>
+  </section>
+
+  <section class="khoi" id="mo-phong">
+    <h2>Radar và mô phỏng 3D</h2>
+    <div class="hai-cot">
+      <div>
+        <div class="man-hinh"><canvas id="radar" aria-label="Radar mặt phẳng Oxy"></canvas><span class="goc">Radar · chỉ có x, y</span></div>
+      </div>
+      <div>
+        <div class="man-hinh"><canvas id="khong-gian" aria-label="Mô phỏng 3D năm quỹ đạo"></canvas><span class="goc">Không gian Oxyz · kéo để xoay</span></div>
+      </div>
+    </div>
+    <div class="dieu-khien" id="bat-tat"></div>
+    <div class="dieu-khien">
+      <button class="nut" id="goc-tren">Nhìn từ trên xuống (giống radar)</button>
+      <button class="nut" id="goc-nghieng">Góc nghiêng</button>
+      <button class="nut" id="duong-dong">Đường dóng tại hai điểm cảnh báo</button>
+    </div>
+  </section>
+
+  <section class="khoi" id="phieu">
+    <h2>Phiếu báo cáo của trạm</h2>
+
+    <div id="buoc-nhan">
+      <p>Chọn trạm và vệ tinh được giao, rồi bấm <b>Nhận nhiệm vụ</b>.</p>
+      <div class="dieu-khien">
+        <label>Trạm số
+          <select id="chon-tram">
+            <option value="">--</option>
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+            <option>5</option><option>6</option><option>7</option><option>8</option>
+          </select>
+        </label>
+        <label style="margin-left:12px">Vệ tinh
+          <select id="chon-ve-tinh">
+            <option value="">--</option>
+            <option>V1</option><option>V2</option><option>V3</option><option>V4</option>
+          </select>
+        </label>
+        <button class="nut chinh" id="nhan-nhiem-vu" style="margin-left:12px">Nhận nhiệm vụ</button>
+      </div>
+    </div>
+
+    <div id="nhiem-vu" hidden>
+      <p id="dang-lam" class="de-bai"></p>
+
+      <div class="dieu-khien">
+        <button class="nut" id="the-cuu-ho">Thẻ Cứu hộ chuyên môn</button>
+        <button class="nut" id="the-tang-toc">Thẻ Tăng tốc</button>
+        <span style="margin-left:auto">Điểm của trạm: <span class="diem" id="tong-rp">0 RP</span></span>
+      </div>
+      <p class="phu" id="ghi-chu-the" style="font-size:.9rem"></p>
+
+      <!-- Câu 1 -->
+      <div class="hop" id="cau-1">
+        <h3 style="margin-top:0">Câu 1 · Nhận biết <span class="diem">+10 RP</span></h3>
+        <p>Trên mô phỏng 3D, chỉ bật T1 và vệ tinh của trạm, xoay nhiều góc nhìn. Dự đoán: hai quỹ đạo có điểm chung không?</p>
+        <div class="lua-chon">
+          <label><input type="radio" name="c1" value="co"> Có điểm chung</label>
+          <label><input type="radio" name="c1" value="khong"> Không có điểm chung</label>
+        </div>
+        <button class="nut chinh" id="nop-1">Nộp câu 1</button>
+        <div class="phan-hoi" id="ph-1" hidden></div>
+      </div>
+
+      <!-- Câu 2 -->
+      <div class="hop" id="cau-2">
+        <h3 style="margin-top:0">Câu 2 · Thông hiểu <span class="diem">+20 RP</span></h3>
+        <p>Chứng minh bằng tính toán. Gọi $\vec v$ là vectơ chỉ phương của vệ tinh, <span id="ten-diem-ve-tinh">M</span> là điểm vệ tinh đi qua.</p>
+        <p>a) Hai vectơ chỉ phương $\vec u$ và $\vec v$ có cùng phương không?</p>
+        <div class="lua-chon">
+          <label><input type="radio" name="c2-cp" value="co"> Cùng phương</label>
+          <label><input type="radio" name="c2-cp" value="khong"> Không cùng phương</label>
+        </div>
+        <div id="nhanh-cung-phuong" hidden>
+          <p>b) $\vec v = k\,\vec u$ với $k =$ <input type="text" class="so" id="c2-k" inputmode="decimal" autocomplete="off"></p>
+          <p>c) Điểm của vệ tinh có thuộc T1 không?</p>
+          <div class="lua-chon">
+            <label><input type="radio" name="c2-thuoc" value="co"> Thuộc T1</label>
+            <label><input type="radio" name="c2-thuoc" value="khong"> Không thuộc T1</label>
+          </div>
+        </div>
+        <div id="nhanh-khong-cung-phuong" hidden>
+          <p>b) <span id="nhan-tich">$[\vec u,\vec v]\cdot\overrightarrow{AM}$</span> $=$ <input type="text" class="so" id="c2-tich" inputmode="decimal" autocomplete="off"></p>
+        </div>
+        <p>Kết luận: T1 và vệ tinh của trạm</p>
+        <div class="lua-chon">
+          <label><input type="radio" name="c2-vt" value="trung"> trùng nhau</label>
+          <label><input type="radio" name="c2-vt" value="song-song"> song song</label>
+          <label><input type="radio" name="c2-vt" value="cat"> cắt nhau</label>
+          <label><input type="radio" name="c2-vt" value="cheo"> chéo nhau</label>
+        </div>
+        <button class="nut chinh" id="nop-2">Nộp câu 2</button>
+        <div class="phan-hoi" id="ph-2" hidden></div>
+      </div>
+
+      <!-- Câu 3 -->
+      <div class="hop" id="cau-3">
+        <h3 style="margin-top:0">Câu 3 · Vận dụng <span class="diem">+40 RP</span> <span class="dong-ho" id="dem-tang-toc"></span></h3>
+        <p>Trong hai cảnh báo trên radar, cảnh báo nào là báo động thật? Điểm nguy hiểm có tọa độ nào trong $Oxyz$?</p>
+        <div class="lua-chon">
+          <label><input type="radio" name="c3" value="1"> Cảnh báo tại $(6;1)$</label>
+          <label><input type="radio" name="c3" value="2"> Cảnh báo tại $(8;2)$</label>
+          <label><input type="radio" name="c3" value="ca-hai"> Cả hai</label>
+          <label><input type="radio" name="c3" value="khong"> Không cảnh báo nào</label>
+        </div>
+        <p>Điểm nguy hiểm: $($ <input type="text" class="so" id="c3-x" placeholder="x" inputmode="decimal" autocomplete="off"> $;$ <input type="text" class="so" id="c3-y" placeholder="y" inputmode="decimal" autocomplete="off"> $;$ <input type="text" class="so" id="c3-z" placeholder="z" inputmode="decimal" autocomplete="off"> $)$</p>
+        <button class="nut chinh" id="nop-3">Nộp câu 3</button>
+        <div class="phan-hoi" id="ph-3" hidden></div>
+      </div>
+
+      <!-- Báo cáo -->
+      <div class="chot" id="bao-cao" hidden>
+        <p style="margin:0 0 6px"><b>Báo cáo về trụ sở</b></p>
+        <div id="noi-dung-bao-cao"></div>
+      </div>
+
+      <p style="margin-top:18px"><button class="nut nho" id="xoa-phieu">Xoá phiếu trên máy này</button></p>
+    </div>
+  </section>
 
   <nav class="dieu-huong">
     <a href="../noi-dung-1-2/">← 2. Nội dung 1 và 2</a>

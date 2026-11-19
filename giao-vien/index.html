@@ -1,53 +1,202 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Màn hình Giáo viên – Trạm kiểm soát vũ trụ</title>
-  <link rel="stylesheet" href="../assets/scrollcraft.css">
-  <link rel="stylesheet" href="../assets/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Màn hình giáo viên – Trạm kiểm soát vũ trụ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .hang-tram { display:grid; grid-template-columns:110px 90px 110px 1fr; gap:10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--vien); }
+  .hang-tram .rp { font-size:1.6rem; font-weight:800; font-variant-numeric:tabular-nums; }
+  .hang-tram.dan-dau .rp { color:var(--gv); }
+  .hang-tram .ten { font-weight:600; }
+  #so-dong-ho { font-size:clamp(3rem,10vw,5.5rem); line-height:1.1; margin:6px 0 4px; }
+  #so-dong-ho.het { color:var(--sai); }
+  @media (max-width:700px) { .hang-tram { grid-template-columns:1fr 1fr; } }
+</style>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script defer src="../assets/chung.js"></script>
 </head>
 <body>
+<main class="rong">
+  <div class="nhan">Trạm kiểm soát vũ trụ · Giáo viên</div>
+  <h1>Màn hình giáo viên</h1>
+  <p class="phu">Bảng Radar Points, đồng hồ hoạt động và đáp án nội dung 3. Số liệu chỉ lưu trên máy đang mở trang này.</p>
 
-  <header class="tm-bar" aria-label="Điều hướng chính">
-    <a class="tm-brand" href="../index.html">
-      <span class="tm-brand__dot" aria-hidden="true"></span>
-      <span>← MÀN HÌNH CHÍNH</span>
-    </a>
-    <nav class="tm-bar__nav">
-      <span class="tm-pill tm-pill--accent">Dành riêng cho Giáo viên</span>
-    </nav>
-  </header>
-
-  <main class="subpage-main">
-    <section class="workspace-shell">
-      <div class="activity-meta">
-        <span>Bảng điều khiển lớp học</span>
-        <span class="activity-badge">Chỉ giáo viên mở trang này</span>
+  <div class="hai-cot">
+    <section class="khoi">
+      <h2>Đồng hồ</h2>
+      <div class="dong-ho" id="so-dong-ho">5:00</div>
+      <div class="dieu-khien" id="moc-gio">
+        <button class="nut nho" data-giay="300">Khởi động 5'</button>
+        <button class="nut nho" data-giay="300">Nội dung 1 · 5'</button>
+        <button class="nut nho" data-giay="300">Nội dung 2 · 5'</button>
+        <button class="nut nho" data-giay="600">Nội dung 3 · 10'</button>
+        <button class="nut nho" data-giay="1200">Luyện tập 20'</button>
+        <button class="nut nho" data-giay="60">1 phút</button>
       </div>
-      <h1 class="tm-display tm-display--lg">Màn hình Giáo viên</h1>
-      <p class="tm-lede">
-        Tạo <span class="kw">mã phòng</span> cho học sinh, theo dõi kết luận các trạm và cập nhật <span class="kw">bảng điểm RP</span> trên máy chiếu.
-      </p>
-
-      <!-- Khung gắn dự án riêng của Màn hình Giáo viên -->
-      <div class="workspace-slot" id="project-slot-gv">
-        <span class="tm-mono" style="font-size:0.8rem; color:var(--sc-accent);">KHUNG NỘI DUNG MÀN HÌNH GIÁO VIÊN (ĐƯA DỰ ÁN RIÊNG VÀO ĐÂY)</span>
-        <ul class="workspace-slot__list">
-          <li>Tạo phòng, cho học sinh nhập mã</li>
-          <li>Xem kết luận các trạm, bảng RP</li>
-        </ul>
-      </div>
-
-      <div class="tm-footer-nav">
-        <a class="tm-btn tm-btn--ghost" href="../index.html">
-          ← Trở lại màn hình chính
-        </a>
+      <div class="dieu-khien">
+        <button class="nut chinh" id="chay-dong-ho">Bắt đầu</button>
+        <button class="nut" id="dat-lai-dong-ho">Đặt lại</button>
       </div>
     </section>
-  </main>
 
-  <script src="../assets/starfield.js"></script>
-  <script src="../assets/page-transition.js"></script>
+    <section class="khoi">
+      <h2>Mở nhanh</h2>
+      <div class="luoi" style="margin-top:8px">
+        <a class="the" href="../khoi-dong/"><b>1. Khởi động</b><span>tình huống bản vẽ và hai câu hỏi mở đầu</span></a>
+        <a class="the" href="../noi-dung-1-2/"><b>2. Nội dung 1 và 2</b><span>ví dụ 1, ví dụ 2, luyện tập 1</span></a>
+        <a class="the" href="../noi-dung-3/#mo-phong"><b>3. Radar và mô phỏng 3D</b><span>xoay từ góc trên xuống sang góc nghiêng</span></a>
+        <a class="the" href="../luyen-tap/zipline/teacher.html"><b>4. Luyện tập · tạo phòng game</b><span>Zip Line Thoát Hồ Ly: tạo mã phòng, chiếu bảng xếp hạng</span></a>
+      </div>
+    </section>
+  </div>
+
+  <section class="khoi">
+    <h2>Bảng Radar Points (RP)</h2>
+    <p class="phu">Nhận biết +10 · Thông hiểu +20 · Vận dụng +40 (dùng thẻ Tăng tốc và đúng trong 60 giây: +80). Bấm vào tên thẻ khi trạm đã dùng thẻ đó.</p>
+    <div id="bang-rp"></div>
+    <div class="dieu-khien" style="margin-top:14px">
+      <button class="nut" id="them-tram">Thêm trạm</button>
+      <button class="nut" id="bot-tram">Bớt trạm</button>
+      <button class="nut" id="xoa-diem" style="margin-left:auto">Xoá toàn bộ điểm</button>
+    </div>
+  </section>
+
+  <section class="khoi">
+    <h2>Nội dung 3 · tiến trình và đáp án</h2>
+    <table class="bang">
+      <tr><th style="width:120px">Bước</th><th>Việc của giáo viên</th></tr>
+      <tr><td>Bước 1 · 1 phút</td><td>Chiếu radar 2D, giới thiệu T1 và bốn vệ tinh, hai cảnh báo tại $(6;1)$ và $(8;2)$. Giao mỗi trạm một vệ tinh (lớp đông thì hai trạm cùng một vệ tinh để đối chiếu).</td></tr>
+      <tr><td>Bước 2 · 5 phút</td><td>Các trạm làm phiếu trên web: dự đoán bằng mô phỏng 3D (+10), chứng minh bằng tính toán (+20), câu vận dụng (+40). Hỗ trợ trạm dùng thẻ Cứu hộ.</td></tr>
+      <tr><td>Bước 3 · 2 phút</td><td>Bốn trạm báo cáo kết luận. Cập nhật bảng RP.</td></tr>
+      <tr><td>Bước 4 · 2 phút</td><td>Chốt quy trình hai bước. Xoay mô phỏng từ góc nhìn trên xuống sang góc nghiêng, bật đường dóng để cả lớp thấy V4 đi phía trên T1.</td></tr>
+    </table>
+
+    <p style="margin-top:16px"><button class="nut chinh" data-hien="dap-an">Hiện đáp án</button></p>
+    <div id="dap-an" hidden>
+      <table class="bang">
+        <tr><th>Vệ tinh</th><th>Kết luận</th><th>Lí do</th></tr>
+        <tr><td><span class="cham" style="background:var(--v1)"></span>V1</td><td>Song song với T1</td><td>$\vec v_1 = -2\vec u$, $B(0;2;1) \notin$ T1</td></tr>
+        <tr><td><span class="cham" style="background:var(--v2)"></span>V2</td><td>Trùng T1</td><td>$\vec v_2 = -\vec u$, $C(4;0;1) \in$ T1 tại $t = 1$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v3)"></span>V3</td><td>Cắt T1 tại $(6;1;-1)$</td><td>$[\vec u,\vec v_3]\cdot\overrightarrow{AD} = 3 - 8 + 5 = 0$. Báo động thật.</td></tr>
+        <tr><td><span class="cham" style="background:var(--v4)"></span>V4</td><td>Chéo T1</td><td>$[\vec u,\vec v_4]\cdot\overrightarrow{AE} = 3 - 12 + 5 = -4 \ne 0$. Tại $x = 8,\ y = 2$: T1 có $z = -3$, V4 có $z = 1$. Báo động giả.</td></tr>
+      </table>
+      <div class="chot">
+        <p><b>Quy trình hai bước.</b> (1) Xét hai vectơ chỉ phương có cùng phương không.</p>
+        <p>(2) Nếu cùng phương: lấy một điểm của đường này, xét có thuộc đường kia không (thuộc: trùng nhau; không thuộc: song song). Nếu không cùng phương: xét $[\vec u,\vec v]\cdot\overrightarrow{AM}$ (bằng $0$: cắt nhau; khác $0$: chéo nhau).</p>
+      </div>
+      <div class="chu-y">
+        <b>Mở rộng.</b> $\vec u\cdot\vec v_3 = \vec u\cdot\vec v_4 = 0$ nên T1 vuông góc với cả V3 (cắt nhau) và V4 (chéo nhau). Vuông góc là quan hệ giữa hai vectơ chỉ phương, không phải vị trí tương đối thứ năm.
+      </div>
+    </div>
+  </section>
+
+  <nav class="dieu-huong">
+    <a class="giua" href="../">← Trang chủ</a>
+  </nav>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const $ = id => document.getElementById(id);
+
+  /* Bảng RP */
+  const KHOA = 'tkv-bang-rp';
+  const VE_TINH = ['V1', 'V2', 'V3', 'V4'];
+  const taoTram = i => ({ ve: VE_TINH[i % 4], rp: 0, cuuHo: false, tangToc: false });
+  let bang = docMay(KHOA, null);
+  if (!Array.isArray(bang) || !bang.length) bang = [0, 1, 2, 3].map(taoTram);
+  const luu = () => luuMay(KHOA, bang);
+
+  function ve() {
+    const cao = Math.max(...bang.map(t => t.rp));
+    const hop = $('bang-rp');
+    hop.innerHTML = '';
+    bang.forEach((t, i) => {
+      const hang = document.createElement('div');
+      hang.className = 'hang-tram' + (cao > 0 && t.rp === cao ? ' dan-dau' : '');
+      hang.innerHTML = `
+        <div class="ten">Trạm ${i + 1}</div>
+        <select aria-label="Vệ tinh của trạm ${i + 1}">${VE_TINH.map(v => `<option${v === t.ve ? ' selected' : ''}>${v}</option>`).join('')}</select>
+        <div class="rp">${t.rp}</div>
+        <div>
+          <button class="nut nho" data-cong="10">+10</button>
+          <button class="nut nho" data-cong="20">+20</button>
+          <button class="nut nho" data-cong="40">+40</button>
+          <button class="nut nho" data-cong="80">+80</button>
+          <button class="nut nho" data-cong="-10">−10</button>
+          <button class="nut nho${t.cuuHo ? ' bat' : ''}" data-the="cuuHo">Cứu hộ</button>
+          <button class="nut nho${t.tangToc ? ' bat' : ''}" data-the="tangToc">Tăng tốc</button>
+        </div>`;
+      hang.querySelector('select').addEventListener('change', e => { t.ve = e.target.value; luu(); });
+      hang.querySelectorAll('[data-cong]').forEach(n => n.addEventListener('click', () => {
+        t.rp = Math.max(0, t.rp + Number(n.dataset.cong));
+        luu(); ve();
+      }));
+      hang.querySelectorAll('[data-the]').forEach(n => n.addEventListener('click', () => {
+        t[n.dataset.the] = !t[n.dataset.the];
+        luu(); ve();
+      }));
+      hop.appendChild(hang);
+    });
+  }
+
+  $('them-tram').addEventListener('click', () => {
+    if (bang.length < 12) { bang.push(taoTram(bang.length)); luu(); ve(); }
+  });
+  $('bot-tram').addEventListener('click', () => {
+    if (bang.length > 1) { bang.pop(); luu(); ve(); }
+  });
+  const nutXoa = $('xoa-diem');
+  let choXoa = null;
+  nutXoa.addEventListener('click', () => {
+    if (!choXoa) {
+      nutXoa.textContent = 'Bấm lần nữa để xoá';
+      choXoa = setTimeout(() => { nutXoa.textContent = 'Xoá toàn bộ điểm'; choXoa = null; }, 3000);
+      return;
+    }
+    clearTimeout(choXoa); choXoa = null;
+    nutXoa.textContent = 'Xoá toàn bộ điểm';
+    bang = bang.map((t, i) => Object.assign(taoTram(i), { ve: t.ve }));
+    luu(); ve();
+  });
+  ve();
+
+  /* Đồng hồ */
+  let tongGiay = 300, conLai = 300, ketThuc = null, hen = null;
+  const so = $('so-dong-ho'), nutChay = $('chay-dong-ho');
+  function hien() {
+    so.textContent = dinhDangGiay(conLai);
+    so.classList.toggle('het', conLai <= 0);
+  }
+  function dung() {
+    clearInterval(hen); hen = null; ketThuc = null;
+    nutChay.textContent = conLai > 0 ? 'Tiếp tục' : 'Bắt đầu';
+  }
+  nutChay.addEventListener('click', () => {
+    if (hen) { dung(); return; }
+    if (conLai <= 0) conLai = tongGiay;
+    ketThuc = Date.now() + conLai * 1000;
+    nutChay.textContent = 'Tạm dừng';
+    hen = setInterval(() => {
+      conLai = Math.max(0, (ketThuc - Date.now()) / 1000);
+      hien();
+      if (conLai <= 0) dung();
+    }, 200);
+  });
+  $('dat-lai-dong-ho').addEventListener('click', () => { dung(); conLai = tongGiay; hien(); nutChay.textContent = 'Bắt đầu'; });
+  document.querySelectorAll('#moc-gio [data-giay]').forEach(n => n.addEventListener('click', () => {
+    dung();
+    tongGiay = conLai = Number(n.dataset.giay);
+    hien();
+    nutChay.textContent = 'Bắt đầu';
+    document.querySelectorAll('#moc-gio .nut').forEach(m => m.classList.toggle('bat', m === n));
+  }));
+  hien();
+});
+</script>
 </body>
 </html>

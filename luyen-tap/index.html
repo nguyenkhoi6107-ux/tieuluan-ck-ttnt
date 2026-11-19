@@ -14,20 +14,24 @@
 <main>
   <div class="nhan">Trạm kiểm soát vũ trụ · Hoạt động 4/4</div>
   <h1>4. Luyện tập</h1>
-  <p class="phu">20 phút · game luyện tập</p>
+  <p class="phu">20 phút · game Zip Line Thoát Hồ Ly, hướng dẫn và bài tập về nhà</p>
 
   <section class="khoi">
-    <h2>Vào game</h2>
-    <!-- Dán đường dẫn game vào href bên dưới -->
-    <p><a class="nut chinh" id="vao-game" href="" target="_blank" rel="noopener">Vào game</a></p>
-    <p class="phu" id="cho-game" hidden>Giáo viên mở game và phát mã phòng trên màn hình chính.</p>
+    <h2>Game: Zip Line Thoát Hồ Ly</h2>
+    <p>Đêm trăng tròn, nhóm bạn cắm trại trên đỉnh núi thì bị một con hồ ly đuổi theo. Muốn thoát, em phải viết đúng <b>phương trình đường thẳng $AB$</b> để bắn dây zip line sang vách bên kia, rồi tìm đúng <b>cao độ $z$ của điểm $M$</b> trên dây để dựng cột đỡ và đu qua vực.</p>
+    <p>
+      <a class="nut chinh" href="zipline/index.html">Vào phòng chơi</a>
+      <a class="nut" href="zipline/play.html?mode=solo">Chơi luyện tập một mình</a>
+    </p>
     <h3>Cách chơi</h3>
     <ol>
-      <li>Giáo viên tạo phòng chơi và cung cấp mã phòng.</li>
-      <li>Mỗi em nhập mã phòng trên thiết bị của mình và chơi cá nhân.</li>
-      <li>Điền đáp số cho từng câu để tiến lên, đến khi hoàn tất cuộc đua.</li>
-      <li>Hết giờ, giáo viên chiếu bảng xếp hạng và chữa các dạng câu hỏi.</li>
+      <li>Giáo viên tạo phòng chơi và chiếu mã phòng gồm 4 chữ số.</li>
+      <li>Mỗi em bấm <b>Vào phòng chơi</b>, nhập mã phòng và tên, chơi cá nhân trên thiết bị của mình.</li>
+      <li>Mỗi màn có hai câu điền số: phương trình tham số của đường thẳng $AB$ và cao độ $z$ của điểm $M$. Trả lời sai thì hồ ly đuổi sát hơn; bị bắt thì mất một mạng.</li>
+      <li>Qua đủ các màn là về đích. Bảng xếp hạng cập nhật trực tiếp trên màn hình giáo viên.</li>
+      <li>Hết giờ, giáo viên chiếu bảng xếp hạng, chữa các dạng câu hỏi và tuyên dương các bạn nhanh, chính xác.</li>
     </ol>
+    <p class="phu">Số được nhập dạng số nguyên, phân số hoặc số thập phân: <code>1/2</code>, <code>0,5</code> và <code>0.5</code> đều được chấp nhận.</p>
   </section>
 
   <section class="khoi">
@@ -104,12 +108,6 @@
 </main>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const game = document.getElementById('vao-game');
-  if (!game.getAttribute('href')) {
-    game.parentElement.hidden = true;
-    document.getElementById('cho-game').hidden = false;
-  }
-
   document.querySelectorAll('#bai-tap .hop').forEach(bai => {
     const ph = bai.querySelector('.phan-hoi');
     bai.querySelector('button').addEventListener('click', () => {

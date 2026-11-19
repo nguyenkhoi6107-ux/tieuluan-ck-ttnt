@@ -1,25 +1,53 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Màn hình giáo viên – Trạm kiểm soát vũ trụ</title>
-<link rel="stylesheet" href="../assets/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Màn hình Giáo viên – Trạm kiểm soát vũ trụ</title>
+  <link rel="stylesheet" href="../assets/scrollcraft.css">
+  <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-<main>
-  <div class="nhan">Trạm kiểm soát vũ trụ · Giáo viên</div>
-  <h1>Màn hình giáo viên</h1>
-  <p class="phu">Chỉ giáo viên mở trang này</p>
 
-  <div class="khung-trong">
-    <b>Trang này sẽ có:</b>
-    <ul><li>Tạo phòng, cho học sinh nhập mã</li><li>Xem kết luận các trạm, bảng RP</li></ul>
-  </div>
+  <header class="tm-bar" aria-label="Điều hướng chính">
+    <a class="tm-brand" href="../index.html">
+      <span class="tm-brand__dot" aria-hidden="true"></span>
+      <span>← MÀN HÌNH CHÍNH</span>
+    </a>
+    <nav class="tm-bar__nav">
+      <span class="tm-pill tm-pill--accent">Dành riêng cho Giáo viên</span>
+    </nav>
+  </header>
 
-  <nav class="dieu-huong">
-    <a class="giua" href="../">← Trang chủ</a>
-  </nav>
-</main>
+  <main class="subpage-main">
+    <section class="workspace-shell">
+      <div class="activity-meta">
+        <span>Bảng điều khiển lớp học</span>
+        <span class="activity-badge">Chỉ giáo viên mở trang này</span>
+      </div>
+      <h1 class="tm-display tm-display--lg">Màn hình Giáo viên</h1>
+      <p class="tm-lede">
+        Tạo <span class="kw">mã phòng</span> cho học sinh, theo dõi kết luận các trạm và cập nhật <span class="kw">bảng điểm RP</span> trên máy chiếu.
+      </p>
+
+      <!-- Khung gắn dự án riêng của Màn hình Giáo viên -->
+      <div class="workspace-slot" id="project-slot-gv">
+        <span class="tm-mono" style="font-size:0.8rem; color:var(--sc-accent);">KHUNG NỘI DUNG MÀN HÌNH GIÁO VIÊN (ĐƯA DỰ ÁN RIÊNG VÀO ĐÂY)</span>
+        <ul class="workspace-slot__list">
+          <li>Tạo phòng, cho học sinh nhập mã</li>
+          <li>Xem kết luận các trạm, bảng RP</li>
+        </ul>
+      </div>
+
+      <div class="tm-footer-nav">
+        <a class="tm-btn tm-btn--ghost" href="../index.html">
+          ← Trở lại màn hình chính
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/starfield.js"></script>
+  <script src="../assets/page-transition.js"></script>
 </body>
 </html>

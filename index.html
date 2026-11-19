@@ -1,29 +1,213 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trạm kiểm soát vũ trụ – Bài 15 Toán 12</title>
-<link rel="stylesheet" href="assets/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trạm kiểm soát vũ trụ: Bài 15 Toán 12 (KNTT)</title>
+  <link rel="stylesheet" href="assets/scrollcraft.css">
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<main>
-  <div class="nhan">Toán 12 · Kết nối tri thức · Bài 15</div>
-  <h1>Trạm kiểm soát vũ trụ</h1>
-  <p class="phu">Phương trình đường thẳng trong không gian. Chọn hoạt động theo thứ tự tiết học.</p>
 
-  <h2 class="muc">Tiến trình tiết học</h2>
-  <div class="luoi">
-    <a class="the" href="khoi-dong/"><b>1. Khởi động</b><span>5 phút · video tình huống và câu hỏi mở đầu</span></a>
-    <a class="the" href="noi-dung-1-2/"><b>2. Hình thành kiến thức – Nội dung 1 và 2</b><span>10 phút · vectơ chỉ phương, phương trình tham số, chính tắc; viết phương trình qua hai điểm</span></a>
-    <a class="the" href="noi-dung-3/"><b>3. Nội dung 3: Báo động thật hay giả?</b><span>10 phút · vị trí tương đối của hai đường thẳng, mô phỏng 3D</span></a>
-    <a class="the" href="luyen-tap/"><b>4. Luyện tập</b><span>20 phút · game</span></a>
-  </div>
+  <!-- Fixed Telemetry Navigation (Student-focused) -->
+  <header class="tm-bar" aria-label="Điều hướng chính">
+    <a class="tm-brand" href="index.html">
+      <span class="tm-brand__dot" aria-hidden="true"></span>
+      <span>TOÁN 12 · BÀI 15</span>
+    </a>
+    <nav class="tm-bar__nav">
+      <a class="tm-pill tm-pill--hide-sm" href="khoi-dong/index.html">1. Khởi động</a>
+      <a class="tm-pill tm-pill--hide-sm" href="noi-dung-1-2/index.html">2. Khám phá</a>
+      <a class="tm-pill tm-pill--hide-sm" href="noi-dung-3/index.html">3. Thử thách</a>
+      <a class="tm-pill tm-pill--accent" href="luyen-tap/index.html">4. Luyện tập</a>
+    </nav>
+  </header>
 
-  <h2 class="muc">Dành cho giáo viên</h2>
-  <div class="luoi">
-    <a class="the gv" href="giao-vien/"><b>Màn hình giáo viên</b><span>mở phòng, xem kết luận các trạm, bảng RP</span></a>
-  </div>
-</main>
+  <main data-sc-root>
+
+    <!-- ACT 1: HERO (Floating Title + Planets + Meteors) -->
+    <section id="act-hero" data-sc-act="pin" data-sc-span="1.45">
+      <div data-sc-stage class="hero-stage">
+        <!-- Rear meteor canvas -->
+        <canvas id="meteor-canvas-back" class="hero-meteor-layer" aria-hidden="true"></canvas>
+
+        <!-- Decorative planets behind/around title -->
+        <div class="planet planet--cyan" data-sc-parallax="-0.9" aria-hidden="true"></div>
+        <div class="planet planet--amber" data-sc-parallax="-0.6" aria-hidden="true"></div>
+
+        <div class="hero-scrim" aria-hidden="true"></div>
+
+        <!-- Centered floating typography plane (NO highlight on title) -->
+        <div class="hero-copy">
+          <div class="hero-float">
+            <p class="tm-eyebrow">Toán 12 · Kết nối tri thức · Bài 15</p>
+            <h1 class="tm-display tm-display--hero">
+              Phương trình đường thẳng<br>trong không gian
+            </h1>
+            <p class="tm-lede" style="max-width:48ch;">
+              Cuộn xuống theo đường bay của sao băng để đi qua lần lượt 4 hoạt động trong tiết học.
+            </p>
+            <div class="hero-actions">
+              <a class="tm-btn tm-btn--primary" href="khoi-dong/index.html">Bắt đầu Khởi động →</a>
+              <a class="tm-btn tm-btn--ghost" href="#hd-1">Xem lộ trình bài học ↓</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Foreground planets -->
+        <div class="planet planet--ringed" data-sc-parallax="0.8" aria-hidden="true"></div>
+        <div class="planet planet--moon" data-sc-parallax="0.5" aria-hidden="true"></div>
+
+        <!-- Front meteor plane (streaks across/in front of title) -->
+        <canvas id="meteor-canvas-front" class="hero-meteor-layer" aria-hidden="true"></canvas>
+      </div>
+    </section>
+
+    <!-- BRIDGE 1: HERO -> HOẠT ĐỘNG 1 -->
+    <div class="space-bridge" aria-hidden="true">
+      <canvas class="bridge-canvas" data-dir="center-to-left" data-target="hd-1"></canvas>
+    </div>
+
+    <!-- HOẠT ĐỘNG 1: KHỞI ĐỘNG -->
+    <section id="hd-1" class="activity-band" data-sc-act="flow">
+      <div class="activity-band-card">
+        <div class="act-cinema">
+          <div class="video-sway-card" aria-label="Biểu tượng video tình huống khởi động">
+            <div class="video-sway-card__play" aria-hidden="true">▶</div>
+            <span class="tm-mono" style="font-size:0.82rem; color:var(--sc-ink-soft);">VIDEO TÌNH HUỐNG MỞ ĐẦU</span>
+            <div class="video-sway-card__bar" aria-hidden="true">
+              <div class="video-sway-card__fill"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="activity-meta">
+              <span>Hoạt động 1</span>
+              <span class="activity-badge">5 phút</span>
+            </div>
+            <h2 class="tm-display tm-display--lg">Khởi động</h2>
+            <p class="tm-lede">
+              Xem video <span class="kw">tình huống mở đầu</span> và trả lời câu hỏi gợi mở ngay trên web để dẫn dắt vào bài học về <span class="kw">đường thẳng</span> trong không gian.
+            </p>
+            <div class="activity-cta">
+              <a class="tm-btn tm-btn--primary" href="khoi-dong/index.html">Bắt đầu Khởi động →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRIDGE 2: HOẠT ĐỘNG 1 -> HOẠT ĐỘNG 2 -->
+    <div class="space-bridge" aria-hidden="true">
+      <canvas class="bridge-canvas" data-dir="ltr" data-target="hd-2"></canvas>
+    </div>
+
+    <!-- HOẠT ĐỘNG 2: KHÁM PHÁ -->
+    <section id="hd-2" class="activity-band" data-sc-act="flow">
+      <div class="activity-band-card">
+        <div class="act-split">
+          <div>
+            <div class="activity-meta">
+              <span>Hoạt động 2</span>
+              <span class="activity-badge">10 phút</span>
+            </div>
+            <h2 class="tm-display tm-display--lg">Khám phá</h2>
+            <p class="tm-lede">
+              Tìm hiểu khái niệm <span class="kw">vectơ chỉ phương</span>, nhận diện các dạng <span class="kw">phương trình đường thẳng</span> và thực hành viết phương trình qua những ví dụ cơ bản.
+            </p>
+            <div class="activity-cta">
+              <a class="tm-btn tm-btn--primary" href="noi-dung-1-2/index.html">Bắt đầu Khám phá →</a>
+            </div>
+          </div>
+
+          <canvas id="motion-hd2" class="motion-canvas motion-canvas--tall" aria-label="Minh họa điểm chuyển động tạo thành đường thẳng"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRIDGE 3: HOẠT ĐỘNG 2 -> HOẠT ĐỘNG 3 -->
+    <div class="space-bridge" aria-hidden="true">
+      <canvas class="bridge-canvas" data-dir="rtl" data-target="hd-3"></canvas>
+    </div>
+
+    <!-- HOẠT ĐỘNG 3: THỬ THÁCH -->
+    <section id="hd-3" class="activity-band" data-sc-act="flow">
+      <div class="activity-band-card">
+        <div class="act-stage-3d">
+          <div class="act-stage-3d__head">
+            <div>
+              <div class="activity-meta">
+                <span>Hoạt động 3</span>
+                <span class="activity-badge">10 phút</span>
+              </div>
+              <h2 class="tm-display tm-display--lg">Thử thách</h2>
+              <p class="tm-lede">
+                Quan sát và xoay góc nhìn không gian để kiểm tra <span class="kw">vị trí tương đối</span> giữa các quỹ đạo, phân biệt đâu là nguy cơ va chạm thật và đâu chỉ là giao nhau trên hình chiếu phẳng.
+              </p>
+            </div>
+            <a class="tm-btn tm-btn--primary" href="noi-dung-3/index.html">Bắt đầu Thử thách →</a>
+          </div>
+
+          <canvas id="motion-hd3" class="motion-canvas motion-canvas--stage" aria-label="Minh họa hai đường thẳng cắt nhau và chéo nhau trong không gian"></canvas>
+
+          <div class="act-stage-3d__callouts">
+            <div class="alarm-card alarm-card--real">
+              <div class="alarm-card__head">
+                <strong>Báo động thật</strong>
+                <span class="badge-danger">CẮT NHAU</span>
+              </div>
+              <p class="tm-lede" style="margin:0; font-size:0.96rem;">Hai đường thẳng <span class="kw">cắt nhau</span> thật tại một điểm chung trong không gian.</p>
+            </div>
+            <div class="alarm-card alarm-card--false">
+              <div class="alarm-card__head">
+                <strong>Báo động giả</strong>
+                <span class="badge-amber">CHÉO NHAU</span>
+              </div>
+              <p class="tm-lede" style="margin:0; font-size:0.96rem;">Hai đường thẳng <span class="kw">chéo nhau</span>, đi lệch nhau ở hai độ cao khác nhau.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BRIDGE 4: HOẠT ĐỘNG 3 -> HOẠT ĐỘNG 4 -->
+    <div class="space-bridge" aria-hidden="true">
+      <canvas class="bridge-canvas" data-dir="ltr-center" data-target="hd-4"></canvas>
+    </div>
+
+    <!-- HOẠT ĐỘNG 4: LUYỆN TẬP -->
+    <section id="hd-4" class="activity-band" data-sc-act="flow">
+      <div class="activity-band-card">
+        <div class="act-race">
+          <canvas id="motion-hd4" class="motion-canvas motion-canvas--race" aria-label="Minh họa đường đua tốc độ giải toán"></canvas>
+          <div class="act-race__bottom">
+            <div style="max-width:660px;">
+              <div class="activity-meta">
+                <span>Hoạt động 4</span>
+                <span class="activity-badge">20 phút</span>
+              </div>
+              <h2 class="tm-display tm-display--lg">Luyện tập</h2>
+              <p class="tm-lede">
+                Nhập <span class="kw">mã phòng</span> để tham gia <span class="kw">game luyện tập</span> cá nhân, vượt qua các thử thách tốc độ và ghi tên lên <span class="kw">bảng xếp hạng</span> của lớp.
+              </p>
+            </div>
+            <a class="tm-btn tm-btn--primary" href="luyen-tap/index.html">Bắt đầu Luyện tập →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DISCREET TEACHER CORNER LINK -->
+    <footer class="tm-footer">
+      <a class="tm-teacher-corner" href="giao-vien/index.html" title="Màn hình điều khiển dành cho Giáo viên">⚙ GV</a>
+    </footer>
+
+  </main>
+
+  <script src="assets/starfield.js"></script>
+  <script src="assets/scrollcraft.js"></script>
+  <script src="assets/meteor-trails.js"></script>
+  <script src="assets/activity-motions.js"></script>
+  <script src="assets/page-transition.js"></script>
 </body>
 </html>

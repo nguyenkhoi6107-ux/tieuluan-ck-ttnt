@@ -105,35 +105,35 @@ main[data-sc-root],
   text-decoration: none;
   font-family: var(--sc-font-display);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   letter-spacing: 0.02em;
 }
 
 .tm-brand__dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--sc-accent);
-  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
 }
 
 .tm-bar__nav {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .tm-pill {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 9px 16px;
+  padding: 7px 13px;
   border-radius: 999px;
   border: 1px solid var(--sc-line);
   background: rgba(15, 23, 42, 0.78);
   color: var(--sc-ink-soft);
   font-family: var(--sc-font-mono);
-  font-size: 0.84rem;
+  font-size: 0.75rem;
   text-decoration: none;
   transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 }
@@ -164,42 +164,41 @@ main[data-sc-root],
   align-items: center;
   gap: 8px;
   font-family: var(--sc-font-mono);
-  font-size: 0.88rem;
-  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--sc-accent);
-  margin: 0 0 18px;
+  margin: 0 0 14px;
 }
 
 .tm-display {
   font-family: var(--sc-font-display);
   font-weight: 700;
-  line-height: 1.04;
-  letter-spacing: -0.025em;
+  line-height: 0.98;
+  letter-spacing: -0.028em;
   text-wrap: balance;
   margin: 0;
 }
 
 .tm-display--hero {
-  font-size: clamp(2.5rem, 5vw, 4.45rem);
+  font-size: clamp(2rem, 4.2vw, 3.65rem);
   line-height: 1.08;
 }
 
 .tm-display--lg {
-  font-size: clamp(2rem, 3.6vw, 3.15rem);
+  font-size: clamp(1.9rem, 3.8vw, 3.4rem);
 }
 
 .tm-display--md {
-  font-size: clamp(1.45rem, 2.3vw, 2.05rem);
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
 }
 
 .tm-lede {
-  font-size: clamp(1.08rem, 1.4vw, 1.26rem);
-  line-height: 1.65;
+  font-size: clamp(1.02rem, 1.35vw, 1.22rem);
   color: var(--sc-ink-soft);
   max-width: 52ch;
   text-wrap: pretty;
-  margin: 18px 0 0;
+  margin: 16px 0 0;
 }
 
 .tm-mono {
@@ -212,12 +211,12 @@ main[data-sc-root],
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 52px;
-  padding: 14px 26px;
-  border-radius: 12px;
+  min-height: 46px;
+  padding: 12px 22px;
+  border-radius: 10px;
   font-family: var(--sc-font-text);
   font-weight: 600;
-  font-size: 1.02rem;
+  font-size: 0.95rem;
   text-decoration: none;
   cursor: pointer;
   border: 1px solid transparent;
@@ -322,7 +321,7 @@ main[data-sc-root],
 .hero-copy {
   position: relative;
   z-index: 4;
-  max-width: min(920px, 92vw);
+  max-width: min(760px, 90vw);
   margin: 0 auto;
   padding: 0 var(--sc-gutter);
   display: flex;
@@ -354,11 +353,11 @@ main[data-sc-root],
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 14px;
-  margin-top: 32px;
+  gap: 12px;
+  margin-top: 28px;
 }
 
-/* ---------- Decorative Planets Framing Title Harmoniously ---------- */
+/* ---------- Decorative Planets Floating Around Title ---------- */
 .planet {
   position: absolute;
   border-radius: 50%;
@@ -367,10 +366,10 @@ main[data-sc-root],
 }
 
 .planet--cyan {
-  width: clamp(90px, 10.5vw, 154px);
-  height: clamp(90px, 10.5vw, 154px);
+  width: clamp(74px, 9vw, 132px);
+  height: clamp(74px, 9vw, 132px);
   top: 16%;
-  left: 11%;
+  left: 10%;
   z-index: 2;
   background: radial-gradient(circle at 30% 30%, #7DD3FC 0%, #0284C7 45%, #071326 88%);
   box-shadow: inset -14px -14px 28px rgba(4, 10, 22, 0.85), 0 0 36px rgba(56, 189, 248, 0.14);
@@ -378,10 +377,10 @@ main[data-sc-root],
 }
 
 .planet--ringed {
-  width: clamp(110px, 12.5vw, 184px);
-  height: clamp(110px, 12.5vw, 184px);
-  bottom: 13%;
-  right: 10%;
+  width: clamp(92px, 11vw, 160px);
+  height: clamp(92px, 11vw, 160px);
+  bottom: 14%;
+  right: 9%;
   z-index: 5;
   background: radial-gradient(circle at 32% 28%, #5EEAD4 0%, #0F766E 48%, #06141C 88%);
   box-shadow: inset -16px -16px 32px rgba(4, 10, 22, 0.88), 0 0 40px rgba(45, 212, 191, 0.12);
@@ -402,8 +401,8 @@ main[data-sc-root],
 }
 
 .planet--amber {
-  width: clamp(54px, 6vw, 86px);
-  height: clamp(54px, 6vw, 86px);
+  width: clamp(42px, 5vw, 72px);
+  height: clamp(42px, 5vw, 72px);
   top: 22%;
   right: 15%;
   z-index: 2;
@@ -413,9 +412,9 @@ main[data-sc-root],
 }
 
 .planet--moon {
-  width: clamp(36px, 4vw, 56px);
-  height: clamp(36px, 4vw, 56px);
-  bottom: 21%;
+  width: clamp(28px, 3.2vw, 46px);
+  height: clamp(28px, 3.2vw, 46px);
+  bottom: 22%;
   left: 16%;
   z-index: 5;
   background: radial-gradient(circle at 32% 30%, #E2E8F0 0%, #64748B 55%, #0F172A 92%);
@@ -526,25 +525,15 @@ main[data-sc-root],
   border-radius: 6px;
 }
 
-/* ---------- Vertical Activity Showcase Bands (Balanced & Symmetrical Proportions) ---------- */
+/* ---------- Vertical Activity Showcase Bands (Seamless unified space + Scroll Scale) ---------- */
 .activity-band {
   position: relative;
-  padding: clamp(52px, 8vh, 88px) var(--sc-gutter);
-  max-width: 1220px;
+  padding: clamp(44px, 7vh, 76px) var(--sc-gutter);
+  max-width: 1180px;
   margin: 0 auto;
   border: none;
   transform-origin: center center;
   will-change: transform, opacity;
-}
-
-.activity-band-card {
-  padding: clamp(28px, 3.6vw, 44px);
-  border-radius: 22px;
-  background: rgba(15, 23, 42, 0.62);
-  border: 1px solid rgba(148, 163, 184, 0.16);
-  box-shadow: 0 20px 50px rgba(4, 10, 22, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 .activity-band.is-connected .activity-badge {
@@ -691,19 +680,11 @@ main[data-sc-root],
 .motion-canvas--stage { height: clamp(240px, 32vw, 340px); }
 .motion-canvas--race { height: clamp(160px, 20vw, 210px); }
 
-/* Layout 1: Balanced 2-Column Split (Khởi động - Left Swaying Video, Right Intro) */
+/* Layout 1: Cinema Widescreen (Khởi động - Floating/Swaying Video Frame) */
 .act-cinema {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 4.5vw, 56px);
-  align-items: center;
-}
-
-/* Layout 2: Balanced 2-Column Split (Khám phá - Left Intro, Right Vector Motion) */
-.act-split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(32px, 4.5vw, 56px);
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(28px, 5vw, 56px);
   align-items: center;
 }
 

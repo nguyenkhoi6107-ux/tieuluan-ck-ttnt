@@ -259,10 +259,10 @@
     activityBands.forEach((band) => {
       const rect = band.getBoundingClientRect();
       const bandCenter = rect.top + rect.height * 0.5;
-      const dist = Math.min(1, Math.abs(bandCenter - centerVh) / (vh * 0.85));
+      const dist = Math.min(1, Math.abs(bandCenter - centerVh) / (vh * 0.78));
       const focus = 0.5 * (1 + Math.cos(dist * Math.PI));
-      const scale = 0.88 + 0.12 * focus;
-      const opacity = 0.58 + 0.42 * focus;
+      const scale = 0.74 + 0.26 * focus;
+      const opacity = 0.34 + 0.66 * focus;
 
       band.style.transform = `scale(${scale.toFixed(4)})`;
       band.style.opacity = opacity.toFixed(3);

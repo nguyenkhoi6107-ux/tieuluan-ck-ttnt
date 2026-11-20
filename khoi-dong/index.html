@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>1. Khởi động – Trạm kiểm soát vũ trụ</title>
+  <title>Khởi động · Trạm kiểm soát vũ trụ</title>
   <link rel="stylesheet" href="../assets/scrollcraft.css">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -11,6 +11,731 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script defer src="../assets/chung.js"></script>
+
+  <style>
+    /* =========================================================================
+       HOẠT ĐỘNG 1 · KHỞI ĐỘNG (Frameless Scrollytelling & Visual Mission Hub)
+       ========================================================================= */
+
+    .hd1-root {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 88px var(--sc-gutter) 96px;
+    }
+
+    /* Scroll-driven focus scale for each stage */
+    .hd1-band {
+      position: relative;
+      padding: clamp(24px, 4vh, 48px) 0;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+
+    .hd1-band::before {
+      content: "";
+      position: absolute;
+      inset: -12% -8%;
+      background: radial-gradient(ellipse 58% 46% at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 72%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Frameless Hero Header */
+    .hd1-hero {
+      margin-bottom: clamp(24px, 4vh, 42px);
+    }
+
+    .hd1-hero__title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(2.45rem, 5.2vw, 4.15rem);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      color: #F8FAFC;
+      margin: 0;
+      text-shadow: 0 0 34px rgba(56, 189, 248, 0.36);
+    }
+
+    .hd1-hero__lede {
+      font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+      color: var(--sc-ink-soft);
+      max-width: 54ch;
+      margin: 14px 0 0;
+    }
+
+    /* ---------- STAGE 1: TÌNH HUỐNG MỞ ĐẦU ---------- */
+    .hd1-situation {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: clamp(28px, 4.5vw, 56px);
+      align-items: center;
+    }
+
+    .hd1-step-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sc-accent);
+      margin-bottom: 10px;
+    }
+
+    .hd1-step-tag__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 10px var(--sc-accent);
+    }
+
+    .hd1-band.is-connected .hd1-step-tag__dot {
+      background: var(--sc-accent-2);
+      box-shadow: 0 0 14px var(--sc-accent-2);
+    }
+
+    .hd1-title {
+      font-family: var(--sc-font-display);
+      font-size: clamp(1.65rem, 2.8vw, 2.35rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      margin: 0 0 14px;
+      color: var(--sc-ink);
+    }
+
+    .hd1-title--highlight {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.32rem, 2.05vw, 1.72rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #E0F2FE;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 14px;
+      text-shadow: 0 0 18px rgba(56, 189, 248, 0.35);
+    }
+
+    .hd1-title--highlight::after {
+      content: "";
+      width: 44px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--sc-accent) 0%, transparent 100%);
+    }
+
+    .hd1-prose {
+      color: var(--sc-ink-soft);
+      font-size: clamp(0.98rem, 1.15vw, 1.08rem);
+      line-height: 1.65;
+      margin: 0 0 14px;
+      max-width: 52ch;
+    }
+
+    /* Interactive 3D Viewport Stage */
+    .hd1-viewport-wrap {
+      position: relative;
+    }
+
+    .hd1-viewport {
+      position: relative;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.09) 0%, rgba(5, 9, 18, 0.88) 75%);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      box-shadow: 0 22px 50px rgba(3, 7, 16, 0.65);
+      overflow: hidden;
+    }
+
+    .hd1-viewport canvas {
+      display: block;
+      width: 100%;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .hd1-viewport canvas:active {
+      cursor: grabbing;
+    }
+
+    .hd1-viewport__hud {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+      font-family: var(--sc-font-mono);
+      font-size: 0.75rem;
+    }
+
+    .hd1-hud-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(7, 11, 20, 0.78);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--sc-accent);
+      backdrop-filter: blur(6px);
+    }
+
+    .hd1-hud-hint {
+      color: var(--sc-ink-soft);
+      background: rgba(7, 11, 20, 0.65);
+      padding: 3px 9px;
+      border-radius: 6px;
+    }
+
+    .hd1-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .hd1-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--sc-line);
+      background: rgba(15, 23, 42, 0.72);
+      color: var(--sc-ink-soft);
+      font-family: var(--sc-font-text);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s var(--sc-ease-out), border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .hd1-view-btn:hover,
+    .hd1-view-btn:focus-visible {
+      border-color: var(--sc-accent);
+      color: var(--sc-ink);
+      transform: translateY(-1px);
+    }
+
+    .hd1-view-btn.bat {
+      background: rgba(56, 189, 248, 0.16);
+      border-color: var(--sc-accent);
+      color: #E0F2FE;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    /* ---------- COSMIC BRIDGE BETWEEN STAGES ---------- */
+    .hd1-bridge {
+      position: relative;
+      height: clamp(180px, 24vh, 240px);
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .hd1-bridge-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ---------- STAGE 2: CÂU HỎI GỢI MỞ & CHỐT KIẾN THỨC ---------- */
+    .hd1-qa-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .hd1-qa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: start;
+    }
+
+    .hd1-q-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(56, 189, 248, 0.28);
+    }
+
+    .hd1-q-num {
+      font-family: var(--sc-font-mono);
+      font-size: 0.75rem;
+      color: var(--sc-accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hd1-q-prompt {
+      font-size: 1.04rem;
+      font-weight: 600;
+      color: var(--sc-ink);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .hd1-textarea {
+      width: 100%;
+      min-height: 88px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.58);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      color: var(--sc-ink);
+      font-family: var(--sc-font-text);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      resize: vertical;
+      transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hd1-textarea:focus {
+      border-color: var(--sc-accent);
+      background: rgba(15, 23, 42, 0.85);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.14);
+      outline: none;
+    }
+
+    .hd1-qa-actions {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hd1-save-status {
+      font-family: var(--sc-font-mono);
+      font-size: 0.8rem;
+      color: var(--sc-accent-2);
+    }
+
+    /* Intentional Emphasis Frame: Key Mathematical Takeaway */
+    .hd1-insight-frame {
+      margin-top: 24px;
+      padding: clamp(20px, 2.8vw, 30px);
+      border-radius: 18px;
+      background:
+        radial-gradient(ellipse 80% 65% at 15% 0%, rgba(56, 189, 248, 0.14) 0%, transparent 70%),
+        rgba(15, 23, 42, 0.82);
+      border: 1px solid var(--sc-line-strong);
+      box-shadow: 0 18px 44px rgba(3, 8, 20, 0.55);
+      animation: hd1Reveal 0.38s var(--sc-ease-out);
+    }
+
+    @keyframes hd1Reveal {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    .hd1-insight-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--sc-line);
+    }
+
+    .hd1-insight-core {
+      font-size: clamp(1.02rem, 1.25vw, 1.14rem);
+      color: var(--sc-ink);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ---------- STAGE 3: VISUAL MISSION BRIEFING (Motion-First, Minimal Text) ---------- */
+    .hd1-mission-lead {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .hd1-mission-panel {
+      animation: hd1Reveal 0.45s var(--sc-ease-out);
+    }
+
+    /* Visual Simulation + 3 Motion Icon Nodes */
+    .hd1-visual-mission {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+      padding: 12px 0 36px;
+      border-bottom: 1px solid var(--sc-line);
+    }
+
+    .hd1-sim-stage {
+      position: relative;
+      width: 100%;
+      height: clamp(240px, 28vw, 310px);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 38% 50%, rgba(56, 189, 248, 0.12) 0%, rgba(7, 11, 20, 0.4) 72%);
+      overflow: hidden;
+    }
+
+    .hd1-sim-stage canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* 3 Visual Story Badges alongside simulation (Minimal Words, High Motion) */
+    .hd1-story-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .hd1-story-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hd1-story-emblem {
+      position: relative;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sc-accent);
+      flex-shrink: 0;
+      box-shadow: 0 0 22px rgba(56, 189, 248, 0.16);
+    }
+
+    .hd1-story-emblem--alert {
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #F87171;
+      box-shadow: 0 0 22px rgba(239, 68, 68, 0.18);
+    }
+
+    .hd1-story-emblem--vector {
+      border-color: rgba(45, 212, 191, 0.45);
+      color: #2DD4BF;
+      box-shadow: 0 0 22px rgba(45, 212, 191, 0.18);
+    }
+
+    .hd1-story-emblem svg {
+      animation: emblemPulse 3.2s ease-in-out infinite;
+    }
+
+    .hd1-story-item:nth-child(2) .hd1-story-emblem svg {
+      animation-delay: 0.6s;
+    }
+
+    .hd1-story-item:nth-child(3) .hd1-story-emblem svg {
+      animation-delay: 1.2s;
+    }
+
+    @keyframes emblemPulse {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.1) rotate(3deg); }
+    }
+
+    .hd1-story-caption > strong {
+      display: block;
+      font-family: var(--sc-font-display);
+      font-size: 1.06rem;
+      color: var(--sc-ink);
+      margin-bottom: 4px;
+    }
+
+    .hd1-story-caption > p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--sc-ink-soft);
+      line-height: 1.5;
+    }
+
+    /* ---------- LỘ TRÌNH (Clean 4-Orb Constellation Map, Prominent Font) ---------- */
+    .hd1-roadmap-wrap {
+      padding: 36px 0 38px;
+      border-bottom: 1px solid var(--sc-line);
+    }
+
+    .hd1-roadmap-title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.45rem, 2.3vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 30px;
+      color: #E0F2FE;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 0 0 24px rgba(56, 189, 248, 0.45);
+    }
+
+    .hd1-roadmap-title::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 14px var(--sc-accent);
+    }
+
+    .hd1-roadmap-title::after {
+      content: "";
+      width: 56px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--sc-accent) 0%, transparent 100%);
+    }
+
+    .hd1-roadmap {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(16px, 2.5vw, 28px);
+    }
+
+    /* Animated Light Stream connecting the 4 Activities */
+    .hd1-roadmap::before {
+      content: "";
+      position: absolute;
+      top: 28px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg,
+        var(--sc-accent) 0%,
+        var(--sc-accent-2) 35%,
+        var(--sc-amber) 70%,
+        #E5354C 100%);
+      opacity: 0.55;
+      z-index: 0;
+    }
+
+    .hd1-node {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.24s var(--sc-ease-out);
+    }
+
+    a.hd1-node:hover,
+    a.hd1-node:focus-visible {
+      transform: translateY(-5px);
+      outline: none;
+    }
+
+    .hd1-node__orb {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--sc-canvas);
+      border: 2px solid var(--sc-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--sc-accent);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.24);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    a.hd1-node:hover .hd1-node__orb {
+      transform: scale(1.08);
+    }
+
+    .hd1-node--active .hd1-node__orb {
+      background: var(--sc-accent);
+      color: var(--sc-accent-ink);
+      box-shadow: 0 0 26px rgba(56, 189, 248, 0.6);
+    }
+
+    .hd1-node--explore .hd1-node__orb {
+      border-color: var(--sc-accent-2);
+      color: #5EEAD4;
+      box-shadow: 0 0 20px rgba(45, 212, 191, 0.22);
+    }
+
+    .hd1-node--challenge .hd1-node__orb {
+      border-color: var(--sc-amber);
+      color: #FCD34D;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.24);
+    }
+
+    .hd1-node--practice .hd1-node__orb {
+      border-color: #E5354C;
+      color: #FDA4AF;
+      box-shadow: 0 0 20px rgba(229, 53, 76, 0.28);
+    }
+
+    .hd1-node__title {
+      font-family: var(--sc-font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--sc-ink);
+      margin: 2px 0 0;
+    }
+
+    .hd1-node__desc {
+      font-size: 0.86rem;
+      color: var(--sc-ink-soft);
+      line-height: 1.45;
+      margin: 0;
+      max-width: 22ch;
+    }
+
+    /* ---------- VISUAL RP BADGES & SKILL CARDS (Compact Visual Strip) ---------- */
+    .hd1-rules-strip {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: center;
+    }
+
+    .hd1-rp-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .hd1-rp-pill {
+      flex: 1 1 110px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+    }
+
+    .hd1-rp-pill strong {
+      font-family: var(--sc-font-mono);
+      font-size: 1.2rem;
+      color: var(--sc-accent);
+    }
+
+    .hd1-rp-pill--mid {
+      border-color: rgba(45, 212, 191, 0.3);
+    }
+    .hd1-rp-pill--mid strong { color: #2DD4BF; }
+
+    .hd1-rp-pill--high {
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+    .hd1-rp-pill--high strong { color: #FBBF24; }
+
+    .hd1-rp-pill span {
+      font-size: 0.82rem;
+      color: var(--sc-ink-soft);
+    }
+
+    .hd1-cards-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .hd1-skill-token {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--sc-line);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hd1-skill-token__icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--sc-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hd1-skill-token__icon--boost {
+      background: rgba(245, 158, 11, 0.16);
+      color: #FCD34D;
+    }
+
+    .hd1-skill-token b {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--sc-ink);
+    }
+
+    .hd1-skill-token small {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--sc-ink-soft);
+      line-height: 1.35;
+    }
+
+    @media (max-width: 900px) {
+      .hd1-situation,
+      .hd1-qa-grid,
+      .hd1-insight-grid,
+      .hd1-visual-mission,
+      .hd1-rules-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .hd1-roadmap {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 24px;
+      }
+
+      .hd1-roadmap::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .hd1-roadmap,
+      .hd1-cards-pair {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -20,225 +745,917 @@
       <span>← MÀN HÌNH CHÍNH</span>
     </a>
     <nav class="tm-bar__nav">
-      <span class="tm-pill tm-pill--accent">Hoạt động 1 · Khởi động</span>
+      <span class="tm-pill tm-pill--accent">Khởi động</span>
     </nav>
   </header>
 
-  <main class="subpage-main">
-    <section class="workspace-shell">
+  <main class="hd1-root" id="project-slot-hd1">
+
+    <!-- HERO HEADER: Tiêu đề chỉ giữ chữ "Khởi động" (To & Nổi bật nhất trang) -->
+    <header class="hd1-hero">
       <div class="activity-meta">
         <span>Hoạt động 1</span>
-        <span class="activity-badge">5 phút</span>
       </div>
-      <h1 class="tm-display tm-display--lg">1. Khởi động</h1>
-      <p class="tm-lede">
-        Quan sát <span class="kw">tình huống mở đầu</span> về bản vẽ của kỹ sư và trả lời câu hỏi gợi mở ngay trên web để dẫn vào bài học.
+      <h1 class="hd1-hero__title">Khởi động</h1>
+      <p class="hd1-hero__lede">
+        Quan sát <span class="kw">tình huống mở đầu</span> từ bản vẽ kỹ sư, trả lời hai câu hỏi gợi mở và kích hoạt <span class="kw">trạm kiểm soát vũ trụ</span>.
       </p>
+    </header>
 
-      <div class="workspace-content" id="project-slot-hd1">
-      <div class="khoi">
-    <h2>Tình huống mở đầu</h2>
-    <p>Một kỹ sư phác thảo hai tuyến đường trên bản vẽ mặt bằng: <b>tuyến A</b> chạy sát mặt đất và <b>cầu cạn B</b>. Trên bản vẽ, hai tuyến cắt nhau tại điểm $K$, nên kỹ sư ghi chú "nút giao tại $K$". Đến lúc thi công, đội công trình không thể nối hai tuyến tại $K$.</p>
-    <div class="man-hinh"><canvas id="mo-hinh" aria-label="Mô hình hai tuyến đường"></canvas><span class="goc" id="ten-goc">Bản vẽ mặt bằng của kỹ sư</span></div>
-    <div class="dieu-khien">
-      <button class="nut bat" id="xem-ban-ve">Bản vẽ của kỹ sư</button>
-      <button class="nut" id="xem-thuc-te">Ngoài thực tế</button>
-      <span class="phu" style="font-size:.85rem">Có thể kéo để xoay.</span>
-    </div>
-  </div>
+    <!-- =======================================================================
+         CHẶNG 1: TÌNH HUỐNG MỞ ĐẦU (Bản vẽ mặt bằng vs Không gian thực tế)
+         ======================================================================= -->
+    <section id="hd1-step-1" class="hd1-band">
+      <div class="hd1-situation">
+        <div>
+          <div class="hd1-step-tag">
+            <span class="hd1-step-tag__dot" aria-hidden="true"></span>
+            <span>Chặng 01 · Mở đầu</span>
+          </div>
+          <h2 class="hd1-title hd1-title--highlight">Tình huống</h2>
+          <p class="hd1-prose">
+            Trên <span class="kw">bản vẽ mặt bằng</span>, kỹ sư thấy <b>tuyến A</b> (sát mặt đất) và <b>cầu cạn B</b> cắt nhau tại $K$ nên ghi chú <i>"nút giao tại $K$"</i>.
+          </p>
+          <p class="hd1-prose">
+            Ra <span class="kw">ngoài thực tế</span>, đội công trình không thể nối hai tuyến tại $K$. Hãy bấm chuyển góc nhìn hoặc kéo xoay mô hình để kiểm chứng.
+          </p>
 
-  <div class="khoi">
-    <h2>Trả lời câu hỏi</h2>
-    <p class="de-bai">Câu 1. Khi phác thảo bản vẽ, người kỹ sư dùng hình ảnh gì để tượng trưng cho đường đi?</p>
-    <textarea id="tl-1" placeholder="Câu trả lời của em"></textarea>
-    <p class="de-bai" style="margin-top:16px">Câu 2. Vì sao bản thảo trong thực tế lại không thi công hoàn chỉnh?</p>
-    <textarea id="tl-2" placeholder="Câu trả lời của em"></textarea>
-    <p class="phu" id="da-luu" style="font-size:.85rem;margin-top:8px">&nbsp;</p>
-    <button class="nut" data-hien="ket-luan">Xem kết luận</button>
-    <div id="ket-luan" hidden>
-      <div class="chot">
-        <p><b>Câu 1.</b> Trên bản vẽ, mỗi đường đi được tượng trưng bằng một đường thẳng.</p>
-        <p><b>Câu 2.</b> Bản vẽ mặt bằng chỉ có hai chiều, không thể hiện độ cao. Hai tuyến cắt nhau trên giấy, nhưng ngoài thực tế cầu cạn B đi phía trên tuyến A nên hai tuyến không gặp nhau.</p>
-        <p>Muốn mô tả chính xác một đường đi trong không gian, cần biết <b>một điểm</b> mà nó đi qua và <b>hướng</b> của nó trong hệ tọa độ $Oxyz$. Đó là nội dung của bài hôm nay: <b>phương trình đường thẳng trong không gian</b>.</p>
-      </div>
-    </div>
-  </div>
+          <div class="hd1-controls" role="group" aria-label="Chọn góc nhìn mô hình">
+            <button class="hd1-view-btn bat" id="xem-ban-ve" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
+              Bản vẽ của kỹ sư
+            </button>
+            <button class="hd1-view-btn" id="xem-thuc-te" type="button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              Ngoài thực tế
+            </button>
+          </div>
+        </div>
 
-  <div class="khoi">
-    <h2>Vào bài</h2>
-    <button class="nut chinh" data-hien="vao-bai">Nhận nhiệm vụ của trạm</button>
-    <div id="vao-bai" hidden>
-      <div class="chot">
-        <p><b>Trạm kiểm soát vũ trụ.</b> Mỗi em là một nhân viên của trung tâm kiểm soát dự báo vũ trụ; mỗi trung tâm quan sát hàng trăm vệ tinh nhỏ xung quanh.</p>
-        <p>Một siêu tân tinh vừa nổ. Hàng trăm thiên thạch đang lao vào không phận, nguy cơ va chạm giữa thiên thạch và vệ tinh ngày càng cao. Nhiệm vụ của các trạm: dự báo hướng đi của thiên thạch; thiên thạch nào có khả năng va chạm với vệ tinh thì báo cáo ngay về trụ sở chính.</p>
-        <p>Vũ trụ được mô phỏng bởi không gian $Oxyz$. Mỗi thiên thạch hoặc vệ tinh di chuyển trên một đường thẳng, xuất phát từ điểm $M_0(x_0;y_0;z_0)$, theo hướng của vectơ $\vec u = (a;b;c)$.</p>
-        <p>Radar của trạm cũng giống bản vẽ của kỹ sư: chỉ thấy hai tọa độ $x, y$. <b>Muốn dự báo đúng, trước hết phải viết được phương trình của đường thẳng trong không gian.</b></p>
-      </div>
-      <h3>Luật tính điểm</h3>
-      <table class="bang">
-        <tr><th>Mức độ câu hỏi</th><th>Radar Points (RP)</th></tr>
-        <tr><td>Nhận biết</td><td>+10 RP mỗi câu</td></tr>
-        <tr><td>Thông hiểu</td><td>+20 RP mỗi câu</td></tr>
-        <tr><td>Vận dụng, thực tế</td><td>+40 RP mỗi câu</td></tr>
-      </table>
-      <h3>Thẻ kỹ năng của mỗi trạm</h3>
-      <p><b>Thẻ Cứu hộ chuyên môn:</b> được hỏi giáo viên gợi ý một bước mà không bị trừ điểm.</p>
-      <p><b>Thẻ Tăng tốc:</b> nhân đôi điểm của một câu vận dụng nếu giải đúng trong vòng 60 giây.</p>
-    </div>
-  </div>
-      </div>
-
-      <div class="tm-footer-nav">
-        <a class="tm-btn tm-btn--ghost" href="../index.html#hd-1">
-          ← Trở lại màn hình chính
-        </a>
-        <a class="tm-btn tm-btn--done" href="../index.html#hd-1">
-          Hoàn thành
-        </a>
+        <div class="hd1-viewport-wrap">
+          <div class="hd1-viewport">
+            <canvas id="mo-hinh" aria-label="Mô hình hai tuyến đường A và B"></canvas>
+            <div class="hd1-viewport__hud">
+              <span class="hd1-hud-badge" id="ten-goc">Bản vẽ mặt bằng của kỹ sư</span>
+              <span class="hd1-hud-hint">Kéo để xoay</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- SHOOTING-STAR BRIDGE 1: TÌNH HUỐNG -> CÂU HỎI -->
+    <div class="hd1-bridge" aria-hidden="true">
+      <canvas class="hd1-bridge-canvas" data-dir="rtl" data-target="hd1-step-2"></canvas>
+    </div>
+
+    <!-- =======================================================================
+         CHẶNG 2: CÂU HỎI GỢI MỞ & KẾT LUẬN DẪN VÀO BÀI
+         ======================================================================= -->
+    <section id="hd1-step-2" class="hd1-band">
+      <div class="hd1-qa-head">
+        <div>
+          <div class="hd1-step-tag">
+            <span class="hd1-step-tag__dot" aria-hidden="true"></span>
+            <span>Chặng 02 · Giải mã tình huống</span>
+          </div>
+          <h2 class="hd1-title" style="margin-bottom:0;">Trả lời câu hỏi</h2>
+        </div>
+        <span class="hd1-save-status" id="da-luu" aria-live="polite">&nbsp;</span>
+      </div>
+
+      <div class="hd1-qa-grid">
+        <div class="hd1-q-item">
+          <span class="hd1-q-num">Câu 1</span>
+          <p class="hd1-q-prompt">
+            Khi phác thảo bản vẽ, người kỹ sư dùng hình ảnh gì để tượng trưng cho <span class="kw">đường đi</span>?
+          </p>
+          <textarea class="hd1-textarea" id="tl-1" placeholder="Câu trả lời của em..."></textarea>
+        </div>
+
+        <div class="hd1-q-item">
+          <span class="hd1-q-num">Câu 2</span>
+          <p class="hd1-q-prompt">
+            Vì sao bản thảo trong <span class="kw">thực tế</span> lại không thi công hoàn chỉnh?
+          </p>
+          <textarea class="hd1-textarea" id="tl-2" placeholder="Câu trả lời của em..."></textarea>
+        </div>
+      </div>
+
+      <div class="hd1-qa-actions">
+        <button class="tm-btn tm-btn--ghost" data-hien="ket-luan" type="button">Xem kết luận</button>
+      </div>
+
+      <!-- Khung nhấn mạnh duy nhất cho Chốt kiến thức -->
+      <div id="ket-luan" class="hd1-insight-frame" hidden>
+        <div class="hd1-insight-grid">
+          <div>
+            <span class="hd1-q-num">Câu 1</span>
+            <p class="hd1-prose" style="margin:6px 0 0; color:var(--sc-ink);">
+              Mỗi đường đi được tượng trưng bằng một <span class="kw">đường thẳng</span>.
+            </p>
+          </div>
+          <div>
+            <span class="hd1-q-num">Câu 2</span>
+            <p class="hd1-prose" style="margin:6px 0 0; color:var(--sc-ink);">
+              Bản vẽ thiếu <span class="kw">độ cao</span>. Thực tế cầu cạn B đi phía trên tuyến A nên <span class="kw">không gặp nhau</span>.
+            </p>
+          </div>
+        </div>
+        <p class="hd1-insight-core">
+          → Để xác định chính xác đường thẳng trong không gian $Oxyz$, cần biết <span class="kw">một điểm</span> đi qua và <span class="kw">hướng</span> (vectơ chỉ phương) — nội dung của <span class="kw">phương trình đường thẳng</span>.
+        </p>
+      </div>
+    </section>
+
+    <!-- SHOOTING-STAR BRIDGE 2: CÂU HỎI -> NHIỆM VỤ TRẠM -->
+    <div class="hd1-bridge" aria-hidden="true">
+      <canvas class="hd1-bridge-canvas" data-dir="ltr" data-target="hd1-step-3"></canvas>
+    </div>
+
+    <!-- =======================================================================
+         CHẶNG 3: VÀO BÀI & GIAO NHIỆM VỤ (Motion-First Visual Briefing)
+         ======================================================================= -->
+    <section id="hd1-step-3" class="hd1-band">
+      <div class="hd1-mission-lead">
+        <div>
+          <div class="hd1-step-tag">
+            <span class="hd1-step-tag__dot" aria-hidden="true"></span>
+            <span>Chặng 03 · Vào bài &amp; Giao nhiệm vụ</span>
+          </div>
+          <h2 class="hd1-title" style="margin-bottom:0;">Trạm kiểm soát dự báo vũ trụ</h2>
+        </div>
+        <button class="tm-btn tm-btn--primary" id="btn-nhan-nv" data-hien="vao-bai" type="button">Nhận nhiệm vụ của trạm</button>
+      </div>
+
+      <div id="vao-bai" class="hd1-mission-panel" hidden>
+
+        <!-- 1. Mô phỏng trực quan Trạm Radar + Thiên thạch + Vệ tinh & 3 Biểu tượng nhiệm vụ -->
+        <div class="hd1-visual-mission">
+          <div class="hd1-sim-stage">
+            <canvas id="station-sim-canvas" aria-label="Mô phỏng radar trạm vũ trụ theo dõi thiên thạch và vệ tinh"></canvas>
+          </div>
+
+          <div class="hd1-story-steps">
+            <div class="hd1-story-item">
+              <div class="hd1-story-emblem hd1-story-emblem--alert" aria-hidden="true">
+                <!-- Meteor & Supernova Alert Icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="9" cy="15" r="5"/>
+                  <path d="M14 10l7-7"/>
+                  <path d="M11 6l5-5"/>
+                  <path d="M18 13l5-5"/>
+                </svg>
+              </div>
+              <div class="hd1-story-caption">
+                <strong>Siêu tân tinh nổ · Thiên thạch lao tới</strong>
+                <p>Đe dọa hàng trăm <span class="kw">vệ tinh</span> quanh trạm kiểm soát.</p>
+              </div>
+            </div>
+
+            <div class="hd1-story-item">
+              <div class="hd1-story-emblem" aria-hidden="true">
+                <!-- 2D Radar Scan Icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <line x1="12" y1="12" x2="18.5" y2="5.5"/>
+                </svg>
+              </div>
+              <div class="hd1-story-caption">
+                <strong>Radar 2D chỉ thấy $(x; y)$ · Thiếu độ cao $z$</strong>
+                <p>Dễ báo động nhầm như <span class="kw">bản vẽ kỹ sư</span>.</p>
+              </div>
+            </div>
+
+            <div class="hd1-story-item">
+              <div class="hd1-story-emblem hd1-story-emblem--vector" aria-hidden="true">
+                <!-- 3D Vector Trajectory Icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="5" cy="19" r="2.5"/>
+                  <path d="M7 17L19 5"/>
+                  <polyline points="13 5 19 5 19 11"/>
+                </svg>
+              </div>
+              <div class="hd1-story-caption">
+                <strong>Nhiệm vụ</strong>
+                <p>Lập <span class="kw">phương trình đường thẳng</span> để báo cáo va chạm thật.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Lộ trình (4 biểu tượng ngắn gọn: Khởi động -> Khám phá -> Thử thách -> Luyện tập) -->
+        <div class="hd1-roadmap-wrap">
+          <h3 class="hd1-roadmap-title">Lộ trình</h3>
+
+          <div class="hd1-roadmap" aria-label="Lộ trình 4 hoạt động">
+            <!-- Khởi động -->
+            <div class="hd1-node hd1-node--active">
+              <div class="hd1-node__orb" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              </div>
+              <h4 class="hd1-node__title">Khởi động</h4>
+              <p class="hd1-node__desc">Từ bản vẽ 2D đến không gian $Oxyz$</p>
+            </div>
+
+            <!-- Khám phá -->
+            <a class="hd1-node hd1-node--explore" href="../noi-dung-1-2/index.html">
+              <div class="hd1-node__orb" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              </div>
+              <h4 class="hd1-node__title">Khám phá</h4>
+              <p class="hd1-node__desc">Vectơ chỉ phương &amp; phương trình đường thẳng</p>
+            </a>
+
+            <!-- Thử thách -->
+            <a class="hd1-node hd1-node--challenge" href="../noi-dung-3/index.html">
+              <div class="hd1-node__orb" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="21"/></svg>
+              </div>
+              <h4 class="hd1-node__title">Thử thách</h4>
+              <p class="hd1-node__desc">Quét 3D phân biệt báo động thật &amp; giả</p>
+            </a>
+
+            <!-- Luyện tập -->
+            <a class="hd1-node hd1-node--practice" href="../luyen-tap/index.html">
+              <div class="hd1-node__orb" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <h4 class="hd1-node__title">Luyện tập</h4>
+              <p class="hd1-node__desc">Đua tốc độ <i>Foxy Running</i> &amp; bảng xếp hạng</p>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3. Điểm thưởng RP & 2 Thẻ kỹ năng (Icon + Huy hiệu trực quan, cực ít chữ) -->
+        <div class="hd1-rules-strip">
+          <div>
+            <span class="hd1-q-num">Điểm thưởng Radar Points (RP)</span>
+            <div class="hd1-rp-pills">
+              <div class="hd1-rp-pill">
+                <strong>+10 RP</strong>
+                <span>Nhận biết</span>
+              </div>
+              <div class="hd1-rp-pill hd1-rp-pill--mid">
+                <strong>+20 RP</strong>
+                <span>Thông hiểu</span>
+              </div>
+              <div class="hd1-rp-pill hd1-rp-pill--high">
+                <strong>+40 RP</strong>
+                <span>Vận dụng</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span class="hd1-q-num">2 Thẻ kỹ năng của trạm</span>
+            <div class="hd1-cards-pair">
+              <div class="hd1-skill-token">
+                <span class="hd1-skill-token__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </span>
+                <div>
+                  <b>Thẻ Cứu hộ</b>
+                  <small>Gợi ý 1 bước · Không trừ điểm</small>
+                </div>
+              </div>
+
+              <div class="hd1-skill-token">
+                <span class="hd1-skill-token__icon hd1-skill-token__icon--boost" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </span>
+                <div>
+                  <b>Thẻ Tăng tốc</b>
+                  <small>×2 điểm vận dụng trong 60s</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="tm-footer-nav">
+      <a class="tm-btn tm-btn--ghost" href="../index.html#hd-1">
+        ← Trở lại màn hình chính
+      </a>
+      <a class="tm-btn tm-btn--done" href="../index.html#hd-1">
+        Hoàn thành
+      </a>
+    </div>
+
   </main>
 
   <script src="../assets/starfield.js"></script>
   <script src="../assets/page-transition.js"></script>
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  /* Câu trả lời lưu trên máy */
-  const KHOA = 'tkv-khoi-dong';
-  const da = docMay(KHOA, {});
-  const ghi = document.getElementById('da-luu');
-  let hen = null;
-  ['tl-1', 'tl-2'].forEach(id => {
-    const o = document.getElementById(id);
-    o.value = da[id] || '';
-    o.addEventListener('input', () => {
-      da[id] = o.value;
-      luuMay(KHOA, da);
-      ghi.textContent = 'Đã lưu trên máy này.';
-      clearTimeout(hen);
-      hen = setTimeout(() => { ghi.innerHTML = '&nbsp;'; }, 1500);
-    });
-  });
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Mô hình: tuyến A trên mặt đất, cầu cạn B cao 3 đơn vị. Nhìn từ trên xuống thì hai tuyến cắt nhau tại K(5; 4). */
-  const cv = document.getElementById('mo-hinh');
-  const tenGoc = document.getElementById('ten-goc');
-  const nutBanVe = document.getElementById('xem-ban-ve');
-  const nutThucTe = document.getElementById('xem-thuc-te');
-  const CAO = 3;
-  const A = [[0, 2, 0], [10, 6, 0]];
-  const B = [[0, 7, CAO], [10, 1, CAO]];
-  const tren = (p, q, k) => p.map((v, i) => v + (q[i] - v) * k);
-  const V = { goc: 0, nghieng: Math.PI / 2 };
-  const TAM = [5, 4, 1];
-  let ctx, w, h;
-
-  function kichThuoc() {
-    const dpr = window.devicePixelRatio || 1;
-    w = cv.clientWidth; h = Math.round(w * (w < 500 ? 0.8 : 0.55));
-    cv.style.height = h + 'px';
-    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
-    ctx = cv.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ve();
-  }
-
-  function chieu(p) {
-    const s = Math.min(w / 13, h / 9.5);
-    const x = p[0] - TAM[0], y = p[1] - TAM[1], z = p[2] - TAM[2];
-    const c = Math.cos(V.goc), sn = Math.sin(V.goc);
-    const x1 = x * c - y * sn, y1 = x * sn + y * c;
-    return [w / 2 + s * x1, h / 2 - s * (y1 * Math.sin(V.nghieng) + z * Math.cos(V.nghieng))];
-  }
-
-  function net(a, b, mau, day, dut) {
-    const p = chieu(a), q = chieu(b);
-    ctx.strokeStyle = mau; ctx.lineWidth = day; ctx.setLineDash(dut || []);
-    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke();
-    ctx.setLineDash([]);
-  }
-
-  function chu(p, noiDung, mau, dy) {
-    const q = chieu(p);
-    ctx.fillStyle = mau; ctx.font = '600 13px "Be Vietnam Pro", system-ui, sans-serif';
-    let x = q[0] + 8;
-    const rong = ctx.measureText(noiDung).width;
-    if (x + rong > w - 6) x = Math.max(6, w - 6 - rong);
-    ctx.fillText(noiDung, x, q[1] + (dy === undefined ? -8 : dy));
-  }
-
-  function ve() {
-    if (!ctx) return;
-    ctx.clearRect(0, 0, w, h);
-    const banVe = V.nghieng > 1.45;
-    // mặt đất
-    ctx.lineCap = 'butt';
-    for (let x = 0; x <= 10; x++) net([x, 0, 0], [x, 8, 0], 'rgba(79,209,197,.09)', 1);
-    for (let y = 0; y <= 8; y++) net([0, y, 0], [10, y, 0], 'rgba(79,209,197,.09)', 1);
-    ctx.lineCap = 'round';
-    // tuyến A
-    net(A[0], A[1], '#9aa6c7', 7);
-    chu(tren(A[0], A[1], 0.9), 'Tuyến A', '#c7d0e8');
-    // trụ cầu
-    if (!banVe) [0.1, 0.3, 0.7, 0.9].forEach(k => {
-      const p = tren(B[0], B[1], k);
-      net([p[0], p[1], 0], p, 'rgba(246,193,119,.55)', 3);
-    });
-    // cầu cạn B
-    net(B[0], B[1], '#f6c177', 7);
-    chu(tren(B[0], B[1], 0.06), 'Cầu cạn B', '#f6c177');
-    // điểm K
-    if (banVe) {
-      const k = chieu([5, 4, CAO]);
-      ctx.fillStyle = '#f87171';
-      ctx.beginPath(); ctx.arc(k[0], k[1], 6, 0, Math.PI * 2); ctx.fill();
-      chu([5, 4, CAO], 'K', '#fecaca');
-    } else {
-      net([5, 4, 0], [5, 4, CAO], 'rgba(248,113,113,.9)', 1.5, [5, 5]);
-      [[5, 4, 0], [5, 4, CAO]].forEach(p => {
-        const q = chieu(p);
-        ctx.fillStyle = '#f87171';
-        ctx.beginPath(); ctx.arc(q[0], q[1], 5, 0, Math.PI * 2); ctx.fill();
+    /* 1. Lưu câu trả lời học sinh trên máy */
+    const KHOA = 'tkv-khoi-dong';
+    const da = docMay(KHOA, {});
+    const ghi = document.getElementById('da-luu');
+    let hen = null;
+    ['tl-1', 'tl-2'].forEach(id => {
+      const o = document.getElementById(id);
+      o.value = da[id] || '';
+      o.addEventListener('input', () => {
+        da[id] = o.value;
+        luuMay(KHOA, da);
+        ghi.textContent = '✓ Đã lưu trên máy này';
+        clearTimeout(hen);
+        hen = setTimeout(() => { ghi.innerHTML = '&nbsp;'; }, 1800);
       });
-      chu([5, 4, 0], 'Tại K, cầu B đi phía trên tuyến A', '#fecaca', 22);
-    }
-    ctx.lineCap = 'butt';
-    tenGoc.textContent = banVe ? 'Bản vẽ mặt bằng của kỹ sư' : 'Ngoài thực tế';
-    nutBanVe.classList.toggle('bat', banVe);
-    nutThucTe.classList.toggle('bat', !banVe);
-  }
+    });
 
-  function xoayToi(goc, nghieng) {
-    const g0 = V.goc, n0 = V.nghieng, t0 = performance.now();
-    (function buoc(t) {
-      const k = Math.min(1, (t - t0) / 700);
-      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      V.goc = g0 + (goc - g0) * e;
-      V.nghieng = n0 + (nghieng - n0) * e;
+    /* Khi mở khung ẩn (Kết luận / Nhận nhiệm vụ), tự động cuộn mượt tới phần vừa mở */
+    document.querySelectorAll('[data-hien]').forEach(nut => {
+      nut.addEventListener('click', () => {
+        const muc = document.getElementById(nut.dataset.hien);
+        if (muc && !muc.hidden) {
+          setTimeout(() => {
+            muc.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+          }, 60);
+        }
+      });
+    });
+
+    /* 2. Mô hình 3D Chặng 1: Tuyến A trên mặt đất (z=0), cầu cạn B cao 3 đơn vị (z=3) */
+    const cv = document.getElementById('mo-hinh');
+    const tenGoc = document.getElementById('ten-goc');
+    const nutBanVe = document.getElementById('xem-ban-ve');
+    const nutThucTe = document.getElementById('xem-thuc-te');
+    const CAO = 3;
+    const A = [[0, 2, 0], [10, 6, 0]];
+    const B = [[0, 7, CAO], [10, 1, CAO]];
+    const tren = (p, q, k) => p.map((v, i) => v + (q[i] - v) * k);
+    const V = { goc: 0, nghieng: Math.PI / 2 };
+    const TAM = [5, 4, 1];
+    let ctx, w, h;
+
+    function kichThuoc() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = cv.clientWidth;
+      h = Math.round(w * (w < 500 ? 0.76 : 0.56));
+      cv.style.height = h + 'px';
+      cv.width = Math.round(w * dpr);
+      cv.height = Math.round(h * dpr);
+      ctx = cv.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ve();
-      if (k < 1) requestAnimationFrame(buoc);
-    })(t0);
-  }
+    }
 
-  nutBanVe.addEventListener('click', () => xoayToi(0, Math.PI / 2));
-  nutThucTe.addEventListener('click', () => xoayToi(0.55, 0.42));
+    function chieu(p) {
+      const s = Math.min(w / 12.6, h / 9.2);
+      const x = p[0] - TAM[0], y = p[1] - TAM[1], z = p[2] - TAM[2];
+      const c = Math.cos(V.goc), sn = Math.sin(V.goc);
+      const x1 = x * c - y * sn, y1 = x * sn + y * c;
+      return [w / 2 + s * x1, h / 2 - s * (y1 * Math.sin(V.nghieng) + z * Math.cos(V.nghieng))];
+    }
 
-  let keo = null;
-  cv.addEventListener('pointerdown', e => { keo = { x: e.clientX, y: e.clientY }; cv.setPointerCapture(e.pointerId); });
-  cv.addEventListener('pointermove', e => {
-    if (!keo) return;
-    V.goc += (e.clientX - keo.x) * 0.008;
-    V.nghieng = Math.min(Math.PI / 2, Math.max(0.05, V.nghieng + (e.clientY - keo.y) * 0.008));
-    keo = { x: e.clientX, y: e.clientY };
-    ve();
+    function net(a, b, mau, day, dut) {
+      const p = chieu(a), q = chieu(b);
+      ctx.strokeStyle = mau;
+      ctx.lineWidth = day;
+      ctx.setLineDash(dut || []);
+      ctx.beginPath();
+      ctx.moveTo(p[0], p[1]);
+      ctx.lineTo(q[0], q[1]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function chu(p, noiDung, mau, dy) {
+      const q = chieu(p);
+      ctx.fillStyle = mau;
+      ctx.font = '600 13px "Be Vietnam Pro", system-ui, sans-serif';
+      let x = q[0] + 8;
+      const rong = ctx.measureText(noiDung).width;
+      if (x + rong > w - 8) x = Math.max(8, w - 8 - rong);
+      ctx.fillText(noiDung, x, q[1] + (dy === undefined ? -10 : dy));
+    }
+
+    function ve() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, w, h);
+      const banVe = V.nghieng > 1.45;
+
+      ctx.lineCap = 'butt';
+      for (let x = 0; x <= 10; x++) net([x, 0, 0], [x, 8, 0], 'rgba(56, 189, 248, 0.11)', 1);
+      for (let y = 0; y <= 8; y++) net([0, y, 0], [10, y, 0], 'rgba(56, 189, 248, 0.11)', 1);
+      ctx.lineCap = 'round';
+
+      net(A[0], A[1], '#38BDF8', 6.5);
+      chu(tren(A[0], A[1], 0.86), 'Tuyến A', '#BAE6FD');
+
+      if (!banVe) {
+        [0.12, 0.32, 0.68, 0.88].forEach(k => {
+          const p = tren(B[0], B[1], k);
+          net([p[0], p[1], 0], p, 'rgba(245, 158, 11, 0.45)', 2.5);
+        });
+      }
+
+      net(B[0], B[1], '#F59E0B', 6.5);
+      chu(tren(B[0], B[1], 0.06), 'Cầu cạn B', '#FDE68A');
+
+      if (banVe) {
+        const k = chieu([5, 4, CAO]);
+        ctx.save();
+        ctx.fillStyle = '#EF4444';
+        ctx.shadowColor = '#EF4444';
+        ctx.shadowBlur = 14;
+        ctx.beginPath();
+        ctx.arc(k[0], k[1], 6.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        chu([5, 4, CAO], 'K', '#FCA5A5');
+      } else {
+        net([5, 4, 0], [5, 4, CAO], 'rgba(248, 113, 113, 0.92)', 2, [5, 5]);
+        [[5, 4, 0], [5, 4, CAO]].forEach(p => {
+          const q = chieu(p);
+          ctx.save();
+          ctx.fillStyle = '#EF4444';
+          ctx.shadowColor = '#EF4444';
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.arc(q[0], q[1], 5.2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+        chu([5, 4, 0], 'Tại K, cầu B đi phía trên tuyến A', '#FCA5A5', 22);
+      }
+
+      ctx.lineCap = 'butt';
+      tenGoc.textContent = banVe ? 'Bản vẽ mặt bằng của kỹ sư' : 'Ngoài thực tế';
+      nutBanVe.classList.toggle('bat', banVe);
+      nutThucTe.classList.toggle('bat', !banVe);
+    }
+
+    function xoayToi(goc, nghieng) {
+      const g0 = V.goc, n0 = V.nghieng, t0 = performance.now();
+      (function buoc(t) {
+        const k = Math.min(1, (t - t0) / 680);
+        const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+        V.goc = g0 + (goc - g0) * e;
+        V.nghieng = n0 + (nghieng - n0) * e;
+        ve();
+        if (k < 1) requestAnimationFrame(buoc);
+      })(t0);
+    }
+
+    nutBanVe.addEventListener('click', () => xoayToi(0, Math.PI / 2));
+    nutThucTe.addEventListener('click', () => xoayToi(0.55, 0.42));
+
+    let keo = null;
+    cv.addEventListener('pointerdown', e => {
+      keo = { x: e.clientX, y: e.clientY };
+      cv.setPointerCapture(e.pointerId);
+    });
+    cv.addEventListener('pointermove', e => {
+      if (!keo) return;
+      V.goc += (e.clientX - keo.x) * 0.008;
+      V.nghieng = Math.min(Math.PI / 2, Math.max(0.06, V.nghieng + (e.clientY - keo.y) * 0.008));
+      keo = { x: e.clientX, y: e.clientY };
+      ve();
+    });
+    cv.addEventListener('pointerup', () => { keo = null; });
+    cv.addEventListener('pointercancel', () => { keo = null; });
+
+    let henKT = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(henKT);
+      henKT = setTimeout(kichThuoc, 120);
+    });
+    kichThuoc();
+
+    /* 3. Motion Canvas cho Chặng 3: Mô phỏng trực quan Trạm kiểm soát dự báo vũ trụ
+          (Quét Radar Oxyz + Quỹ đạo Vệ tinh + Thiên thạch bay thẳng từ M0 theo vectơ u) */
+    const simCanvas = document.getElementById('station-sim-canvas');
+    const bands = Array.from(document.querySelectorAll('.hd1-band'));
+    const bridges = Array.from(document.querySelectorAll('.hd1-bridge-canvas'));
+
+    function setupHiDPI(canvas) {
+      if (!canvas) return null;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return null;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      const c = canvas.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx: c, w: rect.width, h: rect.height };
+    }
+
+    function drawStationSim(t) {
+      const g = setupHiDPI(simCanvas);
+      if (!g) return;
+      const { ctx: c, w: cw, h: ch } = g;
+      c.clearRect(0, 0, cw, ch);
+
+      const cx = cw * 0.46;
+      const cy = ch * 0.54;
+      const R = Math.min(cw, ch) * 0.36;
+
+      // 1. Vòng Radar Oxyz nghiêng trong không gian
+      c.save();
+      c.translate(cx, cy);
+      c.scale(1, 0.56);
+
+      [0.45, 0.75, 1.05].forEach((scale, idx) => {
+        c.strokeStyle = idx === 2 ? 'rgba(56, 189, 248, 0.34)' : 'rgba(56, 189, 248, 0.16)';
+        c.lineWidth = idx === 2 ? 1.5 : 1;
+        c.beginPath();
+        c.arc(0, 0, R * scale, 0, Math.PI * 2);
+        c.stroke();
+      });
+
+      // Tia quét Radar xoay tròn
+      const sweep = reduced ? 0.8 : (t * 1.15) % (Math.PI * 2);
+      const sweepGrad = c.createLinearGradient(0, 0, Math.cos(sweep) * R, Math.sin(sweep) * R);
+      sweepGrad.addColorStop(0, 'rgba(56, 189, 248, 0.02)');
+      sweepGrad.addColorStop(1, 'rgba(56, 189, 248, 0.38)');
+      c.fillStyle = sweepGrad;
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.arc(0, 0, R * 1.05, sweep - 0.55, sweep);
+      c.closePath();
+      c.fill();
+      c.restore();
+
+      // 2. Trục độ cao Oz tại tâm Trạm kiểm soát
+      c.save();
+      c.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+      c.setLineDash([4, 4]);
+      c.beginPath();
+      c.moveTo(cx, cy + R * 0.45);
+      c.lineTo(cx, cy - R * 0.95);
+      c.stroke();
+      c.restore();
+
+      // Biểu tượng Trạm kiểm soát ở tâm
+      c.save();
+      c.fillStyle = '#38BDF8';
+      c.shadowColor = '#38BDF8';
+      c.shadowBlur = 14;
+      c.beginPath();
+      c.arc(cx, cy, 5.5, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      // 3. Quỹ đạo thẳng của Vệ tinh (màu xanh ngọc)
+      const satA = { x: cw * 0.14, y: ch * 0.72 };
+      const satB = { x: cw * 0.86, y: ch * 0.34 };
+      c.save();
+      c.strokeStyle = 'rgba(45, 212, 191, 0.45)';
+      c.lineWidth = 2;
+      c.setLineDash([5, 5]);
+      c.beginPath();
+      c.moveTo(satA.x, satA.y);
+      c.lineTo(satB.x, satB.y);
+      c.stroke();
+      c.restore();
+
+      // Vệ tinh di chuyển trên đường thẳng
+      const satP = reduced ? 0.58 : (0.2 + 0.65 * (0.5 + 0.5 * Math.sin(t * 0.85)));
+      const satX = satA.x + (satB.x - satA.x) * satP;
+      const satY = satA.y + (satB.y - satA.y) * satP;
+
+      c.save();
+      c.translate(satX, satY);
+      // Cánh pin mặt trời vệ tinh
+      c.strokeStyle = '#2DD4BF';
+      c.lineWidth = 2.2;
+      c.beginPath();
+      c.moveTo(-10, -4); c.lineTo(10, 4);
+      c.stroke();
+      c.fillStyle = '#E0F2FE';
+      c.shadowColor = '#2DD4BF';
+      c.shadowBlur = 12;
+      c.beginPath();
+      c.arc(0, 0, 4.2, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      c.fillStyle = '#5EEAD4';
+      c.font = '600 11px "JetBrains Mono", monospace';
+      c.fillText('VỆ TINH', satX - 22, satY - 12);
+
+      // 4. Quỹ đạo thẳng của Thiên thạch từ M0 theo vectơ chỉ phương u
+      const m0 = { x: cw * 0.16, y: ch * 0.20 };
+      const m1 = { x: cw * 0.88, y: ch * 0.76 };
+
+      // Đường thẳng quỹ đạo thiên thạch
+      c.save();
+      c.strokeStyle = 'rgba(248, 113, 113, 0.38)';
+      c.lineWidth = 2;
+      c.beginPath();
+      c.moveTo(m0.x, m0.y);
+      c.lineTo(m1.x, m1.y);
+      c.stroke();
+      c.restore();
+
+      // Điểm xuất phát M0 & Vectơ chỉ phương u
+      const uEnd = {
+        x: m0.x + (m1.x - m0.x) * 0.24,
+        y: m0.y + (m1.y - m0.y) * 0.24
+      };
+      c.save();
+      c.strokeStyle = '#FBBF24';
+      c.lineWidth = 2.8;
+      c.beginPath();
+      c.moveTo(m0.x, m0.y);
+      c.lineTo(uEnd.x, uEnd.y);
+      c.stroke();
+
+      // Đầu mũi tên vectơ u
+      const ang = Math.atan2(uEnd.y - m0.y, uEnd.x - m0.x);
+      c.fillStyle = '#FBBF24';
+      c.beginPath();
+      c.moveTo(uEnd.x, uEnd.y);
+      c.lineTo(uEnd.x - 8 * Math.cos(ang - 0.4), uEnd.y - 8 * Math.sin(ang - 0.4));
+      c.lineTo(uEnd.x - 8 * Math.cos(ang + 0.4), uEnd.y - 8 * Math.sin(ang + 0.4));
+      c.closePath();
+      c.fill();
+
+      c.fillStyle = '#FDE68A';
+      c.beginPath();
+      c.arc(m0.x, m0.y, 4.5, 0, Math.PI * 2);
+      c.fill();
+      c.font = '600 11px "JetBrains Mono", monospace';
+      c.fillText('M₀(x₀;y₀;z₀)', m0.x + 8, m0.y - 6);
+      c.fillText('u = (a;b;c)', uEnd.x + 6, uEnd.y - 4);
+      c.restore();
+
+      // Thiên thạch đang lao theo đường thẳng
+      const metP = reduced ? 0.62 : ((t * 0.38) % 1);
+      const metX = m0.x + (m1.x - m0.x) * metP;
+      const metY = m0.y + (m1.y - m0.y) * metP;
+      const tailP = Math.max(0, metP - 0.18);
+      const tailX = m0.x + (m1.x - m0.x) * tailP;
+      const tailY = m0.y + (m1.y - m0.y) * tailP;
+
+      const tailGrad = c.createLinearGradient(tailX, tailY, metX, metY);
+      tailGrad.addColorStop(0, 'rgba(239, 68, 68, 0)');
+      tailGrad.addColorStop(0.6, '#EF4444');
+      tailGrad.addColorStop(1, '#FEF08A');
+
+      c.save();
+      c.strokeStyle = tailGrad;
+      c.lineWidth = 4;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(tailX, tailY);
+      c.lineTo(metX, metY);
+      c.stroke();
+
+      c.fillStyle = '#FFFFFF';
+      c.shadowColor = '#EF4444';
+      c.shadowBlur = 16;
+      c.beginPath();
+      c.arc(metX, metY, 5, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      // 5. Vòng cảnh báo giao điểm hình chiếu (Radar Alert Pulse)
+      const ix = cw * 0.54;
+      const iy = ch * 0.51;
+      const pulseR = 8 + (reduced ? 4 : ((t * 18) % 18));
+      const pulseA = reduced ? 0.6 : Math.max(0, 1 - ((t * 18) % 18) / 18);
+
+      c.save();
+      c.strokeStyle = `rgba(239, 68, 68, ${pulseA})`;
+      c.lineWidth = 1.8;
+      c.beginPath();
+      c.arc(ix, iy, pulseR, 0, Math.PI * 2);
+      c.stroke();
+
+      c.fillStyle = '#FCA5A5';
+      c.font = '600 10.5px "JetBrains Mono", monospace';
+      c.fillText('CẢNH BÁO VA CHẠM?', ix + 12, iy + 4);
+      c.restore();
+    }
+
+    /* 4. Hiệu ứng cuộn & Cầu nối sao băng giữa các chặng */
+    function updateBandFocus() {
+      if (reduced) return;
+      const vh = window.innerHeight || 800;
+      const centerVh = vh * 0.5;
+      bands.forEach(band => {
+        const rect = band.getBoundingClientRect();
+        if (rect.height > vh * 0.85 && rect.top < vh * 0.65 && rect.bottom > vh * 0.35) {
+          band.style.transform = 'scale(1)';
+          band.style.opacity = '1';
+          return;
+        }
+        const bandCenter = rect.top + rect.height * 0.5;
+        const dist = Math.min(1, Math.abs(bandCenter - centerVh) / (vh * 0.92));
+        const focus = 0.5 * (1 + Math.cos(dist * Math.PI));
+        const scale = 0.92 + 0.08 * focus;
+        const opacity = 0.52 + 0.48 * focus;
+        band.style.transform = `scale(${scale.toFixed(4)})`;
+        band.style.opacity = opacity.toFixed(3);
+      });
+    }
+
+    function getBridgeProgress(el) {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      const startY = vh * 0.88;
+      const endY = vh * 0.24;
+      const raw = (startY - rect.top) / Math.max(1, startY - endY);
+      return Math.max(0, Math.min(1, raw));
+    }
+
+    function drawStar(c, sx, sy, ex, ey, prog, tailFrac, r, color, alpha, drawFlare) {
+      if (prog <= 0.01) return;
+      const p = Math.max(0, Math.min(1, prog));
+      const mx = sx + (ex - sx) * p;
+      const my = sy + (ey - sy) * p;
+      const tp = Math.max(0, p - tailFrac);
+      const tx = sx + (ex - sx) * tp;
+      const ty = sy + (ey - sy) * tp;
+
+      const grad = c.createLinearGradient(tx, ty, mx, my);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(0.55, color);
+      grad.addColorStop(1, '#FFFFFF');
+
+      c.save();
+      c.globalAlpha = alpha === undefined ? 1 : alpha;
+      c.strokeStyle = grad;
+      c.lineWidth = r * 0.85;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(tx, ty);
+      c.lineTo(mx, my);
+      c.stroke();
+
+      c.fillStyle = '#FFFFFF';
+      c.shadowColor = color;
+      c.shadowBlur = r * 3.8;
+      c.beginPath();
+      c.arc(mx, my, r, 0, Math.PI * 2);
+      c.fill();
+
+      if (drawFlare) {
+        c.strokeStyle = '#FFFFFF';
+        c.lineWidth = 1.1;
+        const arm = r * 2.3;
+        c.beginPath();
+        c.moveTo(mx - arm, my); c.lineTo(mx + arm, my);
+        c.moveTo(mx, my - arm); c.lineTo(mx, my + arm);
+        c.stroke();
+      }
+      c.restore();
+    }
+
+    // Các ngôi sao băng nhỏ bay hộ tống dọc theo dải sao băng chính
+    const bridgeCompanions = [
+      { perpOffset: -30, lag: -0.06, tailLen: 0.14, r: 2.2, color: '#7DD3FC', alpha: 0.86 },
+      { perpOffset: 28,  lag: -0.11, tailLen: 0.12, r: 1.9, color: '#5EEAD4', alpha: 0.80 },
+      { perpOffset: -54, lag: -0.17, tailLen: 0.10, r: 1.5, color: '#BAE6FD', alpha: 0.65 },
+      { perpOffset: 50,  lag: -0.03, tailLen: 0.11, r: 1.7, color: '#FDE68A', alpha: 0.75 }
+    ];
+
+    function drawBridges(t) {
+      bridges.forEach((canvas, idx) => {
+        const g = setupHiDPI(canvas);
+        if (!g) return;
+        const { ctx: c, w: cw, h: ch } = g;
+        c.clearRect(0, 0, cw, ch);
+
+        const dir = canvas.getAttribute('data-dir') || 'ltr';
+        const targetId = canvas.getAttribute('data-target');
+        const prog = reduced ? 1 : getBridgeProgress(canvas);
+
+        if (targetId) {
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) targetEl.classList.toggle('is-connected', prog > 0.8);
+        }
+
+        const sx = dir === 'rtl' ? cw * 0.78 : cw * 0.22;
+        const sy = 16;
+        const ex = dir === 'rtl' ? cw * 0.22 : cw * 0.78;
+        const ey = ch - 16;
+        const dx = ex - sx;
+        const dy = ey - sy;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = -dy / len;
+        const ny = dx / len;
+
+        c.save();
+        c.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+        c.lineWidth = 1.3;
+        c.setLineDash([6, 6]);
+        c.beginPath();
+        c.moveTo(sx, sy);
+        c.lineTo(ex, ey);
+        c.stroke();
+        c.restore();
+
+        c.fillStyle = '#38BDF8';
+        c.beginPath();
+        c.arc(sx, sy, 4.2, 0, Math.PI * 2);
+        c.fill();
+
+        if (prog > 0.01) {
+          const cx = sx + dx * prog;
+          const cy = sy + dy * prog;
+          const beam = c.createLinearGradient(sx, sy, cx, cy);
+          beam.addColorStop(0, 'rgba(56, 189, 248, 0.15)');
+          beam.addColorStop(0.6, '#38BDF8');
+          beam.addColorStop(1, '#2DD4BF');
+
+          c.save();
+          c.strokeStyle = beam;
+          c.lineWidth = 2.6;
+          c.shadowColor = '#38BDF8';
+          c.shadowBlur = 13;
+          c.beginPath();
+          c.moveTo(sx, sy);
+          c.lineTo(cx, cy);
+          c.stroke();
+          c.restore();
+
+          const starP = prog < 0.98 ? prog : ((t * 0.44 + idx * 0.35) % 1);
+
+          // 1. Ngôi sao băng chính dẫn đầu có tia sáng chữ thập
+          drawStar(c, sx, sy, ex, ey, starP, 0.28, 4.5, '#38BDF8', 1, true);
+
+          // 2. Đội hình các ngôi sao băng nhỏ bay song song dọc theo dải sao băng chính
+          bridgeCompanions.forEach((comp, cIdx) => {
+            const wob = Math.sin(t * 2.3 + cIdx * 1.7) * 3.5;
+            const off = comp.perpOffset + wob;
+            const csx = sx + nx * off;
+            const csy = sy + ny * off;
+            const cex = ex + nx * off;
+            const cey = ey + ny * off;
+
+            const cProg = Math.max(0, Math.min(1, starP + comp.lag));
+            if (cProg > 0.02) {
+              c.save();
+              c.strokeStyle = comp.color;
+              c.globalAlpha = 0.14;
+              c.lineWidth = 1;
+              c.beginPath();
+              c.moveTo(csx, csy);
+              c.lineTo(csx + (cex - csx) * cProg, csy + (cey - csy) * cProg);
+              c.stroke();
+              c.restore();
+
+              drawStar(c, csx, csy, cex, cey, cProg, comp.tailLen, comp.r, comp.color, comp.alpha, false);
+            }
+          });
+
+          // 3. Các hạt bụi sao nhỏ lấp lánh chạy dọc theo đuôi sao băng chính
+          c.save();
+          for (let k = 1; k <= 6; k++) {
+            const dp = Math.max(0, starP - k * 0.038);
+            const px = sx + dx * dp + Math.sin(t * 4.4 + k * 2.1) * 7;
+            const py = sy + dy * dp + Math.cos(t * 3.7 + k * 1.9) * 5;
+            c.fillStyle = k % 2 === 0 ? '#BAE6FD' : '#5EEAD4';
+            c.globalAlpha = Math.max(0.12, 0.78 - k * 0.11);
+            c.beginPath();
+            c.arc(px, py, 1.6, 0, Math.PI * 2);
+            c.fill();
+          }
+          c.restore();
+        }
+
+        c.save();
+        c.fillStyle = prog > 0.9 ? '#2DD4BF' : '#0F172A';
+        c.strokeStyle = prog > 0.9 ? '#2DD4BF' : 'rgba(148, 163, 184, 0.45)';
+        c.lineWidth = 2.2;
+        if (prog > 0.9) {
+          c.shadowColor = '#2DD4BF';
+          c.shadowBlur = 14;
+        }
+        c.beginPath();
+        c.arc(ex, ey, 5.5, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+        c.restore();
+      });
+    }
+
+    function loop(now) {
+      const t = now * 0.001;
+      updateBandFocus();
+      drawBridges(t);
+      drawStationSim(t);
+      if (!reduced) requestAnimationFrame(loop);
+    }
+
+    if (reduced) {
+      loop(0);
+    } else {
+      requestAnimationFrame(loop);
+    }
   });
-  cv.addEventListener('pointerup', () => { keo = null; });
-  cv.addEventListener('pointercancel', () => { keo = null; });
-  let henKT = null;
-  window.addEventListener('resize', () => { clearTimeout(henKT); henKT = setTimeout(kichThuoc, 150); });
-  kichThuoc();
-});
-</script>
+  </script>
 </body>
 </html>

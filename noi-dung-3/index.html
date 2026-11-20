@@ -120,6 +120,12 @@
       <div class="hop" id="cau-2">
         <h3 style="margin-top:0">Câu 2 · Thông hiểu <span class="diem">+20 RP</span></h3>
         <p>Chứng minh bằng tính toán. Gọi $\vec v$ là vectơ chỉ phương của vệ tinh, <span id="ten-diem-ve-tinh">M</span> là điểm vệ tinh đi qua.</p>
+        <p><button class="nut nho" data-hien="goi-nho-tch">Gợi nhớ: tích có hướng</button></p>
+        <div class="chu-y" id="goi-nho-tch" hidden>
+          <p>Với $\vec u = (u_1;u_2;u_3)$ và $\vec v = (v_1;v_2;v_3)$:</p>
+          $$[\vec u,\vec v] = \left(\begin{vmatrix} u_2 & u_3 \\ v_2 & v_3 \end{vmatrix};\ \begin{vmatrix} u_3 & u_1 \\ v_3 & v_1 \end{vmatrix};\ \begin{vmatrix} u_1 & u_2 \\ v_1 & v_2 \end{vmatrix}\right).$$
+          <p>$\vec u$ và $\vec v$ cùng phương khi và chỉ khi $[\vec u,\vec v] = \vec 0$.</p>
+        </div>
         <p>a) Hai vectơ chỉ phương $\vec u$ và $\vec v$ có cùng phương không?</p>
         <div class="lua-chon">
           <label><input type="radio" name="c2-cp" value="co"> Cùng phương</label>
@@ -169,6 +175,47 @@
       </div>
 
       <p style="margin-top:18px"><button class="nut nho" id="xoa-phieu">Xoá phiếu trên máy này</button></p>
+    </div>
+  </div>
+
+  <div class="khoi" id="chot-kien-thuc">
+    <h2>Chốt kiến thức: vị trí tương đối của hai đường thẳng</h2>
+    <p class="phu">Giáo viên chốt sau khi các trạm báo cáo kết luận.</p>
+    <button class="nut chinh" data-hien="nd3-chot">Hiện phần chốt</button>
+    <div id="nd3-chot" hidden>
+      <p style="margin-top:14px">Trong không gian $Oxyz$, cho đường thẳng $d$ đi qua điểm $M$, có vectơ chỉ phương $\vec u$, và đường thẳng $d'$ đi qua điểm $M'$, có vectơ chỉ phương $\vec u'$.</p>
+      <table class="bang">
+        <tr><th>Vị trí tương đối</th><th>Điểm chung</th><th>Điều kiện</th></tr>
+        <tr><td>$d$ và $d'$ trùng nhau</td><td>vô số</td><td>$\vec u, \vec u'$ cùng phương và $M \in d'$</td></tr>
+        <tr><td>$d$ và $d'$ song song</td><td>không có</td><td>$\vec u, \vec u'$ cùng phương và $M \notin d'$</td></tr>
+        <tr><td>$d$ và $d'$ cắt nhau</td><td>đúng một</td><td>$\vec u, \vec u'$ không cùng phương và $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$</td></tr>
+        <tr><td>$d$ và $d'$ chéo nhau</td><td>không có, không cùng nằm trong một mặt phẳng</td><td>$[\vec u,\vec u']\cdot\overrightarrow{MM'} \ne 0$</td></tr>
+      </table>
+      <div class="chot">
+        <p><b>Quy trình hai bước.</b></p>
+        <p><b>Bước 1.</b> Xét $\vec u$ và $\vec u'$ có cùng phương không (tọa độ tỉ lệ, hay $[\vec u,\vec u'] = \vec 0$).</p>
+        <p><b>Bước 2.</b> Nếu cùng phương: lấy điểm $M \in d$, xét $M$ có thuộc $d'$ không. Thuộc thì hai đường thẳng trùng nhau, không thuộc thì song song.</p>
+        <p>Nếu không cùng phương: tính $[\vec u,\vec u']\cdot\overrightarrow{MM'}$. Bằng $0$ thì cắt nhau, khác $0$ thì chéo nhau.</p>
+      </div>
+      <div class="chu-y">
+        <p><b>Vì sao phải làm bước 1 trước?</b> Khi $\vec u, \vec u'$ cùng phương thì $[\vec u,\vec u'] = \vec 0$, nên tích $[\vec u,\vec u']\cdot\overrightarrow{MM'}$ luôn bằng $0$, kể cả khi hai đường thẳng song song (như V1). Chỉ nhìn vào tích này sẽ kết luận sai là "cắt nhau".</p>
+      </div>
+      <div class="chu-y">
+        <p><b>Ý nghĩa của điều kiện.</b> $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$ nghĩa là ba vectơ $\vec u, \vec u', \overrightarrow{MM'}$ đồng phẳng, tức $d$ và $d'$ cùng nằm trong một mặt phẳng. Khi $\vec u, \vec u'$ không cùng phương: hai đường thẳng cùng nằm trong một mặt phẳng thì cắt nhau, không cùng nằm trong mặt phẳng nào thì chéo nhau.</p>
+      </div>
+
+      <h3>Áp dụng vào tình huống</h3>
+      <table class="bang">
+        <tr><th>Vệ tinh</th><th>Kết luận</th><th>Lí do</th></tr>
+        <tr><td><span class="cham" style="background:var(--v1)"></span>V1</td><td>song song với T1</td><td>$\vec v_1 = -2\vec u$, $B(0;2;1) \notin$ T1</td></tr>
+        <tr><td><span class="cham" style="background:var(--v2)"></span>V2</td><td>trùng T1</td><td>$\vec v_2 = -\vec u$, $C(4;0;1) \in$ T1 (ứng với $t = 1$)</td></tr>
+        <tr><td><span class="cham" style="background:var(--v3)"></span>V3</td><td>cắt T1 tại $(6;1;-1)$</td><td>$[\vec u,\vec v_3]\cdot\overrightarrow{AD} = 3 - 8 + 5 = 0$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v4)"></span>V4</td><td>chéo T1</td><td>$[\vec u,\vec v_4]\cdot\overrightarrow{AE} = 3 - 12 + 5 = -4 \ne 0$</td></tr>
+      </table>
+      <p style="margin-top:12px">Vậy cảnh báo tại $(6;1)$ là <b>báo động thật</b>: T1 và V3 gặp nhau tại $(6;1;-1)$. Cảnh báo tại $(8;2)$ là <b>báo động giả</b>: tại đó T1 có $z = -3$ còn V4 có $z = 1$, hai quỹ đạo chéo nhau.</p>
+      <div class="chu-y">
+        <p><b>Mở rộng.</b> $d \perp d' \iff \vec u\cdot\vec u' = 0$. Ở đây $\vec u\cdot\vec v_3 = \vec u\cdot\vec v_4 = 0$ nên T1 vuông góc với cả V3 (cắt nhau) và V4 (chéo nhau). Vuông góc là quan hệ giữa hai vectơ chỉ phương, không phải vị trí tương đối thứ năm.</p>
+      </div>
     </div>
   </div>
       </div>

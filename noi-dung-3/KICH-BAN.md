@@ -11,7 +11,8 @@ Trang hiện có đủ nội dung theo đúng thứ tự dưới đây. Khi thi�
 ## Nội dung 3 · Nhận biết vị trí tương đối (5 phút)
 
 ### Màn 1 · Tình huống (Bước 1, 1 phút)
-- Radar của trung tâm báo **hai cảnh báo va chạm** tại (6; 1) và (8; 2). Radar chỉ đo được x, y nên chưa chắc cả hai đều đúng.
+- Radar cảnh báo của trung tâm báo **hai nguy cơ va chạm** tại (6; 1) và (8; 2). Radar này chỉ so **hình chiếu** (x; y) của các quỹ đạo, bỏ qua độ cao z, nên hễ hai hình chiếu cắt nhau là báo, kể cả khi hai vật đi lệch nhau về độ cao.
+- Trạm có **dữ liệu quỹ đạo đầy đủ** trong Oxyz do hệ thống định vị đo được (bảng dưới), dùng để kiểm tra lại cảnh báo nào thật, cảnh báo nào nhầm. Radar và bảng dữ liệu là hai nguồn khác nhau, đừng viết như thể radar đo ra bảng này.
 - Bảng 5 quỹ đạo:
 
 | Quỹ đạo | Đi qua | Vectơ chỉ phương |

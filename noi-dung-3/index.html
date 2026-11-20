@@ -39,7 +39,8 @@
       <div class="workspace-content" id="project-slot-hd3">
       <div class="khoi">
     <h2>Tình huống</h2>
-    <p>Radar của trung tâm vừa phát <b>hai cảnh báo va chạm</b> tại $(6;1)$ và $(8;2)$. Radar chỉ đo được hai tọa độ $x, y$, nên chưa thể khẳng định cả hai cảnh báo đều đúng. Mỗi trạm nhận một vệ tinh, kiểm tra quỹ đạo của vệ tinh đó với thiên thạch T1 trong không gian $Oxyz$, rồi báo cáo về trụ sở.</p>
+    <p>Radar cảnh báo của trung tâm vừa báo <b>hai nguy cơ va chạm</b> tại $(6;1)$ và $(8;2)$. Radar này chỉ so <b>hình chiếu</b> của các quỹ đạo xuống mặt phẳng $Oxy$, bỏ qua độ cao $z$: hễ hai hình chiếu cắt nhau là báo. Nhưng hai vật có hình chiếu cắt nhau vẫn có thể đi lệch nhau về độ cao, nên cảnh báo có thể nhầm.</p>
+    <p>Trạm có <b>dữ liệu quỹ đạo đầy đủ</b> trong $Oxyz$ do hệ thống định vị đo được (bảng dưới). Mỗi trạm nhận một vệ tinh, dùng dữ liệu này kiểm tra lại quỹ đạo của vệ tinh đó với thiên thạch T1, rồi báo cáo về trụ sở: cảnh báo nào thật, cảnh báo nào nhầm.</p>
     <p>Mỗi vật xuất phát từ điểm đã cho lúc $t = 0$. Vectơ chỉ phương cho biết <b>hướng và vận tốc</b>: sau thời gian $t$, vật ở vị trí $M + t\,\vec v$. Hai vật chỉ <b>va chạm</b> khi ở cùng một điểm <b>tại cùng một thời điểm</b>.</p>
     <table class="bang" id="bang-quy-dao">
       <thead><tr><th>Quỹ đạo</th><th>Đi qua điểm</th><th>Vectơ chỉ phương</th></tr></thead>
@@ -59,7 +60,7 @@
     <p>Nhìn từ trên xuống (giống radar), những cặp quỹ đạo nào trông như có điểm chung với T1? Nghiêng mô phỏng ra thì sao? Chỉ nhìn bằng mắt đã đủ để kết luận chưa?</p>
     <div class="hai-cot">
       <div>
-        <div class="man-hinh"><canvas id="radar" aria-label="Radar mặt phẳng Oxy"></canvas><span class="goc">Radar · chỉ có x, y</span></div>
+        <div class="man-hinh"><canvas id="radar" aria-label="Radar mặt phẳng Oxy"></canvas><span class="goc">Radar · chỉ so hình chiếu (x; y)</span></div>
       </div>
       <div>
         <div class="man-hinh"><canvas id="khong-gian" aria-label="Mô phỏng 3D năm quỹ đạo"></canvas><span class="goc">Không gian Oxyz · kéo để xoay</span></div>

@@ -203,39 +203,234 @@
     const { ctx, w, h } = g;
     ctx.clearRect(0, 0, w, h);
 
-    const racers = [
-      { name: 'Trạm 03', speed: 0.28, color: '#38BDF8', y: h * 0.28 },
-      { name: 'Trạm 01', speed: 0.22, color: '#2DD4BF', y: h * 0.54 },
-      { name: 'Trạm 02', speed: 0.19, color: '#F59E0B', y: h * 0.80 }
-    ];
+    const cx = w * 0.52;
+    const cy = h * 0.50;
+    const floatY = reduced ? 0 : Math.sin(t * 1.15) * 9;
+    const floatX = reduced ? 0 : Math.cos(t * 0.85) * 5;
+    const px = cx + floatX;
+    const py = cy + floatY;
+    const pulse = reduced ? 0 : Math.sin(t * 2.2);
 
-    const padL = 76, padR = 28;
-    const trackW = Math.max(40, w - padL - padR);
+    const planetR = Math.min(w, h) * 0.29 * (1 + pulse * 0.018);
+    const ringRx = planetR * 1.62;
+    const ringRy = planetR * 0.44;
+    const ringTilt = -0.26;
 
-    racers.forEach((r, idx) => {
-      const prog = reduced ? (0.82 - idx * 0.14) : ((t * r.speed + idx * 0.22) % 1);
-      const px = padL + trackW * prog;
+    // 1. Deep Cosmic Nebula Aura (blends seamlessly into the space starfield without any border cut)
+    const nebula = ctx.createRadialGradient(px, py, planetR * 0.2, px, py, planetR * 2.35);
+    nebula.addColorStop(0, 'rgba(229, 53, 76, 0.36)');
+    nebula.addColorStop(0.42, 'rgba(195, 20, 45, 0.14)');
+    nebula.addColorStop(0.75, 'rgba(56, 189, 248, 0.04)');
+    nebula.addColorStop(1, 'rgba(7, 11, 20, 0)');
+    ctx.fillStyle = nebula;
+    ctx.beginPath();
+    ctx.arc(px, py, planetR * 2.35, 0, Math.PI * 2);
+    ctx.fill();
 
-      // Label
-      ctx.fillStyle = '#94A3B8';
-      ctx.font = '500 11px "JetBrains Mono", monospace';
-      ctx.fillText(r.name, 14, r.y + 4);
+    // 2. Back Half of Planetary Ring + Orbiting Mini-Moons (behind planet)
+    const orbitAngle1 = reduced ? 0.8 : t * 0.65;
+    const orbitAngle2 = reduced ? 3.9 : t * 0.42 + 2.4;
 
-      // Track rail
-      ctx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
-      ctx.lineWidth = 6;
-      ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(padL, r.y); ctx.lineTo(padL + trackW, r.y); ctx.stroke();
+    function drawOrbitingMoons(behind) {
+      [
+        { a: orbitAngle1, rx: ringRx * 1.02, ry: ringRy * 1.02, r: 4.5, col: '#FDE68A', glow: '#F59E0B' },
+        { a: orbitAngle2, rx: ringRx * 0.86, ry: ringRy * 0.86, r: 3.2, col: '#7DD3FC', glow: '#38BDF8' }
+      ].forEach((m) => {
+        const sinA = Math.sin(m.a);
+        const isBehind = sinA < 0;
+        if (isBehind !== behind) return;
 
-      // Active progress trail
-      ctx.strokeStyle = r.color;
-      ctx.lineWidth = 6;
-      ctx.beginPath(); ctx.moveTo(padL, r.y); ctx.lineTo(px, r.y); ctx.stroke();
+        const lx = Math.cos(m.a) * m.rx;
+        const ly = sinA * m.ry;
+        const cosT = Math.cos(ringTilt);
+        const sinT = Math.sin(ringTilt);
+        const mx = px + lx * cosT - ly * sinT;
+        const my = py + lx * sinT + ly * cosT;
 
-      // Racer pod
-      ctx.fillStyle = '#F8FAFC';
-      ctx.beginPath(); ctx.arc(px, r.y, 6, 0, Math.PI * 2); ctx.fill();
-    });
+        ctx.save();
+        ctx.fillStyle = m.col;
+        ctx.shadowColor = m.glow;
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(mx, my, m.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+
+    // Back ring arc (π to 2π)
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(ringTilt);
+    ctx.strokeStyle = 'rgba(255, 154, 60, 0.25)';
+    ctx.lineWidth = 3.2;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, ringRx, ringRy, 0, Math.PI, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(229, 53, 76, 0.16)';
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, ringRx * 0.92, ringRy * 0.92, 0, Math.PI, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    drawOrbitingMoons(true);
+
+    // 3. The Blood-Moon Planet Sphere (3D Volumetric Lighting like Hero Planets)
+    ctx.save();
+    const planetGrad = ctx.createRadialGradient(
+      px - planetR * 0.34, py - planetR * 0.34, planetR * 0.08,
+      px, py, planetR
+    );
+    planetGrad.addColorStop(0, '#FFB088');
+    planetGrad.addColorStop(0.32, '#E5354C');
+    planetGrad.addColorStop(0.68, '#880A1F');
+    planetGrad.addColorStop(1, '#1A030B');
+
+    ctx.shadowColor = 'rgba(229, 53, 76, 0.48)';
+    ctx.shadowBlur = 36;
+    ctx.fillStyle = planetGrad;
+    ctx.beginPath();
+    ctx.arc(px, py, planetR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Clip to planet sphere for surface bands, craters & terminator shadow
+    ctx.beginPath();
+    ctx.arc(px, py, planetR, 0, Math.PI * 2);
+    ctx.clip();
+
+    // Subtle planetary surface craters
+    ctx.fillStyle = 'rgba(30, 3, 12, 0.30)';
+    ctx.beginPath();
+    ctx.arc(px - planetR * 0.36, py - planetR * 0.22, planetR * 0.18, 0, Math.PI * 2);
+    ctx.arc(px + planetR * 0.38, py + planetR * 0.26, planetR * 0.15, 0, Math.PI * 2);
+    ctx.arc(px - planetR * 0.14, py + planetR * 0.45, planetR * 0.11, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Inner crescent shadow (bottom-right) for 3D planetary depth
+    const innerShadow = ctx.createRadialGradient(
+      px - planetR * 0.28, py - planetR * 0.28, planetR * 0.45,
+      px + planetR * 0.22, py + planetR * 0.22, planetR * 1.08
+    );
+    innerShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    innerShadow.addColorStop(0.7, 'rgba(8, 2, 12, 0.38)');
+    innerShadow.addColorStop(1, 'rgba(4, 2, 10, 0.84)');
+    ctx.fillStyle = innerShadow;
+    ctx.fillRect(px - planetR, py - planetR, planetR * 2, planetR * 2);
+    ctx.restore();
+
+    // Subtle atmospheric rim highlight
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255, 185, 160, 0.38)';
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.arc(px, py, planetR, -Math.PI * 0.85, -Math.PI * 0.15);
+    ctx.stroke();
+    ctx.restore();
+
+    // 4. Iconic Foxy Running Geometric Fox Emblem (Floating & Breathing on the Blood-Moon Planet)
+    const foxScale = (planetR * 1.12) / 16;
+    const foxY = py + (reduced ? 0 : Math.sin(t * 2.3) * 2.5);
+
+    ctx.save();
+    ctx.translate(px, foxY);
+    ctx.scale(foxScale, foxScale);
+    ctx.translate(-16, -16.5);
+
+    ctx.shadowColor = 'rgba(255, 196, 107, 0.65)';
+    ctx.shadowBlur = 16;
+    const foxGrad = ctx.createLinearGradient(16, 4, 16, 28);
+    foxGrad.addColorStop(0, '#1C0613');
+    foxGrad.addColorStop(0.6, '#11030B');
+    foxGrad.addColorStop(1, '#2B0715');
+    ctx.fillStyle = foxGrad;
+    ctx.strokeStyle = 'rgba(255, 224, 178, 0.92)';
+    ctx.lineWidth = 0.95;
+    ctx.lineJoin = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(4, 5);
+    ctx.lineTo(11, 12);
+    ctx.lineTo(21, 12);
+    ctx.lineTo(28, 5);
+    ctx.lineTo(26, 18);
+    ctx.lineTo(16, 28);
+    ctx.lineTo(6, 18);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Geometric facet lines inside the Fox emblem
+    ctx.strokeStyle = 'rgba(255, 154, 60, 0.38)';
+    ctx.lineWidth = 0.65;
+    ctx.beginPath();
+    ctx.moveTo(4, 5); ctx.lineTo(11, 18);
+    ctx.moveTo(28, 5); ctx.lineTo(21, 18);
+    ctx.moveTo(11, 12); ctx.lineTo(16, 28);
+    ctx.moveTo(21, 12); ctx.lineTo(16, 28);
+    ctx.stroke();
+
+    // Glowing Fox Eyes (periodic natural blink + ember pulse)
+    const blinkCycle = reduced ? 1 : Math.sin(t * 1.75);
+    const eyeOpen = blinkCycle > -0.93 ? 1 : 0.14;
+    const eyeGlow = 0.78 + 0.22 * Math.sin(t * 4.5);
+
+    ctx.fillStyle = `rgba(255, 232, 155, ${eyeGlow})`;
+    ctx.shadowColor = '#FF3A3A';
+    ctx.shadowBlur = 10;
+
+    ctx.beginPath();
+    ctx.ellipse(12, 17, 1.85, 1.55 * eyeOpen, 0.18, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.ellipse(20, 17, 1.85, 1.55 * eyeOpen, -0.18, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // 5. Front Half of Planetary Ring + Front Orbiting Moons (crosses in front of planet)
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(ringTilt);
+
+    ctx.strokeStyle = 'rgba(255, 180, 120, 0.52)';
+    ctx.lineWidth = 2.6;
+    ctx.shadowColor = 'rgba(255, 154, 60, 0.45)';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, ringRx, ringRy, 0, 0, Math.PI);
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(229, 53, 76, 0.28)';
+    ctx.lineWidth = 7;
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, ringRx * 0.92, ringRy * 0.92, 0, 0, Math.PI);
+    ctx.stroke();
+    ctx.restore();
+
+    drawOrbitingMoons(false);
+
+    // 6. Floating Cosmic Star Dust around the Planet
+    for (let i = 0; i < 12; i++) {
+      const angle = i * 0.52 + (reduced ? 0 : t * 0.22 * (i % 2 === 0 ? 1 : -1));
+      const dist = planetR * (1.22 + (i % 4) * 0.22);
+      const sx = px + Math.cos(angle) * dist * 1.15;
+      const sy = py + Math.sin(angle) * dist * 0.78;
+      const alpha = reduced ? 0.65 : 0.3 + 0.65 * Math.abs(Math.sin(t * 2.1 + i));
+
+      ctx.fillStyle = i % 3 === 0
+        ? `rgba(253, 230, 138, ${alpha})`
+        : i % 2 === 0
+          ? `rgba(255, 130, 150, ${alpha})`
+          : `rgba(125, 211, 252, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.4 + (i % 2) * 0.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   // 5. LONG SHOOTING-STAR BRIDGES (Main Star + Companion Mini Shooting Stars)

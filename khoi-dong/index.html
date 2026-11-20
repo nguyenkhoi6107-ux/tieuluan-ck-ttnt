@@ -6,6 +6,11 @@
   <title>1. Khởi động – Trạm kiểm soát vũ trụ</title>
   <link rel="stylesheet" href="../assets/scrollcraft.css">
   <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <link rel="stylesheet" href="../assets/noi-dung.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script defer src="../assets/chung.js"></script>
 </head>
 <body>
 
@@ -27,16 +32,60 @@
       </div>
       <h1 class="tm-display tm-display--lg">1. Khởi động</h1>
       <p class="tm-lede">
-        Xem video <span class="kw">tình huống mở đầu</span> và trả lời câu hỏi gợi mở ngay trên web để dẫn vào bài học.
+        Quan sát <span class="kw">tình huống mở đầu</span> về bản vẽ của kỹ sư và trả lời câu hỏi gợi mở ngay trên web để dẫn vào bài học.
       </p>
 
-      <!-- Khung gắn dự án riêng của Hoạt động 1 -->
-      <div class="workspace-slot" id="project-slot-hd1">
-        <span class="tm-mono" style="font-size:0.8rem; color:var(--sc-accent);">KHUNG NỘI DUNG HOẠT ĐỘNG 1 (ĐƯA DỰ ÁN RIÊNG VÀO ĐÂY)</span>
-        <ul class="workspace-slot__list">
-          <li>Video tình huống mở đầu</li>
-          <li>Câu hỏi để học sinh trả lời ngay trên web</li>
-        </ul>
+      <div class="workspace-content" id="project-slot-hd1">
+      <div class="khoi">
+    <h2>Tình huống mở đầu</h2>
+    <p>Một kỹ sư phác thảo hai tuyến đường trên bản vẽ mặt bằng: <b>tuyến A</b> chạy sát mặt đất và <b>cầu cạn B</b>. Trên bản vẽ, hai tuyến cắt nhau tại điểm $K$, nên kỹ sư ghi chú "nút giao tại $K$". Đến lúc thi công, đội công trình không thể nối hai tuyến tại $K$.</p>
+    <div class="man-hinh"><canvas id="mo-hinh" aria-label="Mô hình hai tuyến đường"></canvas><span class="goc" id="ten-goc">Bản vẽ mặt bằng của kỹ sư</span></div>
+    <div class="dieu-khien">
+      <button class="nut bat" id="xem-ban-ve">Bản vẽ của kỹ sư</button>
+      <button class="nut" id="xem-thuc-te">Ngoài thực tế</button>
+      <span class="phu" style="font-size:.85rem">Có thể kéo để xoay.</span>
+    </div>
+  </div>
+
+  <div class="khoi">
+    <h2>Trả lời câu hỏi</h2>
+    <p class="de-bai">Câu 1. Khi phác thảo bản vẽ, người kỹ sư dùng hình ảnh gì để tượng trưng cho đường đi?</p>
+    <textarea id="tl-1" placeholder="Câu trả lời của em"></textarea>
+    <p class="de-bai" style="margin-top:16px">Câu 2. Vì sao bản thảo trong thực tế lại không thi công hoàn chỉnh?</p>
+    <textarea id="tl-2" placeholder="Câu trả lời của em"></textarea>
+    <p class="phu" id="da-luu" style="font-size:.85rem;margin-top:8px">&nbsp;</p>
+    <button class="nut" data-hien="ket-luan">Xem kết luận</button>
+    <div id="ket-luan" hidden>
+      <div class="chot">
+        <p><b>Câu 1.</b> Trên bản vẽ, mỗi đường đi được tượng trưng bằng một đường thẳng.</p>
+        <p><b>Câu 2.</b> Bản vẽ mặt bằng chỉ có hai chiều, không thể hiện độ cao. Hai tuyến cắt nhau trên giấy, nhưng ngoài thực tế cầu cạn B đi phía trên tuyến A nên hai tuyến không gặp nhau.</p>
+        <p>Muốn mô tả chính xác một đường đi trong không gian, cần biết <b>một điểm</b> mà nó đi qua và <b>hướng</b> của nó trong hệ tọa độ $Oxyz$. Đó là nội dung của bài hôm nay: <b>phương trình đường thẳng trong không gian</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="khoi">
+    <h2>Vào bài</h2>
+    <button class="nut chinh" data-hien="vao-bai">Nhận nhiệm vụ của trạm</button>
+    <div id="vao-bai" hidden>
+      <div class="chot">
+        <p><b>Trạm kiểm soát vũ trụ.</b> Mỗi em là một nhân viên của trung tâm kiểm soát dự báo vũ trụ; mỗi trung tâm quan sát hàng trăm vệ tinh nhỏ xung quanh.</p>
+        <p>Một siêu tân tinh vừa nổ. Hàng trăm thiên thạch đang lao vào không phận, nguy cơ va chạm giữa thiên thạch và vệ tinh ngày càng cao. Nhiệm vụ của các trạm: dự báo hướng đi của thiên thạch; thiên thạch nào có khả năng va chạm với vệ tinh thì báo cáo ngay về trụ sở chính.</p>
+        <p>Vũ trụ được mô phỏng bởi không gian $Oxyz$. Mỗi thiên thạch hoặc vệ tinh di chuyển trên một đường thẳng, xuất phát từ điểm $M_0(x_0;y_0;z_0)$, theo hướng của vectơ $\vec u = (a;b;c)$.</p>
+        <p>Radar của trạm cũng giống bản vẽ của kỹ sư: chỉ thấy hai tọa độ $x, y$. <b>Muốn dự báo đúng, trước hết phải viết được phương trình của đường thẳng trong không gian.</b></p>
+      </div>
+      <h3>Luật tính điểm</h3>
+      <table class="bang">
+        <tr><th>Mức độ câu hỏi</th><th>Radar Points (RP)</th></tr>
+        <tr><td>Nhận biết</td><td>+10 RP mỗi câu</td></tr>
+        <tr><td>Thông hiểu</td><td>+20 RP mỗi câu</td></tr>
+        <tr><td>Vận dụng, thực tế</td><td>+40 RP mỗi câu</td></tr>
+      </table>
+      <h3>Thẻ kỹ năng của mỗi trạm</h3>
+      <p><b>Thẻ Cứu hộ chuyên môn:</b> được hỏi giáo viên gợi ý một bước mà không bị trừ điểm.</p>
+      <p><b>Thẻ Tăng tốc:</b> nhân đôi điểm của một câu vận dụng nếu giải đúng trong vòng 60 giây.</p>
+    </div>
+  </div>
       </div>
 
       <div class="tm-footer-nav">
@@ -52,5 +101,144 @@
 
   <script src="../assets/starfield.js"></script>
   <script src="../assets/page-transition.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  /* Câu trả lời lưu trên máy */
+  const KHOA = 'tkv-khoi-dong';
+  const da = docMay(KHOA, {});
+  const ghi = document.getElementById('da-luu');
+  let hen = null;
+  ['tl-1', 'tl-2'].forEach(id => {
+    const o = document.getElementById(id);
+    o.value = da[id] || '';
+    o.addEventListener('input', () => {
+      da[id] = o.value;
+      luuMay(KHOA, da);
+      ghi.textContent = 'Đã lưu trên máy này.';
+      clearTimeout(hen);
+      hen = setTimeout(() => { ghi.innerHTML = '&nbsp;'; }, 1500);
+    });
+  });
+
+  /* Mô hình: tuyến A trên mặt đất, cầu cạn B cao 3 đơn vị. Nhìn từ trên xuống thì hai tuyến cắt nhau tại K(5; 4). */
+  const cv = document.getElementById('mo-hinh');
+  const tenGoc = document.getElementById('ten-goc');
+  const nutBanVe = document.getElementById('xem-ban-ve');
+  const nutThucTe = document.getElementById('xem-thuc-te');
+  const CAO = 3;
+  const A = [[0, 2, 0], [10, 6, 0]];
+  const B = [[0, 7, CAO], [10, 1, CAO]];
+  const tren = (p, q, k) => p.map((v, i) => v + (q[i] - v) * k);
+  const V = { goc: 0, nghieng: Math.PI / 2 };
+  const TAM = [5, 4, 1];
+  let ctx, w, h;
+
+  function kichThuoc() {
+    const dpr = window.devicePixelRatio || 1;
+    w = cv.clientWidth; h = Math.round(w * (w < 500 ? 0.8 : 0.55));
+    cv.style.height = h + 'px';
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ve();
+  }
+
+  function chieu(p) {
+    const s = Math.min(w / 13, h / 9.5);
+    const x = p[0] - TAM[0], y = p[1] - TAM[1], z = p[2] - TAM[2];
+    const c = Math.cos(V.goc), sn = Math.sin(V.goc);
+    const x1 = x * c - y * sn, y1 = x * sn + y * c;
+    return [w / 2 + s * x1, h / 2 - s * (y1 * Math.sin(V.nghieng) + z * Math.cos(V.nghieng))];
+  }
+
+  function net(a, b, mau, day, dut) {
+    const p = chieu(a), q = chieu(b);
+    ctx.strokeStyle = mau; ctx.lineWidth = day; ctx.setLineDash(dut || []);
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function chu(p, noiDung, mau, dy) {
+    const q = chieu(p);
+    ctx.fillStyle = mau; ctx.font = '600 13px "Be Vietnam Pro", system-ui, sans-serif';
+    let x = q[0] + 8;
+    const rong = ctx.measureText(noiDung).width;
+    if (x + rong > w - 6) x = Math.max(6, w - 6 - rong);
+    ctx.fillText(noiDung, x, q[1] + (dy === undefined ? -8 : dy));
+  }
+
+  function ve() {
+    if (!ctx) return;
+    ctx.clearRect(0, 0, w, h);
+    const banVe = V.nghieng > 1.45;
+    // mặt đất
+    ctx.lineCap = 'butt';
+    for (let x = 0; x <= 10; x++) net([x, 0, 0], [x, 8, 0], 'rgba(79,209,197,.09)', 1);
+    for (let y = 0; y <= 8; y++) net([0, y, 0], [10, y, 0], 'rgba(79,209,197,.09)', 1);
+    ctx.lineCap = 'round';
+    // tuyến A
+    net(A[0], A[1], '#9aa6c7', 7);
+    chu(tren(A[0], A[1], 0.9), 'Tuyến A', '#c7d0e8');
+    // trụ cầu
+    if (!banVe) [0.1, 0.3, 0.7, 0.9].forEach(k => {
+      const p = tren(B[0], B[1], k);
+      net([p[0], p[1], 0], p, 'rgba(246,193,119,.55)', 3);
+    });
+    // cầu cạn B
+    net(B[0], B[1], '#f6c177', 7);
+    chu(tren(B[0], B[1], 0.06), 'Cầu cạn B', '#f6c177');
+    // điểm K
+    if (banVe) {
+      const k = chieu([5, 4, CAO]);
+      ctx.fillStyle = '#f87171';
+      ctx.beginPath(); ctx.arc(k[0], k[1], 6, 0, Math.PI * 2); ctx.fill();
+      chu([5, 4, CAO], 'K', '#fecaca');
+    } else {
+      net([5, 4, 0], [5, 4, CAO], 'rgba(248,113,113,.9)', 1.5, [5, 5]);
+      [[5, 4, 0], [5, 4, CAO]].forEach(p => {
+        const q = chieu(p);
+        ctx.fillStyle = '#f87171';
+        ctx.beginPath(); ctx.arc(q[0], q[1], 5, 0, Math.PI * 2); ctx.fill();
+      });
+      chu([5, 4, 0], 'Tại K, cầu B đi phía trên tuyến A', '#fecaca', 22);
+    }
+    ctx.lineCap = 'butt';
+    tenGoc.textContent = banVe ? 'Bản vẽ mặt bằng của kỹ sư' : 'Ngoài thực tế';
+    nutBanVe.classList.toggle('bat', banVe);
+    nutThucTe.classList.toggle('bat', !banVe);
+  }
+
+  function xoayToi(goc, nghieng) {
+    const g0 = V.goc, n0 = V.nghieng, t0 = performance.now();
+    (function buoc(t) {
+      const k = Math.min(1, (t - t0) / 700);
+      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      V.goc = g0 + (goc - g0) * e;
+      V.nghieng = n0 + (nghieng - n0) * e;
+      ve();
+      if (k < 1) requestAnimationFrame(buoc);
+    })(t0);
+  }
+
+  nutBanVe.addEventListener('click', () => xoayToi(0, Math.PI / 2));
+  nutThucTe.addEventListener('click', () => xoayToi(0.55, 0.42));
+
+  let keo = null;
+  cv.addEventListener('pointerdown', e => { keo = { x: e.clientX, y: e.clientY }; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', e => {
+    if (!keo) return;
+    V.goc += (e.clientX - keo.x) * 0.008;
+    V.nghieng = Math.min(Math.PI / 2, Math.max(0.05, V.nghieng + (e.clientY - keo.y) * 0.008));
+    keo = { x: e.clientX, y: e.clientY };
+    ve();
+  });
+  cv.addEventListener('pointerup', () => { keo = null; });
+  cv.addEventListener('pointercancel', () => { keo = null; });
+  let henKT = null;
+  window.addEventListener('resize', () => { clearTimeout(henKT); henKT = setTimeout(kichThuoc, 150); });
+  kichThuoc();
+});
+</script>
 </body>
 </html>

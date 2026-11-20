@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>3. Thử thách – Trạm kiểm soát vũ trụ</title>
+  <title>Thử thách · Trạm kiểm soát vũ trụ</title>
   <link rel="stylesheet" href="../assets/scrollcraft.css">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -12,6 +12,836 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script defer src="../assets/chung.js"></script>
   <script defer src="tram.js"></script>
+
+  <style>
+    /* =========================================================================
+       HOẠT ĐỘNG 3 · THỬ THÁCH (Frameless Scrollytelling & 3D Mission Command)
+       ========================================================================= */
+
+    .katex svg { max-width: none; }
+
+    .hd3-root {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 88px var(--sc-gutter) 96px;
+    }
+
+    /* Scroll-driven grow/shrink (Landing Page style) */
+    .hd3-band,
+    .hd3-zoom-block {
+      position: relative;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+
+    .hd3-band {
+      padding: clamp(26px, 4.2vh, 48px) 0;
+    }
+
+    .hd3-band::before {
+      content: "";
+      position: absolute;
+      inset: -12% -8%;
+      background: radial-gradient(ellipse 58% 46% at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 72%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ---------- FRAMELESS HERO HEADER ---------- */
+    .hd3-hero {
+      margin-bottom: clamp(26px, 4.2vh, 44px);
+    }
+
+    .hd3-hero__title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(2.4rem, 5.1vw, 4.1rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      color: #F8FAFC;
+      margin: 0;
+      text-shadow: 0 0 34px rgba(56, 189, 248, 0.36);
+    }
+
+    .hd3-hero__lede {
+      font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+      color: var(--sc-ink-soft);
+      max-width: 60ch;
+      margin: 14px 0 0;
+    }
+
+    /* ---------- VISUAL 2-MODULE OVERVIEW (Nội dung 3 & Nội dung 4, no time badges) ---------- */
+    .hd3-modules-wrap {
+      margin-top: clamp(26px, 4vh, 38px);
+      padding-top: 22px;
+      border-top: 1px solid rgba(56, 189, 248, 0.22);
+    }
+
+    .hd3-modules-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .hd3-modules-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7DD3FC;
+    }
+
+    .hd3-modules-count::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 12px var(--sc-accent);
+    }
+
+    .hd3-modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(16px, 2.4vw, 24px);
+    }
+
+    .hd3-module-card {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: clamp(18px, 2.2vw, 24px);
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse 85% 75% at 12% 0%, rgba(56, 189, 248, 0.16) 0%, transparent 68%),
+        rgba(15, 23, 42, 0.74);
+      border: 1px solid rgba(56, 189, 248, 0.34);
+      box-shadow: 0 18px 42px rgba(3, 8, 20, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      transition: transform 0.26s var(--sc-ease-out), border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .hd3-module-card:hover,
+    .hd3-module-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: #7DD3FC;
+      box-shadow: 0 22px 50px rgba(3, 8, 20, 0.68), 0 0 28px rgba(56, 189, 248, 0.22);
+      outline: none;
+    }
+
+    .hd3-module-card--teal {
+      background:
+        radial-gradient(ellipse 85% 75% at 12% 0%, rgba(45, 212, 191, 0.16) 0%, transparent 68%),
+        rgba(15, 23, 42, 0.74);
+      border-color: rgba(45, 212, 191, 0.34);
+    }
+
+    .hd3-module-card--teal:hover,
+    .hd3-module-card--teal:focus-visible {
+      border-color: #5EEAD4;
+      box-shadow: 0 22px 50px rgba(3, 8, 20, 0.68), 0 0 28px rgba(45, 212, 191, 0.22);
+    }
+
+    .hd3-module-card--amber {
+      background:
+        radial-gradient(ellipse 85% 75% at 12% 0%, rgba(245, 158, 11, 0.16) 0%, transparent 68%),
+        rgba(15, 23, 42, 0.74);
+      border-color: rgba(245, 158, 11, 0.36);
+    }
+
+    .hd3-module-card--amber:hover,
+    .hd3-module-card--amber:focus-visible {
+      border-color: #FCD34D;
+      box-shadow: 0 22px 50px rgba(3, 8, 20, 0.68), 0 0 28px rgba(245, 158, 11, 0.22);
+    }
+
+    .hd3-module-card__watermark {
+      position: absolute;
+      right: 12px;
+      bottom: -14px;
+      font-family: var(--sc-font-display);
+      font-size: clamp(3.4rem, 5.2vw, 4.6rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: rgba(56, 189, 248, 0.07);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hd3-module-card--teal .hd3-module-card__watermark {
+      color: rgba(45, 212, 191, 0.08);
+    }
+
+    .hd3-module-card--amber .hd3-module-card__watermark {
+      color: rgba(245, 158, 11, 0.08);
+    }
+
+    .hd3-module-card__emblem {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      color: #7DD3FC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.2);
+    }
+
+    .hd3-module-card--teal .hd3-module-card__emblem {
+      background: rgba(45, 212, 191, 0.16);
+      border-color: rgba(45, 212, 191, 0.42);
+      color: #5EEAD4;
+      box-shadow: 0 0 18px rgba(45, 212, 191, 0.2);
+    }
+
+    .hd3-module-card--amber .hd3-module-card__emblem {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: rgba(245, 158, 11, 0.44);
+      color: #FCD34D;
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.2);
+    }
+
+    .hd3-module-card__body {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .hd3-module-card__step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sc-accent);
+      margin-bottom: 5px;
+    }
+
+    .hd3-module-card--teal .hd3-module-card__step { color: #5EEAD4; }
+    .hd3-module-card--amber .hd3-module-card__step { color: #FCD34D; }
+
+    .hd3-module-card__title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.02rem, 1.32vw, 1.16rem);
+      font-weight: 800;
+      line-height: 1.28;
+      color: #F8FAFC;
+      margin: 0 0 8px;
+    }
+
+    .hd3-module-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .hd3-module-chip {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: rgba(7, 11, 20, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      color: var(--sc-ink-soft);
+    }
+
+    /* ---------- TYPOGRAPHY & SECTION HEADERS ---------- */
+    .hd3-step-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sc-accent);
+      margin-bottom: 10px;
+    }
+
+    .hd3-step-tag__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 10px var(--sc-accent);
+    }
+
+    .hd3-band.is-connected .hd3-step-tag__dot {
+      background: var(--sc-accent-2);
+      box-shadow: 0 0 14px var(--sc-accent-2);
+    }
+
+    .hd3-title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.42rem, 2.3vw, 1.88rem);
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #E0F2FE;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 18px;
+      text-shadow: 0 0 22px rgba(56, 189, 248, 0.38);
+    }
+
+    .hd3-title::after {
+      content: "";
+      width: 48px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--sc-accent) 0%, transparent 100%);
+    }
+
+    .hd3-subhead {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.14rem, 1.6vw, 1.36rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #BAE6FD;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+    }
+
+    .hd3-subhead::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 10px var(--sc-accent);
+    }
+
+    /* Striking Caution Title (matching Activity 2) */
+    .hd3-caution-title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.12rem, 1.55vw, 1.35rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #FDE68A;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 8px;
+      text-shadow:
+        0 0 18px rgba(245, 158, 11, 0.5),
+        0 0 32px rgba(245, 158, 11, 0.22);
+    }
+
+    .hd3-caution-title__icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(251, 191, 36, 0.55);
+      color: #FBBF24;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.32);
+      flex-shrink: 0;
+    }
+
+    .hd3-caution-title::after {
+      content: "";
+      width: 36px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #F59E0B 0%, transparent 100%);
+    }
+
+    .hd3-prose {
+      color: var(--sc-ink-soft);
+      font-size: clamp(0.98rem, 1.15vw, 1.08rem);
+      line-height: 1.65;
+      margin: 0 0 14px;
+      max-width: 60ch;
+    }
+
+    /* ---------- CHẶNG 1: TÌNH HUỐNG + RADAR 2D & MÔ PHỎNG 3D ---------- */
+    .hd3-situation-grid {
+      display: grid;
+      grid-template-columns: 0.94fr 1.06fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: start;
+      margin-bottom: 28px;
+    }
+
+    .hd3-alert-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .hd3-alert-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(239, 68, 68, 0.42);
+      color: #FECACA;
+      font-family: var(--sc-font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .hd3-alert-pill__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #EF4444;
+      box-shadow: 0 0 10px #EF4444;
+      animation: hd3Pulse 1.6s ease-in-out infinite;
+    }
+
+    @keyframes hd3Pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.55; }
+    }
+
+    /* Clean Frameless Trajectory Telemetry Table */
+    .hd3-telemetry-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    .hd3-telemetry-table th {
+      text-align: left;
+      padding: 8px 10px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--sc-accent);
+      border-bottom: 1px solid rgba(56, 189, 248, 0.28);
+    }
+
+    .hd3-telemetry-table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      color: var(--sc-ink);
+    }
+
+    .hd3-sim-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(18px, 2.6vw, 28px);
+    }
+
+    .hd3-viewport {
+      position: relative;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(56, 189, 248, 0.09) 0%, rgba(5, 9, 18, 0.9) 76%);
+      border: 1px solid rgba(56, 189, 248, 0.26);
+      box-shadow: 0 20px 48px rgba(3, 7, 16, 0.62);
+      overflow: hidden;
+    }
+
+    .hd3-viewport canvas {
+      display: block;
+      width: 100%;
+      touch-action: none;
+    }
+
+    #khong-gian {
+      cursor: grab;
+    }
+
+    #khong-gian:active {
+      cursor: grabbing;
+    }
+
+    .hd3-viewport__hud {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(7, 11, 20, 0.78);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #BAE6FD;
+      font-family: var(--sc-font-mono);
+      font-size: 0.73rem;
+      pointer-events: none;
+      backdrop-filter: blur(6px);
+    }
+
+    .hd3-sim-toolbar {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    /* ---------- CHẶNG 2: KIẾN THỨC VỊ TRÍ TƯƠNG ĐỐI & QUY TRÌNH 2 BƯỚC ---------- */
+    .hd3-4cases {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 18px 0 26px;
+    }
+
+    .hd3-case-col {
+      padding-top: 14px;
+      border-top: 2px solid rgba(56, 189, 248, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hd3-case-col--2 { border-top-color: #60A5FA; }
+    .hd3-case-col--3 { border-top-color: #4ADE80; }
+    .hd3-case-col--4 { border-top-color: #FBBF24; }
+
+    .hd3-case-col__title {
+      font-family: var(--sc-font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin: 0;
+    }
+
+    .hd3-case-col__pts {
+      font-family: var(--sc-font-mono);
+      font-size: 0.75rem;
+      color: var(--sc-accent);
+    }
+
+    .hd3-case-col__cond {
+      font-size: 0.92rem;
+      color: var(--sc-ink-soft);
+      line-height: 1.55;
+      margin: 4px 0 0;
+    }
+
+    /* EMPHASIS FRAME: CHỐT KIẾN THỨC QUY TRÌNH 2 BƯỚC */
+    .hd3-chot-frame {
+      position: relative;
+      margin: 22px 0 28px;
+      padding: clamp(22px, 3vw, 34px);
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse 85% 70% at 15% 0%, rgba(56, 189, 248, 0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 60% at 88% 100%, rgba(45, 212, 191, 0.12) 0%, transparent 70%),
+        rgba(15, 23, 42, 0.88);
+      border: 1.5px solid rgba(56, 189, 248, 0.46);
+      box-shadow:
+        0 22px 54px rgba(3, 8, 20, 0.7),
+        0 0 32px rgba(56, 189, 248, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .hd3-chot-frame--amber {
+      background:
+        radial-gradient(ellipse 85% 70% at 15% 0%, rgba(245, 158, 11, 0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 60% at 88% 100%, rgba(239, 68, 68, 0.12) 0%, transparent 70%),
+        rgba(15, 23, 42, 0.9);
+      border-color: rgba(245, 158, 11, 0.48);
+      box-shadow:
+        0 22px 54px rgba(3, 8, 20, 0.7),
+        0 0 32px rgba(245, 158, 11, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .hd3-chot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      color: #E0F2FE;
+      font-family: var(--sc-font-mono);
+      font-size: 0.73rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .hd3-chot-frame--amber .hd3-chot-badge {
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.45);
+      color: #FEF3C7;
+    }
+
+    .hd3-steps-tree {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: clamp(20px, 3vw, 32px);
+      align-items: stretch;
+    }
+
+    .hd3-tree-step {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hd3-tree-step + .hd3-tree-step {
+      padding-left: clamp(18px, 2.5vw, 28px);
+      border-left: 1px solid rgba(148, 163, 184, 0.22);
+    }
+
+    .hd3-tree-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hd3-tree-num {
+      padding: 3px 10px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.22);
+      color: #7DD3FC;
+      font-family: var(--sc-font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .hd3-tree-title {
+      font-family: var(--sc-font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin: 0;
+    }
+
+    .hd3-branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .hd3-branch-box {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(7, 11, 20, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--sc-ink);
+    }
+
+    .hd3-branch-box--teal {
+      border-color: rgba(45, 212, 191, 0.28);
+    }
+
+    .hd3-branch-tag {
+      display: block;
+      font-family: var(--sc-font-mono);
+      font-size: 0.73rem;
+      font-weight: 700;
+      color: #7DD3FC;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .hd3-branch-box--teal .hd3-branch-tag {
+      color: #5EEAD4;
+    }
+
+    /* Frameless Caution & Example 3 Grid */
+    .hd3-notes-example {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      align-items: start;
+      padding-top: 22px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .hd3-caution-stack {
+      display: grid;
+      gap: 20px;
+    }
+
+    .hd3-caution-item {
+      padding-left: 18px;
+      border-left: 3.5px solid var(--sc-amber);
+    }
+
+    .hd3-answer-flow {
+      margin-top: 14px;
+      padding: 12px 0 4px 18px;
+      border-left: 2px dashed rgba(56, 189, 248, 0.45);
+    }
+
+    /* ---------- CHẶNG 3 (NỘI DUNG 4): PHIẾU BÁO CÁO CỦA TRẠM ---------- */
+    .hd3-dispatch-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 22px;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(56, 189, 248, 0.32);
+    }
+
+    .hd3-dispatch-bar label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: var(--sc-ink);
+    }
+
+    .hd3-dispatch-bar select {
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(7, 11, 20, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #F8FAFC;
+      font-weight: 600;
+    }
+
+    .hd3-mission-hud {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 16px;
+      margin-bottom: 18px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.24);
+    }
+
+    .hd3-mission-active-title {
+      font-family: var(--sc-font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #7DD3FC;
+      margin: 0;
+    }
+
+    /* Frameless 3-Question Stream (Replaces boxy .hop cards) */
+    .hd3-q-stream {
+      display: grid;
+      gap: 26px;
+      margin-top: 18px;
+    }
+
+    .hd3-q-stage {
+      padding: 18px 0 4px 20px;
+      border-left: 3px solid var(--sc-accent);
+      transition: opacity 0.25s ease;
+    }
+
+    .hd3-q-stage--2 { border-left-color: var(--sc-accent-2); }
+    .hd3-q-stage--3 { border-left-color: var(--sc-amber); }
+
+    .hd3-q-stage h3 {
+      margin: 0 0 10px;
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #F8FAFC;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ---------- CHỐT KẾT LUẬN BÁO ĐỘNG THẬT HAY GIẢ ---------- */
+    .hd3-verdict-banners {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .hd3-verdict-box {
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: rgba(7, 11, 20, 0.72);
+      border-left: 4px solid var(--sc-danger);
+    }
+
+    .hd3-verdict-box--false {
+      border-left-color: var(--sc-amber);
+    }
+
+    .hd3-verdict-box__tag {
+      font-family: var(--sc-font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FCA5A5;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .hd3-verdict-box--false .hd3-verdict-box__tag {
+      color: #FCD34D;
+    }
+
+    /* ---------- COSMIC BRIDGE BETWEEN STAGES ---------- */
+    .hd3-bridge {
+      position: relative;
+      height: clamp(200px, 28vh, 270px);
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .hd3-bridge-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 940px) {
+      .hd3-modules-grid,
+      .hd3-situation-grid,
+      .hd3-sim-pair,
+      .hd3-4cases,
+      .hd3-steps-tree,
+      .hd3-branches,
+      .hd3-notes-example,
+      .hd3-verdict-banners {
+        grid-template-columns: 1fr;
+      }
+
+      .hd3-tree-step + .hd3-tree-step {
+        padding-left: 0;
+        padding-top: 16px;
+        border-left: none;
+        border-top: 1px solid rgba(148, 163, 184, 0.22);
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -21,233 +851,808 @@
       <span>← MÀN HÌNH CHÍNH</span>
     </a>
     <nav class="tm-bar__nav">
-      <span class="tm-pill tm-pill--accent">Hoạt động 3 · Thử thách</span>
+      <span class="tm-pill tm-pill--accent">Thử thách</span>
     </nav>
   </header>
 
-  <main class="subpage-main">
-    <section class="workspace-shell">
+  <main class="hd3-root" id="project-slot-hd3">
+
+    <!-- HERO HEADER & 3 CHẶNG NHIỆM VỤ TRỰC QUAN -->
+    <header class="hd3-hero hd3-zoom-block">
       <div class="activity-meta">
         <span>Hoạt động 3</span>
-        <span class="activity-badge">13 phút</span>
       </div>
-      <h1 class="tm-display tm-display--lg">3. Thử thách: Báo động thật hay giả?</h1>
-      <p class="tm-lede">
+      <h1 class="hd3-hero__title">Thử thách: Báo động thật hay giả?</h1>
+      <p class="hd3-hero__lede">
         <b>Nội dung 3</b> nhận biết <span class="kw">vị trí tương đối</span> của hai đường thẳng trên mô phỏng 3D. <b>Nội dung 4</b> vận dụng vào nhiệm vụ của trạm: cảnh báo trên radar là <span class="kw">báo động thật</span> hay <span class="kw">báo động giả</span>?
       </p>
 
-      <div class="workspace-content" id="project-slot-hd3">
-      <div class="khoi">
-    <h2>Tình huống</h2>
-    <p>Radar cảnh báo của trung tâm vừa báo <b>hai nguy cơ va chạm</b> tại $(6;1)$ và $(8;2)$. Radar này chỉ so <b>hình chiếu</b> của các quỹ đạo xuống mặt phẳng $Oxy$, bỏ qua độ cao $z$: hễ hai hình chiếu cắt nhau là báo. Nhưng hai vật có hình chiếu cắt nhau vẫn có thể đi lệch nhau về độ cao, nên cảnh báo có thể nhầm.</p>
-    <p>Trạm có <b>dữ liệu quỹ đạo đầy đủ</b> trong $Oxyz$ do hệ thống định vị đo được (bảng dưới). Mỗi trạm nhận một vệ tinh, dùng dữ liệu này kiểm tra lại quỹ đạo của vệ tinh đó với thiên thạch T1, rồi báo cáo về trụ sở: cảnh báo nào thật, cảnh báo nào nhầm.</p>
-    <p>Mỗi vật xuất phát từ điểm đã cho lúc $t = 0$. Vectơ chỉ phương cho biết <b>hướng và vận tốc</b>: sau thời gian $t$, vật ở vị trí $M + t\,\vec v$. Hai vật chỉ <b>va chạm</b> khi ở cùng một điểm <b>tại cùng một thời điểm</b>.</p>
-    <table class="bang" id="bang-quy-dao">
-      <thead><tr><th>Quỹ đạo</th><th>Đi qua điểm</th><th>Vectơ chỉ phương</th></tr></thead>
-      <tbody>
-        <tr><td><span class="cham" style="background:var(--t1)"></span>Thiên thạch T1</td><td>$A(2;-1;3)$</td><td>$\vec u = (2;1;-2)$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v1)"></span>Vệ tinh V1</td><td>$B(0;2;1)$</td><td>$\vec v_1 = (-4;-2;4)$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v2)"></span>Vệ tinh V2</td><td>$C(4;0;1)$</td><td>$\vec v_2 = (2;1;-2)$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v3)"></span>Vệ tinh V3</td><td>$D(4;1;-3)$</td><td>$\vec v_3 = (1;0;1)$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v4)"></span>Vệ tinh V4</td><td>$E(5;2;-2)$</td><td>$\vec v_4 = (1;0;1)$</td></tr>
-      </tbody>
-    </table>
-    <p class="phu" style="margin-top:10px">T1 chính là đường thẳng $d$ ở Ví dụ 1.</p>
-  </div>
-
-  <div class="khoi" id="mo-phong">
-    <h2>Nội dung 3 · Quan sát trên radar và mô phỏng 3D</h2>
-    <p>Nhìn từ trên xuống (giống radar), những cặp quỹ đạo nào trông như có điểm chung với T1? Nghiêng mô phỏng ra thì sao? Chỉ nhìn bằng mắt đã đủ để kết luận chưa?</p>
-    <div class="hai-cot">
-      <div>
-        <div class="man-hinh"><canvas id="radar" aria-label="Radar mặt phẳng Oxy"></canvas><span class="goc">Radar · chỉ so hình chiếu (x; y)</span></div>
-      </div>
-      <div>
-        <div class="man-hinh"><canvas id="khong-gian" aria-label="Mô phỏng 3D năm quỹ đạo"></canvas><span class="goc">Không gian Oxyz · kéo để xoay</span></div>
-      </div>
-    </div>
-    <div class="dieu-khien" id="bat-tat"></div>
-    <div class="dieu-khien">
-      <button class="nut" id="goc-tren">Nhìn từ trên xuống (giống radar)</button>
-      <button class="nut" id="goc-nghieng">Góc nghiêng</button>
-      <button class="nut" id="duong-dong">Đường dóng tại hai điểm cảnh báo</button>
-    </div>
-  </div>
-
-  <div class="khoi" id="kien-thuc">
-    <h2>Nội dung 3 · Kiến thức: vị trí tương đối của hai đường thẳng</h2>
-    <p>Trong không gian $Oxyz$, cho đường thẳng $d$ đi qua điểm $M$, có vectơ chỉ phương $\vec u$, và đường thẳng $d'$ đi qua điểm $M'$, có vectơ chỉ phương $\vec u'$.</p>
-    <table class="bang">
-      <tr><th>Vị trí tương đối</th><th>Điểm chung</th><th>Điều kiện</th></tr>
-      <tr><td>$d$ và $d'$ trùng nhau</td><td>vô số</td><td>$\vec u, \vec u'$ cùng phương và $M \in d'$</td></tr>
-      <tr><td>$d$ và $d'$ song song</td><td>không có</td><td>$\vec u, \vec u'$ cùng phương và $M \notin d'$</td></tr>
-      <tr><td>$d$ và $d'$ cắt nhau</td><td>đúng một</td><td>$\vec u, \vec u'$ không cùng phương và $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$</td></tr>
-      <tr><td>$d$ và $d'$ chéo nhau</td><td>không có, không cùng nằm trong một mặt phẳng</td><td>$[\vec u,\vec u']\cdot\overrightarrow{MM'} \ne 0$</td></tr>
-    </table>
-    <div class="chot">
-      <p><b>Quy trình hai bước.</b></p>
-      <p><b>Bước 1.</b> Xét $\vec u$ và $\vec u'$ có cùng phương không (tọa độ tỉ lệ, hay $[\vec u,\vec u'] = \vec 0$).</p>
-      <p><b>Bước 2.</b> Nếu cùng phương: lấy điểm $M \in d$, xét $M$ có thuộc $d'$ không. Thuộc thì hai đường thẳng trùng nhau, không thuộc thì song song.</p>
-      <p>Nếu không cùng phương: tính $[\vec u,\vec u']\cdot\overrightarrow{MM'}$. Bằng $0$ thì cắt nhau, khác $0$ thì chéo nhau.</p>
-    </div>
-    <div class="chu-y">
-      <p><b>Vì sao phải làm bước 1 trước?</b> Khi $\vec u, \vec u'$ cùng phương thì $[\vec u,\vec u'] = \vec 0$, nên tích $[\vec u,\vec u']\cdot\overrightarrow{MM'}$ luôn bằng $0$, kể cả khi hai đường thẳng song song. Chỉ nhìn vào tích này sẽ kết luận sai là "cắt nhau".</p>
-    </div>
-    <div class="chu-y">
-      <p><b>Ý nghĩa của điều kiện.</b> $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$ nghĩa là ba vectơ $\vec u, \vec u', \overrightarrow{MM'}$ đồng phẳng, tức $d$ và $d'$ cùng nằm trong một mặt phẳng. Khi $\vec u, \vec u'$ không cùng phương: hai đường thẳng cùng nằm trong một mặt phẳng thì cắt nhau, không cùng nằm trong mặt phẳng nào thì chéo nhau.</p>
-    </div>
-
-    <h3>Ví dụ 3</h3>
-    <p class="de-bai">Xét vị trí tương đối của hai đường thẳng $d: \begin{cases} x = 2 + t \\ y = -1 + 2t \\ z = 3 - t \end{cases}$ và $d': \begin{cases} x = 1 + 2s \\ y = s \\ z = 1 + s \end{cases}$.</p>
-    <button class="nut" data-hien="vd3">Xem lời giải</button>
-    <div class="hop" id="vd3" hidden>
-      <p>$d$ đi qua $M(2;-1;3)$, có $\vec u = (1;2;-1)$; $d'$ đi qua $M'(1;0;1)$, có $\vec u' = (2;1;1)$.</p>
-      <p><b>Bước 1.</b> $\dfrac{1}{2} \ne \dfrac{2}{1}$ nên $\vec u, \vec u'$ không cùng phương.</p>
-      <p><b>Bước 2.</b> $[\vec u,\vec u'] = (3;-3;-3)$, $\overrightarrow{MM'} = (-1;1;-2)$.</p>
-      $$[\vec u,\vec u']\cdot\overrightarrow{MM'} = -3 - 3 + 6 = 0.$$
-      <p>Vậy $d$ và $d'$ cắt nhau. Giải hệ $2 + t = 1 + 2s,\ -1 + 2t = s$ được $t = s = 1$, giao điểm là $(3;1;2)$.</p>
-    </div>
-  </div>
-
-  <div class="khoi" id="phieu">
-    <h2>Nội dung 4 · Vận dụng: phiếu báo cáo của trạm</h2>
-
-    <div id="buoc-nhan">
-      <p>Chọn trạm và vệ tinh được giao, rồi bấm <b>Nhận nhiệm vụ</b>.</p>
-      <div class="dieu-khien">
-        <label>Trạm số
-          <select id="chon-tram">
-            <option value="">--</option>
-            <option>1</option><option>2</option><option>3</option><option>4</option>
-            <option>5</option><option>6</option><option>7</option><option>8</option>
-          </select>
-        </label>
-        <label style="margin-left:12px">Vệ tinh
-          <select id="chon-ve-tinh">
-            <option value="">--</option>
-            <option>V1</option><option>V2</option><option>V3</option><option>V4</option>
-          </select>
-        </label>
-        <button class="nut chinh" id="nhan-nhiem-vu" style="margin-left:12px">Nhận nhiệm vụ</button>
-      </div>
-    </div>
-
-    <div id="nhiem-vu" hidden>
-      <p id="dang-lam" class="de-bai"></p>
-
-      <div class="dieu-khien">
-        <button class="nut" id="the-cuu-ho">Thẻ Cứu hộ chuyên môn</button>
-        <button class="nut" id="the-tang-toc">Thẻ Tăng tốc</button>
-        <span style="margin-left:auto">Điểm của trạm: <span class="diem" id="tong-rp">0 RP</span></span>
-      </div>
-      <p class="phu" id="ghi-chu-the" style="font-size:.9rem"></p>
-
-      <!-- Câu 1 -->
-      <div class="hop" id="cau-1">
-        <h3 style="margin-top:0">Câu 1 · Nhận biết <span class="diem">+10 RP</span></h3>
-        <p>Trên mô phỏng 3D, chỉ bật T1 và vệ tinh của trạm, xoay nhiều góc nhìn. Dự đoán: hai quỹ đạo có điểm chung không?</p>
-        <div class="lua-chon">
-          <label><input type="radio" name="c1" value="co"> Có điểm chung</label>
-          <label><input type="radio" name="c1" value="khong"> Không có điểm chung</label>
+      <!-- 3 Ô NHIỆM VỤ TRỰC QUAN -->
+      <div class="hd3-modules-wrap" aria-label="Ba chặng nhiệm vụ của hoạt động Thử thách">
+        <div class="hd3-modules-header">
+          <span class="hd3-modules-count">Mạch nhiệm vụ tại Trạm kiểm soát (Nội dung 3 &amp; Nội dung 4)</span>
         </div>
-        <button class="nut chinh" id="nop-1">Nộp câu 1</button>
-        <div class="phan-hoi" id="ph-1" hidden></div>
-      </div>
 
-      <!-- Câu 2 -->
-      <div class="hop" id="cau-2">
-        <h3 style="margin-top:0">Câu 2 · Thông hiểu <span class="diem">+20 RP</span></h3>
-        <p>Chứng minh bằng tính toán. Gọi $\vec v$ là vectơ chỉ phương của vệ tinh, <span id="ten-diem-ve-tinh">M</span> là điểm vệ tinh đi qua.</p>
-        <p><button class="nut nho" data-hien="goi-nho-tch">Gợi nhớ: tích có hướng</button></p>
-        <div class="chu-y" id="goi-nho-tch" hidden>
-          <p>Với $\vec u = (u_1;u_2;u_3)$ và $\vec v = (v_1;v_2;v_3)$:</p>
-          $$[\vec u,\vec v] = \left(\begin{vmatrix} u_2 & u_3 \\ v_2 & v_3 \end{vmatrix};\ \begin{vmatrix} u_3 & u_1 \\ v_3 & v_1 \end{vmatrix};\ \begin{vmatrix} u_1 & u_2 \\ v_1 & v_2 \end{vmatrix}\right).$$
-          <p>$\vec u$ và $\vec v$ cùng phương khi và chỉ khi $[\vec u,\vec v] = \vec 0$.</p>
+        <div class="hd3-modules-grid">
+          <!-- Chặng 1 -->
+          <a class="hd3-module-card" href="#mo-phong">
+            <span class="hd3-module-card__watermark" aria-hidden="true">01</span>
+            <div class="hd3-module-card__emblem" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3"/>
+                <line x1="12" y1="12" x2="18.5" y2="5.5"/>
+              </svg>
+            </div>
+            <div class="hd3-module-card__body">
+              <span class="hd3-module-card__step">Nội dung 3 · Quan sát</span>
+              <h2 class="hd3-module-card__title">Radar cảnh báo 2D &amp; Mô phỏng quỹ đạo 3D</h2>
+              <div class="hd3-module-card__tags">
+                <span class="hd3-module-chip">Thiên thạch T1 &amp; V1–V4</span>
+                <span class="hd3-module-chip">2 Cảnh báo $(6;1), (8;2)$</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Chặng 2 -->
+          <a class="hd3-module-card hd3-module-card--teal" href="#kien-thuc">
+            <span class="hd3-module-card__watermark" aria-hidden="true">02</span>
+            <div class="hd3-module-card__emblem" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              </svg>
+            </div>
+            <div class="hd3-module-card__body">
+              <span class="hd3-module-card__step">Nội dung 3 · Kiến thức</span>
+              <h2 class="hd3-module-card__title">Vị trí tương đối &amp; Quy trình 2 bước</h2>
+              <div class="hd3-module-card__tags">
+                <span class="hd3-module-chip">4 Vị trí tương đối</span>
+                <span class="hd3-module-chip">$[\vec u,\vec u']\cdot\overrightarrow{MM'}$ &amp; Ví dụ 3</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Chặng 3 -->
+          <a class="hd3-module-card hd3-module-card--amber" href="#phieu">
+            <span class="hd3-module-card__watermark" aria-hidden="true">03</span>
+            <div class="hd3-module-card__emblem" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <div class="hd3-module-card__body">
+              <span class="hd3-module-card__step">Nội dung 4 · Vận dụng</span>
+              <h2 class="hd3-module-card__title">Phiếu báo cáo trạm &amp; Chốt báo động</h2>
+              <div class="hd3-module-card__tags">
+                <span class="hd3-module-chip">+10 / +20 / +40 RP</span>
+                <span class="hd3-module-chip">Thẻ Cứu hộ &amp; Tăng tốc</span>
+              </div>
+            </div>
+          </a>
         </div>
-        <p>a) Hai vectơ chỉ phương $\vec u$ và $\vec v$ có cùng phương không?</p>
-        <div class="lua-chon">
-          <label><input type="radio" name="c2-cp" value="co"> Cùng phương</label>
-          <label><input type="radio" name="c2-cp" value="khong"> Không cùng phương</label>
+      </div>
+    </header>
+
+    <!-- =======================================================================
+         NỘI DUNG 3 · MÀN 1 & MÀN 2: TÌNH HUỐNG + RADAR 2D & MÔ PHỎNG 3D
+         ======================================================================= -->
+    <section id="mo-phong" class="hd3-band">
+      <div class="hd3-zoom-block">
+        <div class="hd3-step-tag">
+          <span class="hd3-step-tag__dot" aria-hidden="true"></span>
+          <span>Nội dung 3 · Tình huống &amp; Quan sát mô phỏng 3D</span>
         </div>
-        <div id="nhanh-cung-phuong" hidden>
-          <p>b) $\vec v = k\,\vec u$ với $k =$ <input type="text" class="so" id="c2-k" inputmode="decimal" autocomplete="off"></p>
-          <p>c) Điểm của vệ tinh có thuộc T1 không?</p>
-          <div class="lua-chon">
-            <label><input type="radio" name="c2-thuoc" value="co"> Thuộc T1</label>
-            <label><input type="radio" name="c2-thuoc" value="khong"> Không thuộc T1</label>
+        <h2 class="hd3-title">Tình huống &amp; Đài quan sát Radar 3D</h2>
+
+        <div class="hd3-situation-grid">
+          <div>
+            <p class="hd3-prose" style="color:var(--sc-ink);">
+              Radar cảnh báo của trung tâm vừa báo <span class="kw">hai nguy cơ va chạm</span> tại $(6;1)$ và $(8;2)$. Radar này chỉ so <span class="kw">hình chiếu $(x; y)$</span> xuống mặt phẳng $Oxy$, bỏ qua độ cao $z$: hễ hai hình chiếu cắt nhau là báo, kể cả khi hai vật đi lệch độ cao.
+            </p>
+            <div class="hd3-alert-pills">
+              <span class="hd3-alert-pill">
+                <span class="hd3-alert-pill__dot" aria-hidden="true"></span>
+                Cảnh báo 1: $(6; 1)$
+              </span>
+              <span class="hd3-alert-pill">
+                <span class="hd3-alert-pill__dot" aria-hidden="true"></span>
+                Cảnh báo 2: $(8; 2)$
+              </span>
+            </div>
+            <p class="hd3-prose">
+              Trạm có <span class="kw">dữ liệu quỹ đạo đầy đủ</span> trong $Oxyz$ do hệ thống định vị đo được (bảng bên; T1 chính là đường thẳng $d$ ở Ví dụ 1). Mỗi vật xuất phát lúc $t = 0$, VTCP cho biết <span class="kw">hướng và vận tốc</span> (sau thời gian $t$ ở vị trí $M + t\vec v$). Hai vật chỉ <span class="kw">va chạm</span> khi ở cùng một điểm <b>tại cùng một thời điểm</b>.
+            </p>
+          </div>
+
+          <div>
+            <table class="hd3-telemetry-table" id="bang-quy-dao">
+              <thead>
+                <tr>
+                  <th>Quỹ đạo</th>
+                  <th>Đi qua điểm</th>
+                  <th>Vectơ chỉ phương</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="cham" style="background:var(--t1)"></span><b>Thiên thạch T1</b></td>
+                  <td>$A(2;-1;3)$</td>
+                  <td>$\vec u = (2;1;-2)$</td>
+                </tr>
+                <tr>
+                  <td><span class="cham" style="background:var(--v1)"></span><b>Vệ tinh V1</b></td>
+                  <td>$B(0;2;1)$</td>
+                  <td>$\vec v_1 = (-4;-2;4)$</td>
+                </tr>
+                <tr>
+                  <td><span class="cham" style="background:var(--v2)"></span><b>Vệ tinh V2</b></td>
+                  <td>$C(4;0;1)$</td>
+                  <td>$\vec v_2 = (2;1;-2)$</td>
+                </tr>
+                <tr>
+                  <td><span class="cham" style="background:var(--v3)"></span><b>Vệ tinh V3</b></td>
+                  <td>$D(4;1;-3)$</td>
+                  <td>$\vec v_3 = (1;0;1)$</td>
+                </tr>
+                <tr>
+                  <td><span class="cham" style="background:var(--v4)"></span><b>Vệ tinh V4</b></td>
+                  <td>$E(5;2;-2)$</td>
+                  <td>$\vec v_4 = (1;0;1)$</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div id="nhanh-khong-cung-phuong" hidden>
-          <p>b) <span id="nhan-tich">$[\vec u,\vec v]\cdot\overrightarrow{AM}$</span> $=$ <input type="text" class="so" id="c2-tich" inputmode="decimal" autocomplete="off"></p>
+      </div>
+
+      <!-- Màn hình đôi: Radar 2D Oxy & Không gian 3D Oxyz -->
+      <div class="hd3-zoom-block">
+        <p class="hd3-prose" style="color:var(--sc-ink); max-width:none; margin-bottom:14px;">
+          <b>Quan sát trên radar và mô phỏng 3D:</b> Nhìn từ trên xuống (giống radar), những cặp quỹ đạo nào trông như có điểm chung với T1? Nghiêng mô phỏng ra thì sao? <span class="kw">Chỉ nhìn bằng mắt đã đủ kết luận chưa?</span>
+        </p>
+
+        <div class="hd3-sim-pair">
+          <div class="hd3-viewport">
+            <canvas id="radar" aria-label="Radar mặt phẳng Oxy"></canvas>
+            <span class="hd3-viewport__hud">Radar · Chỉ so hình chiếu $(x; y)$</span>
+          </div>
+          <div class="hd3-viewport">
+            <canvas id="khong-gian" aria-label="Mô phỏng 3D năm quỹ đạo"></canvas>
+            <span class="hd3-viewport__hud">Không gian $Oxyz$ · Kéo để xoay</span>
+          </div>
         </div>
-        <p>Kết luận: T1 và vệ tinh của trạm</p>
-        <div class="lua-chon">
-          <label><input type="radio" name="c2-vt" value="trung"> trùng nhau</label>
-          <label><input type="radio" name="c2-vt" value="song-song"> song song</label>
-          <label><input type="radio" name="c2-vt" value="cat"> cắt nhau</label>
-          <label><input type="radio" name="c2-vt" value="cheo"> chéo nhau</label>
+
+        <div class="hd3-sim-toolbar">
+          <div class="dieu-khien" id="bat-tat" style="margin-top:0;"></div>
+          <div class="dieu-khien" style="margin-top:0;">
+            <button class="nut" id="goc-tren" type="button">Nhìn từ trên xuống (giống radar)</button>
+            <button class="nut" id="goc-nghieng" type="button">Góc nghiêng</button>
+            <button class="nut" id="duong-dong" type="button">Đường dóng tại hai điểm cảnh báo</button>
+          </div>
         </div>
-        <button class="nut chinh" id="nop-2">Nộp câu 2</button>
-        <div class="phan-hoi" id="ph-2" hidden></div>
-      </div>
-
-      <!-- Câu 3 -->
-      <div class="hop" id="cau-3">
-        <h3 style="margin-top:0">Câu 3 · Vận dụng <span class="diem">+40 RP</span> <span class="dong-ho" id="dem-tang-toc"></span></h3>
-        <p>Trong hai cảnh báo trên radar, cảnh báo nào là báo động thật? Điểm nguy hiểm có tọa độ nào trong $Oxyz$? Nhớ: va chạm khi hai vật ở cùng một điểm tại cùng một thời điểm.</p>
-        <div class="lua-chon">
-          <label><input type="radio" name="c3" value="1"> Cảnh báo tại $(6;1)$</label>
-          <label><input type="radio" name="c3" value="2"> Cảnh báo tại $(8;2)$</label>
-          <label><input type="radio" name="c3" value="ca-hai"> Cả hai</label>
-          <label><input type="radio" name="c3" value="khong"> Không cảnh báo nào</label>
-        </div>
-        <p>Điểm nguy hiểm: $($ <input type="text" class="so" id="c3-x" placeholder="x" inputmode="decimal" autocomplete="off"> $;$ <input type="text" class="so" id="c3-y" placeholder="y" inputmode="decimal" autocomplete="off"> $;$ <input type="text" class="so" id="c3-z" placeholder="z" inputmode="decimal" autocomplete="off"> $)$</p>
-        <button class="nut chinh" id="nop-3">Nộp câu 3</button>
-        <div class="phan-hoi" id="ph-3" hidden></div>
-      </div>
-
-      <!-- Báo cáo -->
-      <div class="chot" id="bao-cao" hidden>
-        <p style="margin:0 0 6px"><b>Báo cáo về trụ sở</b></p>
-        <div id="noi-dung-bao-cao"></div>
-      </div>
-
-      <p style="margin-top:18px"><button class="nut nho" id="xoa-phieu">Xoá phiếu trên máy này</button></p>
-    </div>
-  </div>
-
-  <div class="khoi" id="ket-luan-nd3">
-    <h2>Nội dung 4 · Kết luận: báo động thật hay giả?</h2>
-    <p class="phu">Giáo viên mở sau khi các trạm báo cáo.</p>
-    <button class="nut chinh" data-hien="nd3-ket-luan">Hiện kết luận</button>
-    <div id="nd3-ket-luan" hidden>
-      <table class="bang">
-        <tr><th>Vệ tinh</th><th>Kết luận</th><th>Lí do</th></tr>
-        <tr><td><span class="cham" style="background:var(--v1)"></span>V1</td><td>song song với T1</td><td>$\vec v_1 = -2\vec u$, $B(0;2;1) \notin$ T1</td></tr>
-        <tr><td><span class="cham" style="background:var(--v2)"></span>V2</td><td>trùng T1</td><td>$\vec v_2 = \vec u$, $C(4;0;1) \in$ T1 (ứng với $t = 1$). Cùng vận tốc nên V2 luôn đi trước T1 một vectơ $\vec u$, không va chạm.</td></tr>
-        <tr><td><span class="cham" style="background:var(--v3)"></span>V3</td><td>cắt T1 tại $(6;1;-1)$</td><td>$[\vec u,\vec v_3]\cdot\overrightarrow{AD} = 2 - 8 + 6 = 0$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v4)"></span>V4</td><td>chéo T1</td><td>$[\vec u,\vec v_4]\cdot\overrightarrow{AE} = 3 - 12 + 5 = -4 \ne 0$</td></tr>
-      </table>
-      <p style="margin-top:12px">Vậy cảnh báo tại $(6;1)$ là <b>báo động thật</b>: T1 và V3 gặp nhau tại $(6;1;-1)$, và cả hai cùng tới điểm này tại $t = 2$. Cảnh báo tại $(8;2)$ là <b>báo động giả</b>: tại đó T1 có $z = -3$ còn V4 có $z = 1$, hai quỹ đạo chéo nhau.</p>
-      <div class="chu-y">
-        <p><b>Mở rộng.</b> $d \perp d' \iff \vec u\cdot\vec u' = 0$. Ở đây $\vec u\cdot\vec v_3 = \vec u\cdot\vec v_4 = 0$ nên T1 vuông góc với cả V3 (cắt nhau) và V4 (chéo nhau). Vuông góc là quan hệ giữa hai vectơ chỉ phương, không phải vị trí tương đối thứ năm.</p>
-      </div>
-    </div>
-  </div>
-      </div>
-
-      <div class="tm-footer-nav">
-        <a class="tm-btn tm-btn--ghost" href="../index.html#hd-3">
-          ← Trở lại màn hình chính
-        </a>
-        <a class="tm-btn tm-btn--done" href="../index.html#hd-3">
-          Hoàn thành
-        </a>
       </div>
     </section>
+
+    <!-- SHOOTING-STAR BRIDGE 1: MÔ PHỎNG -> KIẾN THỨC -->
+    <div class="hd3-bridge" aria-hidden="true">
+      <canvas class="hd3-bridge-canvas" data-dir="rtl" data-target="kien-thuc"></canvas>
+    </div>
+
+    <!-- =======================================================================
+         NỘI DUNG 3 · MÀN 3: KIẾN THỨC VỊ TRÍ TƯƠNG ĐỐI & QUY TRÌNH HAI BƯỚC
+         ======================================================================= -->
+    <section id="kien-thuc" class="hd3-band">
+      <div class="hd3-zoom-block">
+        <div class="hd3-step-tag">
+          <span class="hd3-step-tag__dot" aria-hidden="true"></span>
+          <span>Nội dung 3 · Kiến thức trọng tâm</span>
+        </div>
+        <h2 class="hd3-title">Vị trí tương đối của hai đường thẳng</h2>
+        <p class="hd3-prose">
+          Trong không gian $Oxyz$, cho đường thẳng $d$ đi qua <span class="kw">$M$</span>, có VTCP <span class="kw">$\vec u$</span> và đường thẳng $d'$ đi qua <span class="kw">$M'$</span>, có VTCP <span class="kw">$\vec u'$</span>:
+        </p>
+
+        <!-- 4 Cột trực quan cho 4 vị trí tương đối -->
+        <div class="hd3-4cases">
+          <div class="hd3-case-col">
+            <h3 class="hd3-case-col__title">1. Trùng nhau</h3>
+            <span class="hd3-case-col__pts">Vô số điểm chung</span>
+            <p class="hd3-case-col__cond">
+              $\vec u, \vec u'$ <span class="kw">cùng phương</span> và <span class="kw">$M \in d'$</span>.
+            </p>
+          </div>
+
+          <div class="hd3-case-col hd3-case-col--2">
+            <h3 class="hd3-case-col__title">2. Song song</h3>
+            <span class="hd3-case-col__pts">Không có điểm chung</span>
+            <p class="hd3-case-col__cond">
+              $\vec u, \vec u'$ <span class="kw">cùng phương</span> và <span class="kw">$M \notin d'$</span>.
+            </p>
+          </div>
+
+          <div class="hd3-case-col hd3-case-col--3">
+            <h3 class="hd3-case-col__title">3. Cắt nhau</h3>
+            <span class="hd3-case-col__pts">Đúng 1 điểm chung</span>
+            <p class="hd3-case-col__cond">
+              $\vec u, \vec u'$ <span class="kw">không cùng phương</span> và <span class="kw">$[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$</span>.
+            </p>
+          </div>
+
+          <div class="hd3-case-col hd3-case-col--4">
+            <h3 class="hd3-case-col__title">4. Chéo nhau</h3>
+            <span class="hd3-case-col__pts">Không đồng phẳng</span>
+            <p class="hd3-case-col__cond">
+              $\vec u, \vec u'$ không cùng phương và <span class="kw">$[\vec u,\vec u']\cdot\overrightarrow{MM'} \ne 0$</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- KHUNG CHỐT KIẾN THỨC: QUY TRÌNH HAI BƯỚC (Khung nhấn mạnh nổi bật để học sinh ghi vở) -->
+      <div class="hd3-chot-frame hd3-zoom-block">
+        <span class="hd3-chot-badge">★ Trọng tâm · Quy trình hai bước xét vị trí tương đối</span>
+
+        <div class="hd3-steps-tree">
+          <!-- Bước 1 -->
+          <div class="hd3-tree-step">
+            <div class="hd3-tree-head">
+              <span class="hd3-tree-num">BƯỚC 1</span>
+              <h3 class="hd3-tree-title">Kiểm tra hai VTCP $\vec u$ và $\vec u'$</h3>
+            </div>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin:0;">
+              Xét $\vec u$ và $\vec u'$ có <span class="kw">cùng phương</span> không (tọa độ tỉ lệ $\vec u' = k\vec u$, hay <span class="kw">$[\vec u,\vec u'] = \vec 0$</span>).
+            </p>
+          </div>
+
+          <!-- Bước 2: Rẽ 2 nhánh trực quan -->
+          <div class="hd3-tree-step">
+            <div class="hd3-tree-head">
+              <span class="hd3-tree-num">BƯỚC 2</span>
+              <h3 class="hd3-tree-title">Kết luận theo từng nhánh</h3>
+            </div>
+
+            <div class="hd3-branches">
+              <div class="hd3-branch-box">
+                <span class="hd3-branch-tag">Nhánh A · Nếu cùng phương</span>
+                Lấy điểm $M \in d$, xét $M$ có thuộc $d'$ không:<br>
+                • <span class="kw">$M \in d'$</span> $\Rightarrow$ <b>Trùng nhau</b><br>
+                • <span class="kw">$M \notin d'$</span> $\Rightarrow$ <b>Song song</b>
+              </div>
+
+              <div class="hd3-branch-box hd3-branch-box--teal">
+                <span class="hd3-branch-tag">Nhánh B · Không cùng phương</span>
+                Tính tích hỗn tạp $T = [\vec u,\vec u']\cdot\overrightarrow{MM'}$:<br>
+                • <span class="kw">$T = 0$</span> $\Rightarrow$ <b>Cắt nhau</b><br>
+                • <span class="kw">$T \ne 0$</span> $\Rightarrow$ <b>Chéo nhau</b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHÚ Ý QUAN TRỌNG & VÍ DỤ 3 (Frameless 2-column) -->
+      <div class="hd3-notes-example hd3-zoom-block">
+        <div class="hd3-caution-stack">
+          <div class="hd3-caution-item">
+            <h3 class="hd3-caution-title">
+              <span class="hd3-caution-title__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </span>
+              <span>Vì sao phải làm Bước 1 trước?</span>
+            </h3>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin:0;">
+              Khi $\vec u, \vec u'$ <span class="kw">cùng phương</span> thì $[\vec u,\vec u'] = \vec 0$, nên tích $[\vec u,\vec u']\cdot\overrightarrow{MM'}$ <b>luôn bằng $0$</b> kể cả khi hai đường thẳng <span class="kw">song song</span>. Nếu chỉ nhìn vào tích này sẽ kết luận sai là "cắt nhau".
+            </p>
+          </div>
+
+          <div class="hd3-caution-item">
+            <h3 class="hd3-caution-title">
+              <span class="hd3-caution-title__icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              </span>
+              <span>Ý nghĩa của điều kiện</span>
+            </h3>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin:0;">
+              $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$ nghĩa là ba vectơ $\vec u, \vec u', \overrightarrow{MM'}$ <span class="kw">đồng phẳng</span> ($d$ và $d'$ cùng nằm trong một mặt phẳng).
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="hd3-subhead">Ví dụ 3</h3>
+          <p class="hd3-prose" style="color:var(--sc-ink); font-weight:600;">
+            Xét vị trí tương đối của hai đường thẳng $d: \begin{cases} x = 2 + t \\ y = -1 + 2t \\ z = 3 - t \end{cases}$ và $d': \begin{cases} x = 1 + 2s \\ y = s \\ z = 1 + s \end{cases}$.
+          </p>
+          <button class="tm-btn tm-btn--ghost" data-hien="vd3" type="button">Xem lời giải</button>
+
+          <div class="hd3-answer-flow" id="vd3" hidden>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin-bottom:6px;">
+              • $d$ đi qua $M(2;-1;3)$, có $\vec u = (1;2;-1)$; $d'$ đi qua $M'(1;0;1)$, có $\vec u' = (2;1;1)$.
+            </p>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin-bottom:6px;">
+              • <b>Bước 1:</b> $\dfrac{1}{2} \ne \dfrac{2}{1}$ nên $\vec u, \vec u'$ <span class="kw">không cùng phương</span>.
+            </p>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin-bottom:4px;">
+              • <b>Bước 2:</b> $[\vec u,\vec u'] = (3;-3;-3)$, $\overrightarrow{MM'} = (-1;1;-2) \Rightarrow [\vec u,\vec u']\cdot\overrightarrow{MM'} = -3 - 3 + 6 = 0$.
+            </p>
+            <p class="hd3-prose" style="margin-bottom:0;">
+              → Vậy $d$ và $d'$ <span class="kw">cắt nhau</span>. Giải hệ $2 + t = 1 + 2s,\ -1 + 2t = s$ được $t = s = 1$, giao điểm là <span class="kw">$(3;1;2)$</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOOTING-STAR BRIDGE 2: KIẾN THỨC -> NỘI DUNG 4 (PHIẾU BÁO CÁO TRẠM) -->
+    <div class="hd3-bridge" aria-hidden="true">
+      <canvas class="hd3-bridge-canvas" data-dir="ltr" data-target="phieu"></canvas>
+    </div>
+
+    <!-- =======================================================================
+         NỘI DUNG 4 · VẬN DỤNG: PHIẾU BÁO CÁO CỦA TRẠM & CHỐT KẾT LUẬN
+         ======================================================================= -->
+    <section id="phieu" class="hd3-band">
+      <div class="hd3-zoom-block">
+        <div class="hd3-step-tag">
+          <span class="hd3-step-tag__dot" aria-hidden="true"></span>
+          <span>Nội dung 4 · Vận dụng</span>
+        </div>
+        <h2 class="hd3-title">Nội dung 4 · Phiếu báo cáo của trạm</h2>
+
+        <div id="buoc-nhan" class="hd3-dispatch-bar">
+          <span>Chọn <b>Trạm</b> và <b>Vệ tinh</b> được giao, rồi bấm <b>Nhận nhiệm vụ</b>:</span>
+          <label>Trạm số
+            <select id="chon-tram">
+              <option value="">--</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option>
+              <option>5</option><option>6</option><option>7</option><option>8</option>
+            </select>
+          </label>
+          <label>Vệ tinh
+            <select id="chon-ve-tinh">
+              <option value="">--</option>
+              <option>V1</option><option>V2</option><option>V3</option><option>V4</option>
+            </select>
+          </label>
+          <button class="tm-btn tm-btn--primary" id="nhan-nhiem-vu" type="button">Nhận nhiệm vụ →</button>
+        </div>
+
+        <div id="nhiem-vu" hidden>
+          <div class="hd3-mission-hud">
+            <p id="dang-lam" class="hd3-mission-active-title"></p>
+            <div class="dieu-khien" style="margin-top:0;">
+              <button class="nut" id="the-cuu-ho" type="button">Thẻ Cứu hộ chuyên môn</button>
+              <button class="nut" id="the-tang-toc" type="button">Thẻ Tăng tốc</button>
+              <span>Điểm của trạm: <span class="diem" id="tong-rp">0 RP</span></span>
+            </div>
+          </div>
+          <p class="phu" id="ghi-chu-the" style="font-size:.9rem; margin-top:0;"></p>
+
+          <div class="hd3-q-stream">
+            <!-- Câu 1 -->
+            <div class="hd3-q-stage" id="cau-1">
+              <h3>Câu 1 · Nhận biết <span class="diem">+10 RP</span></h3>
+              <p class="hd3-prose" style="color:var(--sc-ink);">
+                Trên mô phỏng 3D, chỉ bật <span class="kw">T1</span> và <span class="kw">vệ tinh của trạm</span>, xoay nhiều góc nhìn. Dự đoán: hai quỹ đạo có điểm chung không?
+              </p>
+              <div class="lua-chon">
+                <label><input type="radio" name="c1" value="co"> Có điểm chung</label>
+                <label><input type="radio" name="c1" value="khong"> Không có điểm chung</label>
+              </div>
+              <button class="nut chinh" id="nop-1" type="button">Nộp câu 1</button>
+              <div class="phan-hoi" id="ph-1" hidden></div>
+            </div>
+
+            <!-- Câu 2 -->
+            <div class="hd3-q-stage hd3-q-stage--2" id="cau-2">
+              <h3>Câu 2 · Thông hiểu <span class="diem">+20 RP</span></h3>
+              <p class="hd3-prose" style="color:var(--sc-ink);">
+                Chứng minh bằng tính toán. Gọi $\vec v$ là vectơ chỉ phương của vệ tinh, <span id="ten-diem-ve-tinh">M</span> là điểm vệ tinh đi qua.
+              </p>
+              <p><button class="nut nho" data-hien="goi-nho-tch" type="button">Gợi nhớ: tích có hướng</button></p>
+              <div class="hd3-answer-flow" id="goi-nho-tch" hidden style="margin-bottom:12px;">
+                <p style="margin:0 0 6px;">Với $\vec u = (u_1;u_2;u_3)$ và $\vec v = (v_1;v_2;v_3)$:</p>
+                $$[\vec u,\vec v] = \left(\begin{vmatrix} u_2 & u_3 \\ v_2 & v_3 \end{vmatrix};\ \begin{vmatrix} u_3 & u_1 \\ v_3 & v_1 \end{vmatrix};\ \begin{vmatrix} u_1 & u_2 \\ v_1 & v_2 \end{vmatrix}\right).$$
+                <p style="margin:4px 0 0;">$\vec u$ và $\vec v$ cùng phương khi và chỉ khi $[\vec u,\vec v] = \vec 0$.</p>
+              </div>
+
+              <p><b>a)</b> Hai vectơ chỉ phương $\vec u$ và $\vec v$ có cùng phương không?</p>
+              <div class="lua-chon">
+                <label><input type="radio" name="c2-cp" value="co"> Cùng phương</label>
+                <label><input type="radio" name="c2-cp" value="khong"> Không cùng phương</label>
+              </div>
+
+              <div id="nhanh-cung-phuong" hidden>
+                <p><b>b)</b> $\vec v = k\,\vec u$ với $k =$ <input type="text" class="so" id="c2-k" inputmode="decimal" autocomplete="off"></p>
+                <p><b>c)</b> Điểm của vệ tinh có thuộc T1 không?</p>
+                <div class="lua-chon">
+                  <label><input type="radio" name="c2-thuoc" value="co"> Thuộc T1</label>
+                  <label><input type="radio" name="c2-thuoc" value="khong"> Không thuộc T1</label>
+                </div>
+              </div>
+
+              <div id="nhanh-khong-cung-phuong" hidden>
+                <p><b>b)</b> <span id="nhan-tich">$[\vec u,\vec v]\cdot\overrightarrow{AM}$</span> $=$ <input type="text" class="so" id="c2-tich" inputmode="decimal" autocomplete="off"></p>
+              </div>
+
+              <p><b>Kết luận:</b> T1 và vệ tinh của trạm</p>
+              <div class="lua-chon">
+                <label><input type="radio" name="c2-vt" value="trung"> trùng nhau</label>
+                <label><input type="radio" name="c2-vt" value="song-song"> song song</label>
+                <label><input type="radio" name="c2-vt" value="cat"> cắt nhau</label>
+                <label><input type="radio" name="c2-vt" value="cheo"> chéo nhau</label>
+              </div>
+              <button class="nut chinh" id="nop-2" type="button">Nộp câu 2</button>
+              <div class="phan-hoi" id="ph-2" hidden></div>
+            </div>
+
+            <!-- Câu 3 -->
+            <div class="hd3-q-stage hd3-q-stage--3" id="cau-3">
+              <h3>Câu 3 · Vận dụng <span class="diem">+40 RP</span> <span class="dong-ho" id="dem-tang-toc"></span></h3>
+              <p class="hd3-prose" style="color:var(--sc-ink);">
+                Trong hai cảnh báo trên radar, cảnh báo nào là <span class="kw">báo động thật</span>? Điểm nguy hiểm có tọa độ nào trong $Oxyz$?
+              </p>
+              <div class="lua-chon">
+                <label><input type="radio" name="c3" value="1"> Cảnh báo tại $(6;1)$</label>
+                <label><input type="radio" name="c3" value="2"> Cảnh báo tại $(8;2)$</label>
+                <label><input type="radio" name="c3" value="ca-hai"> Cả hai</label>
+                <label><input type="radio" name="c3" value="khong"> Không cảnh báo nào</label>
+              </div>
+              <p>Điểm nguy hiểm: $($ <input type="text" class="so" id="c3-x" placeholder="x" inputmode="decimal" autocomplete="off"> $;$ <input type="text" class="so" id="c3-y" placeholder="y" inputmode="decimal" autocomplete="off"> $;$ <input type="text" class="so" id="c3-z" placeholder="z" inputmode="decimal" autocomplete="off"> $)$</p>
+              <button class="nut chinh" id="nop-3" type="button">Nộp câu 3</button>
+              <div class="phan-hoi" id="ph-3" hidden></div>
+            </div>
+          </div>
+
+          <!-- Báo cáo tổng hợp của trạm -->
+          <div class="chot" id="bao-cao" hidden style="margin-top:22px;">
+            <p style="margin:0 0 6px"><b>Báo cáo về trụ sở</b></p>
+            <div id="noi-dung-bao-cao"></div>
+          </div>
+
+          <p style="margin-top:18px"><button class="nut nho" id="xoa-phieu" type="button">Xoá phiếu trên máy này</button></p>
+        </div>
+      </div>
+
+      <!-- KHUNG CHỐT KẾT LUẬN TOÀN LỚP: BÁO ĐỘNG THẬT HAY GIẢ? -->
+      <div id="ket-luan-nd3" class="hd3-zoom-block" style="margin-top:42px; padding-top:26px; border-top:1px solid rgba(148,163,184,0.16);">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px;">
+          <div>
+            <h3 class="hd3-subhead" style="margin:0;">Kết luận: Báo động thật hay giả?</h3>
+            <p class="phu" style="margin:4px 0 0; font-size:0.9rem;">Giáo viên mở sau khi các trạm báo cáo.</p>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <a class="tm-btn tm-btn--ghost" href="#mo-phong">↑ Xem lại mô phỏng 3D</a>
+            <button class="tm-btn tm-btn--primary" data-hien="nd3-ket-luan" type="button">Hiện kết luận</button>
+          </div>
+        </div>
+
+        <div id="nd3-ket-luan" class="hd3-chot-frame hd3-chot-frame--amber" hidden>
+          <span class="hd3-chot-badge">★ Kết luận Trung tâm Kiểm soát Vũ trụ</span>
+
+          <table class="hd3-telemetry-table">
+            <thead>
+              <tr>
+                <th>Vệ tinh</th>
+                <th>Kết luận</th>
+                <th>Lí do</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="cham" style="background:var(--v1)"></span><b>V1</b></td>
+                <td><span class="kw">Song song</span> với T1</td>
+                <td>$\vec v_1 = -2\vec u$, $B(0;2;1) \notin$ T1</td>
+              </tr>
+              <tr>
+                <td><span class="cham" style="background:var(--v2)"></span><b>V2</b></td>
+                <td><span class="kw">Trùng</span> T1</td>
+                <td>$\vec v_2 = \vec u$, $C(4;0;1) \in$ T1 (ứng với $t = 1$). Cùng vận tốc nên V2 luôn đi trước T1 một vectơ $\vec u$, không va chạm.</td>
+              </tr>
+              <tr>
+                <td><span class="cham" style="background:var(--v3)"></span><b>V3</b></td>
+                <td><span class="kw">Cắt T1</span> tại $(6;1;-1)$</td>
+                <td>$[\vec u,\vec v_3]\cdot\overrightarrow{AD} = 2 - 8 + 6 = 0$</td>
+              </tr>
+              <tr>
+                <td><span class="cham" style="background:var(--v4)"></span><b>V4</b></td>
+                <td><span class="kw">Chéo</span> T1</td>
+                <td>$[\vec u,\vec v_4]\cdot\overrightarrow{AE} = 3 - 12 + 5 = -4 \ne 0$</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="hd3-verdict-banners">
+            <div class="hd3-verdict-box">
+              <span class="hd3-verdict-box__tag">● Báo động thật · Cảnh báo $(6; 1)$</span>
+              <p class="hd3-prose" style="color:var(--sc-ink); margin:0; font-size:0.95rem;">
+                <b>T1</b> và <b>V3</b> gặp nhau tại <span class="kw">$(6; 1; -1)$</span>, và cả hai cùng tới điểm này tại <span class="kw">$t = 2$</span>.
+              </p>
+            </div>
+
+            <div class="hd3-verdict-box hd3-verdict-box--false">
+              <span class="hd3-verdict-box__tag">▲ Báo động giả · Cảnh báo $(8; 2)$</span>
+              <p class="hd3-prose" style="color:var(--sc-ink); margin:0; font-size:0.95rem;">
+                Tại $(8; 2)$, <b>T1</b> có độ cao <span class="kw">$z = -3$</span> còn <b>V4</b> có độ cao <span class="kw">$z = 1$</span> $\Rightarrow$ hai quỹ đạo <span class="kw">chéo nhau</span>.
+              </p>
+            </div>
+          </div>
+
+          <div class="hd3-caution-item" style="margin-top:20px;">
+            <h4 class="hd3-caution-title" style="font-size:1.05rem;">
+              <span class="hd3-caution-title__icon" aria-hidden="true">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </span>
+              <span>Mở rộng · Hai đường thẳng vuông góc</span>
+            </h4>
+            <p class="hd3-prose" style="color:var(--sc-ink); margin:0; max-width:none;">
+              $d \perp d' \iff \vec u\cdot\vec u' = 0$. Ở đây $\vec u\cdot\vec v_3 = \vec u\cdot\vec v_4 = 0$ nên T1 <span class="kw">vuông góc</span> với cả V3 (cắt nhau) và V4 (chéo nhau). Vuông góc là quan hệ giữa hai vectơ chỉ phương, không phải vị trí tương đối thứ năm.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tm-footer-nav">
+      <a class="tm-btn tm-btn--ghost" href="../index.html#hd-3">
+        ← Trở lại màn hình chính
+      </a>
+      <a class="tm-btn tm-btn--done" href="../index.html#hd-3">
+        Hoàn thành
+      </a>
+    </div>
+
   </main>
 
   <script src="../assets/starfield.js"></script>
   <script src="../assets/page-transition.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const zoomBlocks = Array.from(document.querySelectorAll('.hd3-zoom-block'));
+    const bridges = Array.from(document.querySelectorAll('.hd3-bridge-canvas'));
+
+    /* Khi mở khung ẩn (Ví dụ 3 / Kết luận), tự động cập nhật scale và cuộn mượt */
+    document.querySelectorAll('[data-hien]').forEach(nut => {
+      nut.addEventListener('click', () => {
+        const muc = document.getElementById(nut.dataset.hien);
+        if (muc && !muc.hidden) {
+          setTimeout(() => {
+            updateZoomBlocks();
+            muc.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+          }, 60);
+        }
+      });
+    });
+
+    function setupHiDPI(canvas) {
+      if (!canvas) return null;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return null;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      const c = canvas.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx: c, w: rect.width, h: rect.height };
+    }
+
+    /* Hiệu ứng cuộn phóng to / thu nhỏ giống Landing Page */
+    function updateZoomBlocks() {
+      if (reduced) return;
+      const vh = window.innerHeight || 800;
+      const centerVh = vh * 0.5;
+
+      zoomBlocks.forEach(block => {
+        if (block.hidden) return;
+        const rect = block.getBoundingClientRect();
+        if (rect.height > vh * 0.9 && rect.top < vh * 0.65 && rect.bottom > vh * 0.35) {
+          block.style.transform = 'scale(1)';
+          block.style.opacity = '1';
+          return;
+        }
+        const blockCenter = rect.top + rect.height * 0.5;
+        const dist = Math.min(1, Math.abs(blockCenter - centerVh) / (vh * 0.82));
+        const focus = 0.5 * (1 + Math.cos(dist * Math.PI));
+        const scale = 0.78 + 0.22 * focus;
+        const opacity = 0.38 + 0.62 * focus;
+
+        block.style.transform = `scale(${scale.toFixed(4)})`;
+        block.style.opacity = opacity.toFixed(3);
+      });
+    }
+
+    function getBridgeProgress(el) {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      const startY = vh * 0.88;
+      const endY = vh * 0.22;
+      const raw = (startY - rect.top) / Math.max(1, startY - endY);
+      return Math.max(0, Math.min(1, raw));
+    }
+
+    function drawStar(c, sx, sy, ex, ey, prog, tailFrac, r, color, alpha, drawFlare) {
+      if (prog <= 0.01) return;
+      const p = Math.max(0, Math.min(1, prog));
+      const mx = sx + (ex - sx) * p;
+      const my = sy + (ey - sy) * p;
+      const tp = Math.max(0, p - tailFrac);
+      const tx = sx + (ex - sx) * tp;
+      const ty = sy + (ey - sy) * tp;
+
+      const grad = c.createLinearGradient(tx, ty, mx, my);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(0.55, color);
+      grad.addColorStop(1, '#FFFFFF');
+
+      c.save();
+      c.globalAlpha = alpha === undefined ? 1 : alpha;
+      c.strokeStyle = grad;
+      c.lineWidth = r * 0.85;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(tx, ty);
+      c.lineTo(mx, my);
+      c.stroke();
+
+      c.fillStyle = '#FFFFFF';
+      c.shadowColor = color;
+      c.shadowBlur = r * 3.8;
+      c.beginPath();
+      c.arc(mx, my, r, 0, Math.PI * 2);
+      c.fill();
+
+      if (drawFlare) {
+        c.strokeStyle = '#FFFFFF';
+        c.lineWidth = 1.1;
+        const arm = r * 2.3;
+        c.beginPath();
+        c.moveTo(mx - arm, my); c.lineTo(mx + arm, my);
+        c.moveTo(mx, my - arm); c.lineTo(mx, my + arm);
+        c.stroke();
+      }
+      c.restore();
+    }
+
+    const bridgeCompanions = [
+      { perpOffset: -30, lag: -0.06, tailLen: 0.14, r: 2.2, color: '#7DD3FC', alpha: 0.86 },
+      { perpOffset: 28,  lag: -0.11, tailLen: 0.12, r: 1.9, color: '#5EEAD4', alpha: 0.80 },
+      { perpOffset: -54, lag: -0.17, tailLen: 0.10, r: 1.5, color: '#BAE6FD', alpha: 0.65 },
+      { perpOffset: 50,  lag: -0.03, tailLen: 0.11, r: 1.7, color: '#FDE68A', alpha: 0.75 }
+    ];
+
+    function drawBridges(t) {
+      bridges.forEach((canvas, idx) => {
+        const g = setupHiDPI(canvas);
+        if (!g) return;
+        const { ctx: c, w: cw, h: ch } = g;
+        c.clearRect(0, 0, cw, ch);
+
+        const dir = canvas.getAttribute('data-dir') || 'ltr';
+        const targetId = canvas.getAttribute('data-target');
+        const prog = reduced ? 1 : getBridgeProgress(canvas);
+
+        if (targetId) {
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) targetEl.classList.toggle('is-connected', prog > 0.8);
+        }
+
+        const sx = dir === 'rtl' ? cw * 0.78 : cw * 0.22;
+        const sy = 16;
+        const ex = dir === 'rtl' ? cw * 0.22 : cw * 0.78;
+        const ey = ch - 16;
+        const dx = ex - sx;
+        const dy = ey - sy;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = -dy / len;
+        const ny = dx / len;
+
+        c.save();
+        c.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+        c.lineWidth = 1.3;
+        c.setLineDash([6, 6]);
+        c.beginPath();
+        c.moveTo(sx, sy);
+        c.lineTo(ex, ey);
+        c.stroke();
+        c.restore();
+
+        c.fillStyle = '#38BDF8';
+        c.beginPath();
+        c.arc(sx, sy, 4.2, 0, Math.PI * 2);
+        c.fill();
+
+        if (prog > 0.01) {
+          const cx = sx + dx * prog;
+          const cy = sy + dy * prog;
+          const beam = c.createLinearGradient(sx, sy, cx, cy);
+          beam.addColorStop(0, 'rgba(56, 189, 248, 0.15)');
+          beam.addColorStop(0.6, '#38BDF8');
+          beam.addColorStop(1, '#2DD4BF');
+
+          c.save();
+          c.strokeStyle = beam;
+          c.lineWidth = 2.6;
+          c.shadowColor = '#38BDF8';
+          c.shadowBlur = 13;
+          c.beginPath();
+          c.moveTo(sx, sy);
+          c.lineTo(cx, cy);
+          c.stroke();
+          c.restore();
+
+          const starP = prog < 0.98 ? prog : ((t * 0.44 + idx * 0.35) % 1);
+          drawStar(c, sx, sy, ex, ey, starP, 0.28, 4.5, '#38BDF8', 1, true);
+
+          bridgeCompanions.forEach((comp, cIdx) => {
+            const wob = Math.sin(t * 2.3 + cIdx * 1.7) * 3.5;
+            const off = comp.perpOffset + wob;
+            const csx = sx + nx * off;
+            const csy = sy + ny * off;
+            const cex = ex + nx * off;
+            const cey = ey + ny * off;
+
+            const cProg = Math.max(0, Math.min(1, starP + comp.lag));
+            if (cProg > 0.02) {
+              c.save();
+              c.strokeStyle = comp.color;
+              c.globalAlpha = 0.14;
+              c.lineWidth = 1;
+              c.beginPath();
+              c.moveTo(csx, csy);
+              c.lineTo(csx + (cex - csx) * cProg, csy + (cey - csy) * cProg);
+              c.stroke();
+              c.restore();
+
+              drawStar(c, csx, csy, cex, cey, cProg, comp.tailLen, comp.r, comp.color, comp.alpha, false);
+            }
+          });
+
+          c.save();
+          for (let k = 1; k <= 6; k++) {
+            const dp = Math.max(0, starP - k * 0.038);
+            const px = sx + dx * dp + Math.sin(t * 4.4 + k * 2.1) * 7;
+            const py = sy + dy * dp + Math.cos(t * 3.7 + k * 1.9) * 5;
+            c.fillStyle = k % 2 === 0 ? '#BAE6FD' : '#5EEAD4';
+            c.globalAlpha = Math.max(0.12, 0.78 - k * 0.11);
+            c.beginPath();
+            c.arc(px, py, 1.6, 0, Math.PI * 2);
+            c.fill();
+          }
+          c.restore();
+        }
+
+        c.save();
+        c.fillStyle = prog > 0.9 ? '#2DD4BF' : '#0F172A';
+        c.strokeStyle = prog > 0.9 ? '#2DD4BF' : 'rgba(148, 163, 184, 0.45)';
+        c.lineWidth = 2.2;
+        if (prog > 0.9) {
+          c.shadowColor = '#2DD4BF';
+          c.shadowBlur = 14;
+        }
+        c.beginPath();
+        c.arc(ex, ey, 5.5, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+        c.restore();
+      });
+    }
+
+    function loop(now) {
+      const t = now * 0.001;
+      updateZoomBlocks();
+      drawBridges(t);
+      if (!reduced) requestAnimationFrame(loop);
+    }
+
+    if (reduced) {
+      loop(0);
+    } else {
+      requestAnimationFrame(loop);
+    }
+  });
+  </script>
 </body>
 </html>

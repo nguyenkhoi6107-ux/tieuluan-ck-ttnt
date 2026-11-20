@@ -29,24 +29,25 @@
     <section class="workspace-shell">
       <div class="activity-meta">
         <span>Hoạt động 3</span>
-        <span class="activity-badge">10 phút</span>
+        <span class="activity-badge">13 phút</span>
       </div>
       <h1 class="tm-display tm-display--lg">3. Thử thách: Báo động thật hay giả?</h1>
       <p class="tm-lede">
-        Kiểm tra <span class="kw">vị trí tương đối</span> của hai đường thẳng trong không gian để phân biệt hai quỹ đạo <span class="kw">cắt nhau</span> hay <span class="kw">chéo nhau</span>.
+        <b>Nội dung 3</b> nhận biết <span class="kw">vị trí tương đối</span> của hai đường thẳng trên mô phỏng 3D. <b>Nội dung 4</b> vận dụng vào nhiệm vụ của trạm: cảnh báo trên radar là <span class="kw">báo động thật</span> hay <span class="kw">báo động giả</span>?
       </p>
 
       <div class="workspace-content" id="project-slot-hd3">
       <div class="khoi">
     <h2>Tình huống</h2>
     <p>Radar của trung tâm vừa phát <b>hai cảnh báo va chạm</b> tại $(6;1)$ và $(8;2)$. Radar chỉ đo được hai tọa độ $x, y$, nên chưa thể khẳng định cả hai cảnh báo đều đúng. Mỗi trạm nhận một vệ tinh, kiểm tra quỹ đạo của vệ tinh đó với thiên thạch T1 trong không gian $Oxyz$, rồi báo cáo về trụ sở.</p>
+    <p>Mỗi vật xuất phát từ điểm đã cho lúc $t = 0$. Vectơ chỉ phương cho biết <b>hướng và vận tốc</b>: sau thời gian $t$, vật ở vị trí $M + t\,\vec v$. Hai vật chỉ <b>va chạm</b> khi ở cùng một điểm <b>tại cùng một thời điểm</b>.</p>
     <table class="bang" id="bang-quy-dao">
       <thead><tr><th>Quỹ đạo</th><th>Đi qua điểm</th><th>Vectơ chỉ phương</th></tr></thead>
       <tbody>
         <tr><td><span class="cham" style="background:var(--t1)"></span>Thiên thạch T1</td><td>$A(2;-1;3)$</td><td>$\vec u = (2;1;-2)$</td></tr>
         <tr><td><span class="cham" style="background:var(--v1)"></span>Vệ tinh V1</td><td>$B(0;2;1)$</td><td>$\vec v_1 = (-4;-2;4)$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v2)"></span>Vệ tinh V2</td><td>$C(4;0;1)$</td><td>$\vec v_2 = (-2;-1;2)$</td></tr>
-        <tr><td><span class="cham" style="background:var(--v3)"></span>Vệ tinh V3</td><td>$D(5;1;-2)$</td><td>$\vec v_3 = (1;0;1)$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v2)"></span>Vệ tinh V2</td><td>$C(4;0;1)$</td><td>$\vec v_2 = (2;1;-2)$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v3)"></span>Vệ tinh V3</td><td>$D(4;1;-3)$</td><td>$\vec v_3 = (1;0;1)$</td></tr>
         <tr><td><span class="cham" style="background:var(--v4)"></span>Vệ tinh V4</td><td>$E(5;2;-2)$</td><td>$\vec v_4 = (1;0;1)$</td></tr>
       </tbody>
     </table>
@@ -54,7 +55,8 @@
   </div>
 
   <div class="khoi" id="mo-phong">
-    <h2>Radar và mô phỏng 3D</h2>
+    <h2>Nội dung 3 · Quan sát trên radar và mô phỏng 3D</h2>
+    <p>Nhìn từ trên xuống (giống radar), những cặp quỹ đạo nào trông như có điểm chung với T1? Nghiêng mô phỏng ra thì sao? Chỉ nhìn bằng mắt đã đủ để kết luận chưa?</p>
     <div class="hai-cot">
       <div>
         <div class="man-hinh"><canvas id="radar" aria-label="Radar mặt phẳng Oxy"></canvas><span class="goc">Radar · chỉ có x, y</span></div>
@@ -72,7 +74,7 @@
   </div>
 
   <div class="khoi" id="kien-thuc">
-    <h2>Kiến thức: vị trí tương đối của hai đường thẳng</h2>
+    <h2>Nội dung 3 · Kiến thức: vị trí tương đối của hai đường thẳng</h2>
     <p>Trong không gian $Oxyz$, cho đường thẳng $d$ đi qua điểm $M$, có vectơ chỉ phương $\vec u$, và đường thẳng $d'$ đi qua điểm $M'$, có vectơ chỉ phương $\vec u'$.</p>
     <table class="bang">
       <tr><th>Vị trí tương đối</th><th>Điểm chung</th><th>Điều kiện</th></tr>
@@ -107,7 +109,7 @@
   </div>
 
   <div class="khoi" id="phieu">
-    <h2>Phiếu báo cáo của trạm</h2>
+    <h2>Nội dung 4 · Vận dụng: phiếu báo cáo của trạm</h2>
 
     <div id="buoc-nhan">
       <p>Chọn trạm và vệ tinh được giao, rồi bấm <b>Nhận nhiệm vụ</b>.</p>
@@ -191,7 +193,7 @@
       <!-- Câu 3 -->
       <div class="hop" id="cau-3">
         <h3 style="margin-top:0">Câu 3 · Vận dụng <span class="diem">+40 RP</span> <span class="dong-ho" id="dem-tang-toc"></span></h3>
-        <p>Trong hai cảnh báo trên radar, cảnh báo nào là báo động thật? Điểm nguy hiểm có tọa độ nào trong $Oxyz$?</p>
+        <p>Trong hai cảnh báo trên radar, cảnh báo nào là báo động thật? Điểm nguy hiểm có tọa độ nào trong $Oxyz$? Nhớ: va chạm khi hai vật ở cùng một điểm tại cùng một thời điểm.</p>
         <div class="lua-chon">
           <label><input type="radio" name="c3" value="1"> Cảnh báo tại $(6;1)$</label>
           <label><input type="radio" name="c3" value="2"> Cảnh báo tại $(8;2)$</label>
@@ -214,18 +216,18 @@
   </div>
 
   <div class="khoi" id="ket-luan-nd3">
-    <h2>Kết luận: báo động thật hay giả?</h2>
+    <h2>Nội dung 4 · Kết luận: báo động thật hay giả?</h2>
     <p class="phu">Giáo viên mở sau khi các trạm báo cáo.</p>
     <button class="nut chinh" data-hien="nd3-ket-luan">Hiện kết luận</button>
     <div id="nd3-ket-luan" hidden>
       <table class="bang">
         <tr><th>Vệ tinh</th><th>Kết luận</th><th>Lí do</th></tr>
         <tr><td><span class="cham" style="background:var(--v1)"></span>V1</td><td>song song với T1</td><td>$\vec v_1 = -2\vec u$, $B(0;2;1) \notin$ T1</td></tr>
-        <tr><td><span class="cham" style="background:var(--v2)"></span>V2</td><td>trùng T1</td><td>$\vec v_2 = -\vec u$, $C(4;0;1) \in$ T1 (ứng với $t = 1$)</td></tr>
-        <tr><td><span class="cham" style="background:var(--v3)"></span>V3</td><td>cắt T1 tại $(6;1;-1)$</td><td>$[\vec u,\vec v_3]\cdot\overrightarrow{AD} = 3 - 8 + 5 = 0$</td></tr>
+        <tr><td><span class="cham" style="background:var(--v2)"></span>V2</td><td>trùng T1</td><td>$\vec v_2 = \vec u$, $C(4;0;1) \in$ T1 (ứng với $t = 1$). Cùng vận tốc nên V2 luôn đi trước T1 một vectơ $\vec u$, không va chạm.</td></tr>
+        <tr><td><span class="cham" style="background:var(--v3)"></span>V3</td><td>cắt T1 tại $(6;1;-1)$</td><td>$[\vec u,\vec v_3]\cdot\overrightarrow{AD} = 2 - 8 + 6 = 0$</td></tr>
         <tr><td><span class="cham" style="background:var(--v4)"></span>V4</td><td>chéo T1</td><td>$[\vec u,\vec v_4]\cdot\overrightarrow{AE} = 3 - 12 + 5 = -4 \ne 0$</td></tr>
       </table>
-      <p style="margin-top:12px">Vậy cảnh báo tại $(6;1)$ là <b>báo động thật</b>: T1 và V3 gặp nhau tại $(6;1;-1)$. Cảnh báo tại $(8;2)$ là <b>báo động giả</b>: tại đó T1 có $z = -3$ còn V4 có $z = 1$, hai quỹ đạo chéo nhau.</p>
+      <p style="margin-top:12px">Vậy cảnh báo tại $(6;1)$ là <b>báo động thật</b>: T1 và V3 gặp nhau tại $(6;1;-1)$, và cả hai cùng tới điểm này tại $t = 2$. Cảnh báo tại $(8;2)$ là <b>báo động giả</b>: tại đó T1 có $z = -3$ còn V4 có $z = 1$, hai quỹ đạo chéo nhau.</p>
       <div class="chu-y">
         <p><b>Mở rộng.</b> $d \perp d' \iff \vec u\cdot\vec u' = 0$. Ở đây $\vec u\cdot\vec v_3 = \vec u\cdot\vec v_4 = 0$ nên T1 vuông góc với cả V3 (cắt nhau) và V4 (chéo nhau). Vuông góc là quan hệ giữa hai vectơ chỉ phương, không phải vị trí tương đối thứ năm.</p>
       </div>

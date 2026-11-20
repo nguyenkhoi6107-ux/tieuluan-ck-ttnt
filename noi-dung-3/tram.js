@@ -4,8 +4,8 @@
 const QUY_DAO = [
   { ten: 'T1', diem: 'A', M: [2, -1, 3], u: [2, 1, -2], mau: '#f87171', nhan: 0.95 },
   { ten: 'V1', diem: 'B', M: [0, 2, 1], u: [-4, -2, 4], mau: '#60a5fa', nhan: 0.12 },
-  { ten: 'V2', diem: 'C', M: [4, 0, 1], u: [-2, -1, 2], mau: '#c084fc', nhan: 0.92 },
-  { ten: 'V3', diem: 'D', M: [5, 1, -2], u: [1, 0, 1], mau: '#4ade80', nhan: 0.97 },
+  { ten: 'V2', diem: 'C', M: [4, 0, 1], u: [2, 1, -2], mau: '#c084fc', nhan: 0.92 },
+  { ten: 'V3', diem: 'D', M: [4, 1, -3], u: [1, 0, 1], mau: '#4ade80', nhan: 0.97 },
   { ten: 'V4', diem: 'E', M: [5, 2, -2], u: [1, 0, 1], mau: '#fbbf24', nhan: 0.97 }
 ];
 const CANH_BAO = [{ so: 1, x: 6, y: 1 }, { so: 2, x: 8, y: 2 }];
@@ -77,9 +77,12 @@ function xetCanhBao(cb) {
   const zT = T.M[2] + T.u[2] * (cb.x - T.M[0]) / T.u[0];
   const veTinh = QUY_DAO.slice(1).filter(V => !phanTich(V.ten).cungPhuong && V.u[0] !== 0).map(V => {
     const s = (cb.x - V.M[0]) / V.u[0];
-    return { V, y: V.M[1] + s * V.u[1], z: V.M[2] + s * V.u[2] };
+    return { V, s, y: V.M[1] + s * V.u[1], z: V.M[2] + s * V.u[2] };
   }).find(o => Math.abs(o.y - cb.y) < 1e-9);
-  return { zT, veTinh, that: veTinh && Math.abs(veTinh.z - zT) < 1e-9 };
+  const tT = (cb.x - T.M[0]) / T.u[0];
+  const cungDiem = veTinh && Math.abs(veTinh.z - zT) < 1e-9;
+  const cungLuc = cungDiem && Math.abs(veTinh.s - tT) < 1e-9;
+  return { zT, tT, veTinh, cungDiem, that: cungLuc };
 }
 
 /* ---------- Viết số và biểu thức ---------- */
@@ -119,7 +122,10 @@ function loiGiaiCau3() {
     const x = xetCanhBao(cb);
     const ten = x.veTinh.V.ten;
     if (x.that) {
-      return `Cảnh báo tại $(${cb.x};${cb.y})$: T1 và ${ten} cắt nhau tại $(${cb.x};${cb.y};${so(x.zT)})$, đây là <b>báo động thật</b>.`;
+      return `Cảnh báo tại $(${cb.x};${cb.y})$: T1 và ${ten} cắt nhau tại $(${cb.x};${cb.y};${so(x.zT)})$, và cả hai cùng tới điểm này tại $t = ${so(x.tT)}$, đây là <b>báo động thật</b>.`;
+    }
+    if (x.cungDiem) {
+      return `Cảnh báo tại $(${cb.x};${cb.y})$: T1 và ${ten} cắt nhau tại $(${cb.x};${cb.y};${so(x.zT)})$ nhưng tới điểm này vào hai thời điểm khác nhau, nên không va chạm.`;
     }
     return `Cảnh báo tại $(${cb.x};${cb.y})$: với $x = ${cb.x},\\ y = ${cb.y}$ thì T1 có $z = ${so(x.zT)}$ còn ${ten} có $z = ${so(x.veTinh.z)}$; hai quỹ đạo chéo nhau, đây là <b>báo động giả</b>.`;
   }).join('<br>');

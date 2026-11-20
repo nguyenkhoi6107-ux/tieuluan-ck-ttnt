@@ -9,7 +9,7 @@ Mỗi thư mục là một trang. File `index.html` trong thư mục là trang �
 | (gốc) `index.html` | Trang chủ |
 | `khoi-dong/` | Khởi động: tình huống bản vẽ (mô hình xoay được), hai câu hỏi, nhiệm vụ của trạm |
 | `noi-dung-1-2/` | Hình thành kiến thức, nội dung 1 và 2 |
-| `noi-dung-3/` | Nội dung 3: Báo động thật hay giả? |
+| `noi-dung-3/` | Nội dung 3 (nhận biết vị trí tương đối) và Nội dung 4 (vận dụng: báo động thật hay giả?). Kịch bản từng màn: `noi-dung-3/KICH-BAN.md` |
 | `luyen-tap/` | Luyện tập: game Foxy Running (`index.html` học sinh vào phòng, `teacher.html` giáo viên tạo phòng, `play.html?mode=solo` chơi một mình) |
 | `ve-nha/` | Hướng dẫn và bài tập về nhà |
 | `giao-vien/` | Màn hình giáo viên: tạo phòng game, bảng RP, đồng hồ, đáp án nội dung 3 |
@@ -35,7 +35,7 @@ Chung cho mọi trang:
 - Chọn trạm và nhận nhiệm vụ: `chon-tram`, `chon-ve-tinh`, `nhan-nhiem-vu`, `nhiem-vu`, `ten-diem-ve-tinh`, `dang-lam`, `buoc-nhan`, `nhac-nhan`.
 - Phiếu: khối `phieu` chứa `cau-1`, `cau-2`, `cau-3`, `ph-1`, `ph-2`, `ph-3`; ô `c2-k`, `c2-tich`, `c3-x`, `c3-y`, `c3-z`; nhóm chọn `name="c1"`, `c2-cp`, `c2-thuoc`, `c2-vt`, `c3`; nhánh `nhanh-cung-phuong`, `nhanh-khong-cung-phuong`, `nhan-tich`; nút `nop-1`, `nop-2`, `nop-3`, `xoa-phieu`.
 - Điểm và thẻ: `tong-rp`, `the-cuu-ho`, `the-tang-toc`, `dem-tang-toc`, `ghi-chu-the`, `bao-cao`, `noi-dung-bao-cao`.
-- Thứ tự trang: tình huống, `mo-phong`, `kien-thuc` (có Ví dụ 3 `vd3`), `phieu`, `ket-luan-nd3` (kết luận `nd3-ket-luan` để ẩn tới cuối giờ). Kiến thức phải đứng trước phiếu.
+- Thứ tự trang: tình huống, `mo-phong`, `kien-thuc` (có Ví dụ 3 `vd3`) là Nội dung 3; `phieu`, `ket-luan-nd3` (kết luận `nd3-ket-luan` để ẩn tới cuối giờ) là Nội dung 4. Kiến thức phải đứng trước phiếu. Chi tiết từng màn xem `noi-dung-3/KICH-BAN.md`.
 
 `giao-vien/`: `bang-rp`, `them-tram`, `bot-tram`, `xoa-diem`, nút `data-cong`, `data-the`; đồng hồ `so-dong-ho`, `chay-dong-ho`, `dat-lai-dong-ho`, `moc-gio`, nút `data-giay`; đáp án `dap-an`.
 

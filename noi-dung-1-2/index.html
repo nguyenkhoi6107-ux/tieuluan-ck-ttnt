@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2. Khám phá – Trạm kiểm soát vũ trụ</title>
+  <title>Khám phá · Trạm kiểm soát vũ trụ</title>
   <link rel="stylesheet" href="../assets/scrollcraft.css">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -11,6 +11,665 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
   <script defer src="../assets/chung.js"></script>
+
+  <style>
+    /* =========================================================================
+       HOẠT ĐỘNG 2 · KHÁM PHÁ (Frameless Scrollytelling & Landing-Style Motion)
+       ========================================================================= */
+
+    .hd2-root {
+      position: relative;
+      z-index: 1;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 88px var(--sc-gutter) 96px;
+    }
+
+    /* Scroll-driven grow/shrink (landing page style) for each focus band */
+    .hd2-band,
+    .hd2-zoom-block {
+      position: relative;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+
+    .hd2-band {
+      padding: clamp(28px, 4.5vh, 52px) 0;
+    }
+
+    .hd2-band::before {
+      content: "";
+      position: absolute;
+      inset: -12% -8%;
+      background: radial-gradient(ellipse 58% 46% at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 72%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ---------- FRAMELESS HERO HEADER ---------- */
+    .hd2-hero {
+      margin-bottom: clamp(26px, 4.2vh, 44px);
+    }
+
+    .hd2-hero__title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(2.5rem, 5.3vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      color: #F8FAFC;
+      margin: 0;
+      text-shadow: 0 0 34px rgba(56, 189, 248, 0.36);
+    }
+
+    .hd2-hero__lede {
+      font-size: clamp(1.02rem, 1.35vw, 1.2rem);
+      color: var(--sc-ink-soft);
+      max-width: 56ch;
+      margin: 14px 0 0;
+    }
+
+    /* ---------- IMPRESSIVE 2-MODULE SHOWCASE (01 / 02 & 02 / 02, NO TIME DISPLAY) ---------- */
+    .hd2-modules-wrap {
+      margin-top: clamp(26px, 4vh, 38px);
+      padding-top: 22px;
+      border-top: 1px solid rgba(56, 189, 248, 0.22);
+    }
+
+    .hd2-modules-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .hd2-modules-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #7DD3FC;
+    }
+
+    .hd2-modules-count::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 12px var(--sc-accent);
+    }
+
+    .hd2-modules-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(18px, 3vw, 32px);
+    }
+
+    .hd2-module-card {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: clamp(20px, 2.5vw, 26px);
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse 85% 75% at 12% 0%, rgba(56, 189, 248, 0.16) 0%, transparent 68%),
+        rgba(15, 23, 42, 0.74);
+      border: 1px solid rgba(56, 189, 248, 0.34);
+      box-shadow: 0 18px 42px rgba(3, 8, 20, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      transition: transform 0.26s var(--sc-ease-out), border-color 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .hd2-module-card:hover,
+    .hd2-module-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: #7DD3FC;
+      box-shadow: 0 22px 50px rgba(3, 8, 20, 0.68), 0 0 28px rgba(56, 189, 248, 0.22);
+      outline: none;
+    }
+
+    .hd2-module-card--teal {
+      background:
+        radial-gradient(ellipse 85% 75% at 12% 0%, rgba(45, 212, 191, 0.16) 0%, transparent 68%),
+        rgba(15, 23, 42, 0.74);
+      border-color: rgba(45, 212, 191, 0.34);
+    }
+
+    .hd2-module-card--teal:hover,
+    .hd2-module-card--teal:focus-visible {
+      border-color: #5EEAD4;
+      box-shadow: 0 22px 50px rgba(3, 8, 20, 0.68), 0 0 28px rgba(45, 212, 191, 0.22);
+    }
+
+    /* Large background watermark number 01 / 02 */
+    .hd2-module-card__watermark {
+      position: absolute;
+      right: 16px;
+      bottom: -14px;
+      font-family: var(--sc-font-display);
+      font-size: clamp(3.8rem, 6vw, 5.2rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: rgba(56, 189, 248, 0.07);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hd2-module-card--teal .hd2-module-card__watermark {
+      color: rgba(45, 212, 191, 0.08);
+    }
+
+    .hd2-module-card__emblem {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: rgba(56, 189, 248, 0.16);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      color: #7DD3FC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .hd2-module-card--teal .hd2-module-card__emblem {
+      background: rgba(45, 212, 191, 0.16);
+      border-color: rgba(45, 212, 191, 0.42);
+      color: #5EEAD4;
+      box-shadow: 0 0 20px rgba(45, 212, 191, 0.2);
+    }
+
+    .hd2-module-card__body {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .hd2-module-card__step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sc-accent);
+      margin-bottom: 6px;
+    }
+
+    .hd2-module-card--teal .hd2-module-card__step {
+      color: #5EEAD4;
+    }
+
+    .hd2-module-card__title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.08rem, 1.45vw, 1.26rem);
+      font-weight: 800;
+      line-height: 1.3;
+      color: #F8FAFC;
+      margin: 0 0 8px;
+    }
+
+    .hd2-module-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .hd2-module-chip {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(7, 11, 20, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      color: var(--sc-ink-soft);
+    }
+
+    /* ---------- TYPOGRAPHY & SECTION HEADERS ---------- */
+    .hd2-step-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sc-accent);
+      margin-bottom: 10px;
+    }
+
+    .hd2-step-tag__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 10px var(--sc-accent);
+    }
+
+    .hd2-band.is-connected .hd2-step-tag__dot {
+      background: var(--sc-accent-2);
+      box-shadow: 0 0 14px var(--sc-accent-2);
+    }
+
+    .hd2-title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.42rem, 2.3vw, 1.88rem);
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #E0F2FE;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 22px;
+      text-shadow: 0 0 22px rgba(56, 189, 248, 0.38);
+    }
+
+    .hd2-title::after {
+      content: "";
+      width: 48px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--sc-accent) 0%, transparent 100%);
+    }
+
+    .hd2-subhead {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.14rem, 1.6vw, 1.36rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #BAE6FD;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+    }
+
+    .hd2-subhead::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--sc-accent);
+      box-shadow: 0 0 10px var(--sc-accent);
+    }
+
+    /* Striking, attractive Typography for "CHÚ Ý QUAN TRỌNG" */
+    .hd2-caution-title {
+      font-family: 'Be Vietnam Pro', system-ui, sans-serif;
+      font-size: clamp(1.22rem, 1.8vw, 1.52rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FDE68A;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 10px;
+      text-shadow:
+        0 0 20px rgba(245, 158, 11, 0.55),
+        0 0 36px rgba(245, 158, 11, 0.25);
+    }
+
+    .hd2-caution-title__icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(251, 191, 36, 0.55);
+      color: #FBBF24;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+      flex-shrink: 0;
+    }
+
+    .hd2-caution-title::after {
+      content: "";
+      width: 42px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #F59E0B 0%, transparent 100%);
+    }
+
+    .hd2-prose {
+      color: var(--sc-ink-soft);
+      font-size: clamp(0.98rem, 1.15vw, 1.08rem);
+      line-height: 1.65;
+      margin: 0 0 14px;
+      max-width: 56ch;
+    }
+
+    /* ---------- FRAMELESS MISSION / PROBLEM PROMPT + INTERACTIVE SIMULATION ---------- */
+    .hd2-discovery-split {
+      display: grid;
+      grid-template-columns: 0.96fr 1.04fr;
+      gap: clamp(28px, 4.5vw, 54px);
+      align-items: center;
+    }
+
+    .hd2-prompt-lead {
+      padding-left: 18px;
+      border-left: 2.5px solid var(--sc-accent);
+      margin-bottom: 18px;
+    }
+
+    .hd2-prompt-lead--teal {
+      border-left-color: var(--sc-accent-2);
+    }
+
+    .hd2-prompt-question {
+      font-size: clamp(1.05rem, 1.28vw, 1.18rem);
+      font-weight: 600;
+      color: var(--sc-ink);
+      line-height: 1.58;
+      margin: 0 0 8px;
+    }
+
+    .hd2-pair-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--sc-font-mono);
+      font-size: 0.76rem;
+      color: #5EEAD4;
+      background: rgba(45, 212, 191, 0.12);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-top: 4px;
+    }
+
+    .hd2-answer-flow {
+      margin-top: 16px;
+      padding: 14px 0 4px 18px;
+      border-left: 2px dashed rgba(56, 189, 248, 0.45);
+      animation: hd2Reveal 0.35s var(--sc-ease-out);
+    }
+
+    @keyframes hd2Reveal {
+      from {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+    }
+
+    /* Interactive Motion Viewport */
+    .hd2-sim-box {
+      position: relative;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(56, 189, 248, 0.11) 0%, rgba(5, 9, 18, 0.86) 76%);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      box-shadow: 0 20px 48px rgba(3, 7, 16, 0.6);
+      overflow: hidden;
+    }
+
+    .hd2-sim-box--teal {
+      background:
+        radial-gradient(circle at 50% 42%, rgba(45, 212, 191, 0.11) 0%, rgba(5, 9, 18, 0.86) 76%);
+      border-color: rgba(45, 212, 191, 0.26);
+    }
+
+    .hd2-sim-canvas {
+      width: 100%;
+      height: clamp(220px, 25vw, 270px);
+      display: block;
+    }
+
+    .hd2-sim-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 16px;
+      background: rgba(7, 11, 20, 0.78);
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      font-family: var(--sc-font-mono);
+      font-size: 0.78rem;
+      color: var(--sc-ink-soft);
+    }
+
+    .hd2-slider-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .hd2-slider {
+      flex: 1;
+      accent-color: var(--sc-accent);
+      cursor: pointer;
+    }
+
+    .hd2-t-readout {
+      color: #7DD3FC;
+      font-weight: 700;
+      min-width: 64px;
+      text-align: right;
+    }
+
+    /* ---------- EMPHASIS FRAME: CHỐT KIẾN THỨC (Only place using prominent frame!) ---------- */
+    .hd2-chot-section {
+      margin-top: clamp(32px, 5vh, 48px);
+    }
+
+    .hd2-chot-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .hd2-chot-frame {
+      position: relative;
+      margin-top: 18px;
+      padding: clamp(22px, 3vw, 34px);
+      border-radius: 20px;
+      background:
+        radial-gradient(ellipse 85% 70% at 15% 0%, rgba(56, 189, 248, 0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 60% at 88% 100%, rgba(45, 212, 191, 0.12) 0%, transparent 70%),
+        rgba(15, 23, 42, 0.88);
+      border: 1.5px solid rgba(56, 189, 248, 0.45);
+      box-shadow:
+        0 22px 54px rgba(3, 8, 20, 0.7),
+        0 0 32px rgba(56, 189, 248, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      animation: hd2Reveal 0.4s var(--sc-ease-out);
+    }
+
+    .hd2-chot-frame--teal {
+      border-color: rgba(45, 212, 191, 0.48);
+      box-shadow:
+        0 22px 54px rgba(3, 8, 20, 0.7),
+        0 0 32px rgba(45, 212, 191, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .hd2-chot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      color: #E0F2FE;
+      font-family: var(--sc-font-mono);
+      font-size: 0.73rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .hd2-chot-frame--teal .hd2-chot-badge {
+      background: rgba(45, 212, 191, 0.18);
+      border-color: rgba(45, 212, 191, 0.45);
+      color: #CCFBF1;
+    }
+
+    /* 3 Pillars inside Chốt kiến thức Nội dung 1 */
+    .hd2-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(18px, 2.6vw, 28px);
+    }
+
+    .hd2-pillar {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hd2-pillar + .hd2-pillar {
+      padding-left: clamp(16px, 2.2vw, 24px);
+      border-left: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .hd2-pillar__head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hd2-pillar__num {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.2);
+      color: #7DD3FC;
+      font-family: var(--sc-font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hd2-pillar__title {
+      font-family: var(--sc-font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin: 0;
+    }
+
+    .hd2-pillar__body {
+      font-size: 0.94rem;
+      color: var(--sc-ink-soft);
+      line-height: 1.58;
+      margin: 0;
+    }
+
+    .hd2-math-spot {
+      margin-top: 4px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(7, 11, 20, 0.68);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      color: #F8FAFC;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .hd2-math-spot .katex-display {
+      margin: 0.25em 0;
+    }
+
+    /* Stacked full-width formula box inside Chốt kiến thức Nội dung 2 so equation never clips */
+    .hd2-chot-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    /* ---------- FRAMELESS EXAMPLES & PRACTICE STREAM ---------- */
+    .hd2-work-grid {
+      margin-top: clamp(32px, 5vh, 48px);
+      padding-top: 26px;
+      border-top: 1px solid rgba(148, 163, 184, 0.16);
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: clamp(28px, 4.5vw, 52px);
+      align-items: start;
+    }
+
+    .hd2-work-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .hd2-work-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    /* Frameless Caution Callout (Chú ý quan trọng) */
+    .hd2-caution {
+      padding-left: 20px;
+      border-left: 3.5px solid var(--sc-amber);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* ---------- COSMIC BRIDGE BETWEEN STAGES ---------- */
+    .hd2-bridge {
+      position: relative;
+      height: clamp(220px, 32vh, 310px);
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .hd2-bridge-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 920px) {
+      .hd2-modules-grid,
+      .hd2-discovery-split,
+      .hd2-pillars,
+      .hd2-work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hd2-pillar + .hd2-pillar {
+        padding-left: 0;
+        padding-top: 16px;
+        border-left: none;
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -20,111 +679,895 @@
       <span>← MÀN HÌNH CHÍNH</span>
     </a>
     <nav class="tm-bar__nav">
-      <span class="tm-pill tm-pill--accent">Hoạt động 2 · Khám phá</span>
+      <span class="tm-pill tm-pill--accent">Khám phá</span>
     </nav>
   </header>
 
-  <main class="subpage-main">
-    <section class="workspace-shell">
+  <main class="hd2-root" id="project-slot-hd2">
+
+    <!-- HERO HEADER & 2 Ô NỘI DUNG CẦN HỌC (Ấn tượng, không hiện thời gian, bỏ thanh tiến trình 4 hoạt động) -->
+    <header class="hd2-hero hd2-zoom-block">
       <div class="activity-meta">
         <span>Hoạt động 2</span>
-        <span class="activity-badge">10 phút</span>
       </div>
-      <h1 class="tm-display tm-display--lg">2. Khám phá</h1>
-      <p class="tm-lede">
-        Hình thành kiến thức theo SGK: <span class="kw">vectơ chỉ phương</span>, <span class="kw">phương trình đường thẳng</span> và bài toán đi qua hai điểm.
+      <h1 class="hd2-hero__title">Khám phá</h1>
+      <p class="hd2-hero__lede">
+        Nắm vững <span class="kw">vectơ chỉ phương</span>, lập <span class="kw">phương trình tham số</span> và <span class="kw">phương trình chính tắc</span> của đường thẳng trong không gian $Oxyz$.
       </p>
 
-      <div class="workspace-content" id="project-slot-hd2">
-      <div class="khoi">
-    <h2>Nội dung 1. Vectơ chỉ phương, phương trình tham số và phương trình chính tắc <span class="thoi-luong">5 phút</span></h2>
+      <!-- 2 Ô NỘI DUNG TRỌNG TÂM CẦN HỌC -->
+      <div class="hd2-modules-wrap" aria-label="Hai nội dung trọng tâm của bài học">
+        <div class="hd2-modules-header">
+          <span class="hd2-modules-count">2 Nội dung trọng tâm cần khám phá</span>
+        </div>
 
-    <p class="de-bai">Trong không gian, cho điểm $A$ và vectơ $\vec u \ne \vec 0$. Có bao nhiêu đường thẳng đi qua $A$ và song song hoặc trùng với giá của $\vec u$? Điểm $M(x;y;z)$ thuộc đường thẳng đó khi nào?</p>
-    <button class="nut" data-hien="nd1-tl">Xem lời giải</button>
-    <div class="hop" id="nd1-tl" hidden>
-      <p>Có đúng một đường thẳng $d$ như vậy.</p>
-      <p>$M \in d \iff \overrightarrow{AM}$ cùng phương với $\vec u \iff \overrightarrow{AM} = t\vec u\ (t \in \mathbb{R})$.</p>
-      <p>Viết theo từng tọa độ, với $A(x_0;y_0;z_0)$ và $\vec u = (a;b;c)$: $\ x - x_0 = at,\ \ y - y_0 = bt,\ \ z - z_0 = ct$.</p>
-    </div>
+        <div class="hd2-modules-grid">
+          <!-- Ô Nội dung 1 -->
+          <a class="hd2-module-card" href="#hd2-step-1">
+            <span class="hd2-module-card__watermark" aria-hidden="true">01</span>
+            <div class="hd2-module-card__emblem" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="5" cy="19" r="2.5"/>
+                <path d="M7 17L19 5"/>
+                <polyline points="13 5 19 5 19 11"/>
+              </svg>
+            </div>
+            <div class="hd2-module-card__body">
+              <span class="hd2-module-card__step">Nội dung 01 / 02</span>
+              <h2 class="hd2-module-card__title">Vectơ chỉ phương, phương trình tham số và phương trình chính tắc</h2>
+              <div class="hd2-module-card__tags">
+                <span class="hd2-module-chip">Điểm $M_0$ &amp; VTCP $\vec u$</span>
+                <span class="hd2-module-chip">Ví dụ 1 &amp; Chú ý</span>
+              </div>
+            </div>
+          </a>
 
-    <h3>Chốt kiến thức</h3>
-    <button class="nut chinh" data-hien="nd1-chot">Hiện phần chốt</button>
-    <div id="nd1-chot" hidden>
-      <div class="chot">
-        <p><b>Vectơ chỉ phương.</b> Vectơ $\vec u \ne \vec 0$ được gọi là vectơ chỉ phương của đường thẳng $d$ nếu giá của $\vec u$ song song hoặc trùng với $d$.</p>
-        <p>Nếu $\vec u$ là vectơ chỉ phương của $d$ thì $k\vec u\ (k \ne 0)$ cũng là vectơ chỉ phương của $d$. Vì vậy một đường thẳng có vô số vectơ chỉ phương.</p>
+          <!-- Ô Nội dung 2 -->
+          <a class="hd2-module-card hd2-module-card--teal" href="#hd2-step-2">
+            <span class="hd2-module-card__watermark" aria-hidden="true">02</span>
+            <div class="hd2-module-card__emblem" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="6" cy="18" r="3"/>
+                <circle cx="18" cy="6" r="3"/>
+                <line x1="8.2" y1="15.8" x2="15.8" y2="8.2"/>
+              </svg>
+            </div>
+            <div class="hd2-module-card__body">
+              <span class="hd2-module-card__step">Nội dung 02 / 02</span>
+              <h2 class="hd2-module-card__title">Viết phương trình đường thẳng đi qua hai điểm phân biệt</h2>
+              <div class="hd2-module-card__tags">
+                <span class="hd2-module-chip">Hai điểm $A, B$</span>
+                <span class="hd2-module-chip">Ví dụ 2 &amp; Luyện tập 1</span>
+              </div>
+            </div>
+          </a>
+        </div>
       </div>
-      <div class="chot">
-        <p><b>Phương trình tham số.</b> Đường thẳng $d$ đi qua $M_0(x_0;y_0;z_0)$ và có vectơ chỉ phương $\vec u = (a;b;c)$ có phương trình tham số</p>
-        $$\begin{cases} x = x_0 + at \\ y = y_0 + bt \\ z = z_0 + ct \end{cases} \qquad (t \in \mathbb{R}).$$
-      </div>
-      <div class="chot">
-        <p><b>Phương trình chính tắc.</b> Nếu $a, b, c$ đều khác $0$ thì $d$ có phương trình chính tắc</p>
-        $$\frac{x - x_0}{a} = \frac{y - y_0}{b} = \frac{z - z_0}{c}.$$
-      </div>
-    </div>
+    </header>
 
-    <h3>Ví dụ 1</h3>
-    <p class="de-bai">Viết phương trình tham số và phương trình chính tắc của đường thẳng $d$ đi qua $A(2;-1;3)$ và có vectơ chỉ phương $\vec u = (2;1;-2)$.</p>
-    <button class="nut" data-hien="vd1">Xem lời giải</button>
-    <div class="hop" id="vd1" hidden>
-      <p>Phương trình tham số của $d$:</p>
-      $$\begin{cases} x = 2 + 2t \\ y = -1 + t \\ z = 3 - 2t \end{cases} \qquad (t \in \mathbb{R}).$$
-      <p>Vì $2, 1, -2$ đều khác $0$ nên $d$ có phương trình chính tắc</p>
-      $$\frac{x - 2}{2} = \frac{y + 1}{1} = \frac{z - 3}{-2}.$$
-    </div>
-    <div class="chu-y">
-      <b>Chú ý.</b> Đường thẳng có vectơ chỉ phương $(2;0;2)$ không có phương trình chính tắc, vì thành phần thứ hai bằng $0$ (không thể chia cho $0$).
-    </div>
-  </div>
+    <!-- =======================================================================
+         NỘI DUNG 1: VECTƠ CHỈ PHƯƠNG, PT THAM SỐ & PT CHÍNH TẮC
+         ======================================================================= -->
+    <section id="hd2-step-1" class="hd2-band">
+      <div class="hd2-zoom-block">
+        <div class="hd2-step-tag">
+          <span class="hd2-step-tag__dot" aria-hidden="true"></span>
+          <span>Nội dung 01 / 02</span>
+        </div>
+        <h2 class="hd2-title">Vectơ chỉ phương, phương trình tham số và phương trình chính tắc</h2>
 
-  <!-- NỘI DUNG 2 -->
-  <div class="khoi">
-    <h2>Nội dung 2. Viết phương trình đường thẳng qua một điểm, qua hai điểm <span class="thoi-luong">5 phút</span></h2>
+        <!-- 1. Nhiệm vụ khám phá + Mô phỏng tương tác AM = t.u -->
+        <div class="hd2-discovery-split">
+          <div>
+            <div class="hd2-prompt-lead">
+              <p class="hd2-prompt-question">
+                Trong không gian, cho điểm $A$ và vectơ $\vec u \ne \vec 0$. Có bao nhiêu đường thẳng đi qua $A$ và <span class="kw">song song hoặc trùng</span> với giá của $\vec u$? Điểm $M(x;y;z)$ thuộc đường thẳng đó khi nào?
+              </p>
+            </div>
 
-    <p class="de-bai">Biết hai điểm phân biệt $A, B$ thuộc đường thẳng $d$. Làm thế nào để viết phương trình của $d$?</p>
-    <p class="phu">Thảo luận theo cặp.</p>
-    <button class="nut chinh" data-hien="nd2-chot">Hiện phần chốt</button>
-    <div id="nd2-chot" hidden>
-      <div class="chot">
-        <p>Vì $A \ne B$ nên $\overrightarrow{AB} \ne \vec 0$ và giá của $\overrightarrow{AB}$ trùng với $d$. Do đó $\overrightarrow{AB}$ là một vectơ chỉ phương của $d$.</p>
-        <p>Đường thẳng đi qua hai điểm $A, B$: đi qua $A$ (hoặc $B$) và nhận $\overrightarrow{AB}$ làm vectơ chỉ phương.</p>
-        <p>Một đường thẳng có nhiều phương trình tham số khác nhau, tùy cách chọn điểm và vectơ chỉ phương.</p>
-      </div>
-    </div>
+            <button class="tm-btn tm-btn--ghost" data-hien="nd1-tl" type="button">Xem lời giải</button>
 
-    <h3>Ví dụ 2</h3>
-    <p class="de-bai">Viết phương trình tham số của đường thẳng đi qua $A(2;-1;3)$ và $B(4;0;1)$.</p>
-    <button class="nut" data-hien="vd2">Xem lời giải</button>
-    <div class="hop" id="vd2" hidden>
-      <p>$\overrightarrow{AB} = (2;1;-2)$. Đường thẳng đi qua $A$ và nhận $\overrightarrow{AB}$ làm vectơ chỉ phương:</p>
-      $$\begin{cases} x = 2 + 2t \\ y = -1 + t \\ z = 3 - 2t \end{cases} \qquad (t \in \mathbb{R}).$$
-      <p>Đây chính là đường thẳng $d$ ở Ví dụ 1: điểm $B$ ứng với $t = 1$.</p>
-    </div>
+            <div class="hd2-answer-flow" id="nd1-tl" hidden>
+              <p class="hd2-prose" style="color:var(--sc-ink); margin-bottom:8px;">
+                • Có <span class="kw">đúng một</span> đường thẳng $d$ như vậy.
+              </p>
+              <p class="hd2-prose" style="color:var(--sc-ink); margin-bottom:8px;">
+                • $M \in d \iff \overrightarrow{AM}$ <span class="kw">cùng phương</span> với $\vec u \iff \overrightarrow{AM} = t\vec u\ (t \in \mathbb{R})$.
+              </p>
+              <p class="hd2-prose" style="margin-bottom:0;">
+                • Theo từng tọa độ với $A(x_0;y_0;z_0)$ và $\vec u = (a;b;c)$:
+                <span style="color:#E0F2FE; font-weight:600;">$x - x_0 = at,\ y - y_0 = bt,\ z - z_0 = ct$</span>.
+              </p>
+            </div>
+          </div>
 
-    <h3>Luyện tập 1</h3>
-    <p class="de-bai">Viết phương trình tham số và phương trình chính tắc của đường thẳng đi qua $C(1;2;-1)$ và $D(3;4;0)$.</p>
-    <button class="nut" data-dem="60">Bấm giờ 1 phút</button>
-    <button class="nut" data-hien="lt1">Xem đáp số</button>
-    <div class="hop" id="lt1" hidden>
-      <p>$\overrightarrow{CD} = (2;2;1)$.</p>
-      $$\begin{cases} x = 1 + 2t \\ y = 2 + 2t \\ z = -1 + t \end{cases} \ (t \in \mathbb{R}); \qquad \frac{x - 1}{2} = \frac{y - 2}{2} = \frac{z + 1}{1}.$$
-    </div>
-  </div>
+          <!-- Mô phỏng điểm M trượt trên d theo tham số t -->
+          <div class="hd2-sim-box">
+            <canvas id="sim-nd1" class="hd2-sim-canvas" aria-label="Mô phỏng điểm M chuyển động trên đường thẳng d theo vectơ chỉ phương u"></canvas>
+            <div class="hd2-sim-controls">
+              <div class="hd2-slider-wrap">
+                <span>Tham số $t$:</span>
+                <input id="slider-t" class="hd2-slider" type="range" min="-1.5" max="2.2" step="0.05" value="1.2" aria-label="Kéo thay đổi tham số t">
+              </div>
+              <span class="hd2-t-readout" id="readout-t">t = 1.2</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="tm-footer-nav">
-        <a class="tm-btn tm-btn--ghost" href="../index.html#hd-2">
-          ← Trở lại màn hình chính
-        </a>
-        <a class="tm-btn tm-btn--done" href="../index.html#hd-2">
-          Hoàn thành
-        </a>
+      <!-- 2. KHUNG CHỐT KIẾN THỨC NỘI DUNG 1 (Khung nhấn mạnh nổi bật) -->
+      <div class="hd2-chot-section hd2-zoom-block">
+        <div class="hd2-chot-bar">
+          <h3 class="hd2-subhead" style="margin:0;">Chốt kiến thức</h3>
+          <button class="tm-btn tm-btn--primary" data-hien="nd1-chot" type="button">Hiện phần chốt</button>
+        </div>
+
+        <div id="nd1-chot" class="hd2-chot-frame" hidden>
+          <span class="hd2-chot-badge">★ Trọng tâm 1 · Ghi nhớ</span>
+
+          <div class="hd2-pillars">
+            <!-- Cột 1: Vectơ chỉ phương -->
+            <div class="hd2-pillar">
+              <div class="hd2-pillar__head">
+                <span class="hd2-pillar__num">01</span>
+                <h4 class="hd2-pillar__title">Vectơ chỉ phương</h4>
+              </div>
+              <p class="hd2-pillar__body">
+                Vectơ $\vec u \ne \vec 0$ có giá <span class="kw">song song hoặc trùng</span> với $d$ gọi là <span class="kw">vectơ chỉ phương</span> của $d$.
+              </p>
+              <p class="hd2-pillar__body">
+                Nếu $\vec u$ là VTCP thì <span class="kw">$k\vec u\ (k \ne 0)$</span> cũng là VTCP $\Rightarrow$ $d$ có <span class="kw">vô số</span> vectơ chỉ phương.
+              </p>
+            </div>
+
+            <!-- Cột 2: Phương trình tham số -->
+            <div class="hd2-pillar">
+              <div class="hd2-pillar__head">
+                <span class="hd2-pillar__num">02</span>
+                <h4 class="hd2-pillar__title">Phương trình tham số</h4>
+              </div>
+              <p class="hd2-pillar__body">
+                Đường thẳng $d$ đi qua <span class="kw">$M_0(x_0;y_0;z_0)$</span> và có VTCP <span class="kw">$\vec u = (a;b;c)$</span>:
+              </p>
+              <div class="hd2-math-spot">
+                $$\begin{cases} x = x_0 + at \\ y = y_0 + bt \\ z = z_0 + ct \end{cases} \quad (t \in \mathbb{R})$$
+              </div>
+            </div>
+
+            <!-- Cột 3: Phương trình chính tắc -->
+            <div class="hd2-pillar">
+              <div class="hd2-pillar__head">
+                <span class="hd2-pillar__num">03</span>
+                <h4 class="hd2-pillar__title">Phương trình chính tắc</h4>
+              </div>
+              <p class="hd2-pillar__body">
+                Khi <span class="kw">$a, b, c$ đều khác $0$</span>, khử tham số $t$ ta được:
+              </p>
+              <div class="hd2-math-spot">
+                $$\frac{x - x_0}{a} = \frac{y - y_0}{b} = \frac{z - z_0}{c}$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. VÍ DỤ 1 & CHÚ Ý QUAN TRỌNG (Font chữ ấn tượng, thu hút) -->
+      <div class="hd2-work-grid hd2-zoom-block">
+        <div class="hd2-work-item">
+          <h3 class="hd2-subhead">Ví dụ 1</h3>
+          <p class="hd2-prompt-question" style="font-size:1.02rem;">
+            Viết <span class="kw">phương trình tham số</span> và <span class="kw">phương trình chính tắc</span> của đường thẳng $d$ đi qua $A(2;-1;3)$ và có vectơ chỉ phương $\vec u = (2;1;-2)$.
+          </p>
+          <div class="hd2-work-actions">
+            <button class="tm-btn tm-btn--ghost" data-hien="vd1" type="button">Xem lời giải</button>
+          </div>
+
+          <div class="hd2-answer-flow" id="vd1" hidden>
+            <p class="hd2-prose" style="color:var(--sc-ink); margin-bottom:4px;">
+              • <span class="kw">Phương trình tham số</span> của $d$:
+            </p>
+            $$\begin{cases} x = 2 + 2t \\ y = -1 + t \\ z = 3 - 2t \end{cases} \qquad (t \in \mathbb{R}).$$
+            <p class="hd2-prose" style="color:var(--sc-ink); margin:8px 0 4px;">
+              • Vì $2, 1, -2$ đều <span class="kw">khác $0$</span> nên $d$ có <span class="kw">phương trình chính tắc</span>:
+            </p>
+            $$\frac{x - 2}{2} = \frac{y + 1}{1} = \frac{z - 3}{-2}.$$
+          </div>
+        </div>
+
+        <div class="hd2-caution">
+          <h3 class="hd2-caution-title">
+            <span class="hd2-caution-title__icon" aria-hidden="true">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/>
+                <line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </span>
+            <span>Chú ý quan trọng</span>
+          </h3>
+          <p class="hd2-prose" style="color:var(--sc-ink); margin:0;">
+            Đường thẳng có vectơ chỉ phương <span class="kw">$(2;0;2)$</span> <b>không có</b> phương trình chính tắc, vì thành phần thứ hai <span class="kw">bằng $0$</span> (không thể chia cho $0$).
+          </p>
+        </div>
       </div>
     </section>
+
+    <!-- SHOOTING-STAR BRIDGE: NỘI DUNG 1 -> NỘI DUNG 2 -->
+    <div class="hd2-bridge" aria-hidden="true">
+      <canvas class="hd2-bridge-canvas" data-dir="ltr" data-target="hd2-step-2"></canvas>
+    </div>
+
+    <!-- =======================================================================
+         NỘI DUNG 2: VIẾT PHƯƠNG TRÌNH ĐƯỜNG THẲNG ĐI QUA HAI ĐIỂM PHÂN BIỆT
+         ======================================================================= -->
+    <section id="hd2-step-2" class="hd2-band">
+      <div class="hd2-zoom-block">
+        <div class="hd2-step-tag">
+          <span class="hd2-step-tag__dot" aria-hidden="true"></span>
+          <span>Nội dung 02 / 02</span>
+        </div>
+        <h2 class="hd2-title">Viết phương trình đường thẳng đi qua hai điểm phân biệt</h2>
+
+        <!-- 1. Vấn đề thảo luận cặp đôi + Mô phỏng 2 hành tinh nhỏ A, B và đường thẳng nối 2 điểm -->
+        <div class="hd2-discovery-split">
+          <div>
+            <div class="hd2-prompt-lead hd2-prompt-lead--teal">
+              <p class="hd2-prompt-question">
+                Biết hai điểm phân biệt $A, B$ thuộc đường thẳng $d$. Làm thế nào để tìm một <span class="kw">vectơ chỉ phương</span> và viết <span class="kw">phương trình</span> của $d$?
+              </p>
+              <span class="hd2-pair-tag">Thảo luận theo cặp</span>
+            </div>
+
+            <button class="tm-btn tm-btn--primary" data-hien="nd2-chot" type="button">Hiện phần chốt</button>
+          </div>
+
+          <div class="hd2-sim-box hd2-sim-box--teal">
+            <canvas id="sim-nd2" class="hd2-sim-canvas" aria-label="Minh họa đường thẳng đi qua hai hành tinh A và B trong không gian"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. KHUNG CHỐT KIẾN THỨC NỘI DUNG 2 (Hiển thị trọn vẹn công thức tọa độ vectơ u = AB) -->
+      <div id="nd2-chot" class="hd2-chot-frame hd2-chot-frame--teal hd2-zoom-block" hidden>
+        <span class="hd2-chot-badge">★ Trọng tâm 2 · Đường thẳng đi qua hai điểm phân biệt $A, B$</span>
+
+        <div class="hd2-chot-stack">
+          <div>
+            <p class="hd2-prose" style="color:var(--sc-ink); max-width:none; margin-bottom:10px;">
+              • Vì $A \ne B$ nên <span class="kw">$\overrightarrow{AB} \ne \vec 0$</span> và giá của $\overrightarrow{AB}$ trùng với $d \Rightarrow$ <span class="kw">$\overrightarrow{AB}$ là một vectơ chỉ phương</span> của $d$.
+            </p>
+            <p class="hd2-prose" style="color:var(--sc-ink); max-width:none; margin-bottom:10px;">
+              • Đường thẳng đi qua hai điểm $A, B$: chọn điểm đi qua là <span class="kw">$A$ (hoặc $B$)</span> và nhận <span class="kw">$\vec u = \overrightarrow{AB}$</span> làm vectơ chỉ phương.
+            </p>
+            <p class="hd2-prose" style="max-width:none; margin-bottom:0;">
+              • Một đường thẳng có <span class="kw">nhiều phương trình tham số</span> khác nhau, tùy cách chọn điểm và vectơ chỉ phương.
+            </p>
+          </div>
+
+          <div class="hd2-math-spot" style="border-color:rgba(45, 212, 191, 0.35);">
+            $$\vec u = \overrightarrow{AB} = (x_B - x_A;\ y_B - y_A;\ z_B - z_A)$$
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. VÍ DỤ 2 & LUYỆN TẬP 1 -->
+      <div class="hd2-work-grid hd2-zoom-block">
+        <!-- Ví dụ 2 -->
+        <div class="hd2-work-item">
+          <h3 class="hd2-subhead">Ví dụ 2</h3>
+          <p class="hd2-prompt-question" style="font-size:1.02rem;">
+            Viết <span class="kw">phương trình tham số</span> của đường thẳng đi qua $A(2;-1;3)$ và $B(4;0;1)$.
+          </p>
+          <div class="hd2-work-actions">
+            <button class="tm-btn tm-btn--ghost" data-hien="vd2" type="button">Xem lời giải</button>
+          </div>
+
+          <div class="hd2-answer-flow" id="vd2" hidden>
+            <p class="hd2-prose" style="color:var(--sc-ink); margin-bottom:4px;">
+              • Vectơ chỉ phương <span class="kw">$\overrightarrow{AB} = (2;1;-2)$</span>. Phương trình tham số đi qua $A$:
+            </p>
+            $$\begin{cases} x = 2 + 2t \\ y = -1 + t \\ z = 3 - 2t \end{cases} \qquad (t \in \mathbb{R}).$$
+            <p class="hd2-prose" style="margin:6px 0 0;">
+              → Đây chính là đường thẳng $d$ ở <b>Ví dụ 1</b> (điểm $B$ ứng với <span class="kw">$t = 1$</span>).
+            </p>
+          </div>
+        </div>
+
+        <!-- Luyện tập 1 -->
+        <div class="hd2-work-item">
+          <h3 class="hd2-subhead">Luyện tập 1</h3>
+          <p class="hd2-prompt-question" style="font-size:1.02rem;">
+            Viết <span class="kw">phương trình tham số</span> và <span class="kw">phương trình chính tắc</span> của đường thẳng đi qua $C(1;2;-1)$ và $D(3;4;0)$.
+          </p>
+          <div class="hd2-work-actions">
+            <button class="tm-btn tm-btn--ghost" data-dem="60" type="button">Bấm giờ 1 phút</button>
+            <button class="tm-btn tm-btn--ghost" data-hien="lt1" type="button">Xem đáp số</button>
+          </div>
+
+          <div class="hd2-answer-flow" id="lt1" hidden>
+            <p class="hd2-prose" style="color:var(--sc-ink); margin-bottom:4px;">
+              • Vectơ chỉ phương <span class="kw">$\overrightarrow{CD} = (2;2;1)$</span>, đi qua $C(1;2;-1)$:
+            </p>
+            $$\begin{cases} x = 1 + 2t \\ y = 2 + 2t \\ z = -1 + t \end{cases} \ (t \in \mathbb{R}); \qquad \frac{x - 1}{2} = \frac{y - 2}{2} = \frac{z + 1}{1}.$$
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="tm-footer-nav">
+      <a class="tm-btn tm-btn--ghost" href="../index.html#hd-2">
+        ← Trở lại màn hình chính
+      </a>
+      <a class="tm-btn tm-btn--done" href="../index.html#hd-2">
+        Hoàn thành
+      </a>
+    </div>
+
   </main>
 
   <script src="../assets/starfield.js"></script>
   <script src="../assets/page-transition.js"></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const zoomBlocks = Array.from(document.querySelectorAll('.hd2-zoom-block'));
+    const bridges = Array.from(document.querySelectorAll('.hd2-bridge-canvas'));
+    const sim1 = document.getElementById('sim-nd1');
+    const sim2 = document.getElementById('sim-nd2');
+    const sliderT = document.getElementById('slider-t');
+    const readoutT = document.getElementById('readout-t');
+
+    let userInteractingT = false;
+    let manualT = 1.2;
+
+    if (sliderT) {
+      sliderT.addEventListener('input', () => {
+        userInteractingT = true;
+        manualT = parseFloat(sliderT.value) || 0;
+        if (readoutT) readoutT.textContent = 't = ' + manualT.toFixed(2);
+      });
+    }
+
+    /* Khi mở khung ẩn (Lời giải / Chốt kiến thức), tự động cuộn mượt tới phần vừa mở */
+    document.querySelectorAll('[data-hien]').forEach(nut => {
+      nut.addEventListener('click', () => {
+        const muc = document.getElementById(nut.dataset.hien);
+        if (muc && !muc.hidden) {
+          setTimeout(() => {
+            updateZoomBlocks();
+            muc.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'nearest' });
+          }, 60);
+        }
+      });
+    });
+
+    function setupHiDPI(canvas) {
+      if (!canvas) return null;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return null;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      const c = canvas.getContext('2d');
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { ctx: c, w: rect.width, h: rect.height };
+    }
+
+    function drawArrow(c, x1, y1, x2, y2, color, width) {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const len = Math.hypot(dx, dy);
+      if (len < 2) return;
+      const ang = Math.atan2(dy, dx);
+      c.save();
+      c.strokeStyle = color;
+      c.fillStyle = color;
+      c.lineWidth = width || 2.5;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(x1, y1);
+      c.lineTo(x2, y2);
+      c.stroke();
+
+      const head = 8.5;
+      c.beginPath();
+      c.moveTo(x2, y2);
+      c.lineTo(x2 - head * Math.cos(ang - 0.38), y2 - head * Math.sin(ang - 0.38));
+      c.lineTo(x2 - head * Math.cos(ang + 0.38), y2 - head * Math.sin(ang + 0.38));
+      c.closePath();
+      c.fill();
+      c.restore();
+    }
+
+    /* 1. Mô phỏng Nội dung 1: Điểm M trượt trên d theo hệ thức vectơ AM = t.u */
+    function drawSim1(time) {
+      const g = setupHiDPI(sim1);
+      if (!g) return;
+      const { ctx: c, w: cw, h: ch } = g;
+      c.clearRect(0, 0, cw, ch);
+
+      c.save();
+      c.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+      c.lineWidth = 1;
+      for (let x = 28; x < cw; x += 36) {
+        c.beginPath(); c.moveTo(x, 0); c.lineTo(x, ch); c.stroke();
+      }
+      for (let y = 24; y < ch; y += 36) {
+        c.beginPath(); c.moveTo(0, y); c.lineTo(cw, y); c.stroke();
+      }
+      c.restore();
+
+      const tVal = (reduced || userInteractingT)
+        ? manualT
+        : (0.35 + 1.35 * Math.sin(time * 0.95));
+
+      if (!userInteractingT && !reduced && sliderT && readoutT) {
+        sliderT.value = tVal.toFixed(2);
+        readoutT.textContent = 't = ' + tVal.toFixed(2);
+      }
+
+      const ax = cw * 0.38;
+      const ay = ch * 0.56;
+      const ux = cw * 0.19;
+      const uy = -ch * 0.17;
+
+      const dStart = { x: ax - ux * 1.85, y: ay - uy * 1.85 };
+      const dEnd   = { x: ax + ux * 2.45, y: ay + uy * 2.45 };
+
+      c.save();
+      c.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+      c.lineWidth = 2;
+      c.beginPath();
+      c.moveTo(dStart.x, dStart.y);
+      c.lineTo(dEnd.x, dEnd.y);
+      c.stroke();
+      c.fillStyle = '#94A3B8';
+      c.font = '600 12px "Be Vietnam Pro", sans-serif';
+      c.fillText('Đường thẳng d', dEnd.x - 92, dEnd.y - 10);
+      c.restore();
+
+      const uOrigin = { x: ax + 18, y: ay + 48 };
+      const uTip    = { x: uOrigin.x + ux, y: uOrigin.y + uy };
+
+      c.save();
+      c.strokeStyle = 'rgba(251, 191, 36, 0.25)';
+      c.setLineDash([4, 4]);
+      c.beginPath();
+      c.moveTo(uOrigin.x - ux * 1.1, uOrigin.y - uy * 1.1);
+      c.lineTo(uOrigin.x + ux * 1.8, uOrigin.y + uy * 1.8);
+      c.stroke();
+      c.restore();
+
+      drawArrow(c, uOrigin.x, uOrigin.y, uTip.x, uTip.y, '#FBBF24', 2.8);
+      c.fillStyle = '#FDE68A';
+      c.font = '600 12px "JetBrains Mono", monospace';
+      c.fillText('u = (a;b;c)', uOrigin.x + ux * 0.35, uOrigin.y + uy * 0.35 + 18);
+
+      const mx = ax + ux * tVal;
+      const my = ay + uy * tVal;
+
+      drawArrow(c, ax, ay, mx, my, '#38BDF8', 3.2);
+
+      c.save();
+      c.fillStyle = '#0F172A';
+      c.strokeStyle = '#F8FAFC';
+      c.lineWidth = 2.4;
+      c.beginPath();
+      c.arc(ax, ay, 5.2, 0, Math.PI * 2);
+      c.fill();
+      c.stroke();
+      c.fillStyle = '#F8FAFC';
+      c.font = '600 12px "JetBrains Mono", monospace';
+      c.fillText('A(x₀;y₀;z₀)', ax - 38, ay + 22);
+      c.restore();
+
+      c.save();
+      c.fillStyle = '#38BDF8';
+      c.shadowColor = '#38BDF8';
+      c.shadowBlur = 16;
+      c.beginPath();
+      c.arc(mx, my, 6.2, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      c.fillStyle = '#BAE6FD';
+      c.font = '700 12px "JetBrains Mono", monospace';
+      c.fillText('M(x;y;z)', mx - 24, my - 14);
+      c.fillStyle = '#7DD3FC';
+      c.font = '600 11.5px "JetBrains Mono", monospace';
+      c.fillText('AM = ' + tVal.toFixed(2) + '·u', 16, 24);
+    }
+
+    /* Vẽ một hành tinh 3D nhỏ tượng trưng cho điểm trong không gian */
+    function drawMiniPlanet(c, x, y, r, colors, hasRing, ringAngle) {
+      c.save();
+
+      // Vầng sáng khí quyển
+      const aura = c.createRadialGradient(x, y, r * 0.3, x, y, r * 2.4);
+      aura.addColorStop(0, colors.glow);
+      aura.addColorStop(1, 'rgba(7, 11, 20, 0)');
+      c.fillStyle = aura;
+      c.beginPath();
+      c.arc(x, y, r * 2.4, 0, Math.PI * 2);
+      c.fill();
+
+      // Nửa sau vành đai hành tinh
+      if (hasRing) {
+        c.save();
+        c.translate(x, y);
+        c.rotate(ringAngle || -0.32);
+        c.strokeStyle = colors.ringBack;
+        c.lineWidth = 2.2;
+        c.beginPath();
+        c.ellipse(0, 0, r * 1.75, r * 0.52, 0, Math.PI, Math.PI * 2);
+        c.stroke();
+        c.restore();
+      }
+
+      // Khối cầu hành tinh 3D
+      const sphere = c.createRadialGradient(
+        x - r * 0.35, y - r * 0.35, r * 0.1,
+        x, y, r
+      );
+      sphere.addColorStop(0, colors.light);
+      sphere.addColorStop(0.55, colors.mid);
+      sphere.addColorStop(1, colors.dark);
+
+      c.fillStyle = sphere;
+      c.shadowColor = colors.mid;
+      c.shadowBlur = 14;
+      c.beginPath();
+      c.arc(x, y, r, 0, Math.PI * 2);
+      c.fill();
+      c.shadowBlur = 0;
+
+      // Vết hố / vân bề mặt nhẹ
+      c.save();
+      c.beginPath();
+      c.arc(x, y, r, 0, Math.PI * 2);
+      c.clip();
+      c.fillStyle = 'rgba(4, 10, 22, 0.25)';
+      c.beginPath();
+      c.arc(x + r * 0.28, y + r * 0.22, r * 0.22, 0, Math.PI * 2);
+      c.arc(x - r * 0.24, y + r * 0.34, r * 0.14, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      // Nửa trước vành đai hành tinh
+      if (hasRing) {
+        c.save();
+        c.translate(x, y);
+        c.rotate(ringAngle || -0.32);
+        c.strokeStyle = colors.ringFront;
+        c.lineWidth = 2.6;
+        c.beginPath();
+        c.ellipse(0, 0, r * 1.75, r * 0.52, 0, 0, Math.PI);
+        c.stroke();
+        c.restore();
+      }
+
+      c.restore();
+    }
+
+    /* 2. Mô phỏng Nội dung 2: Hai hành tinh nhỏ A, B trong không gian và đường thẳng đi qua A, B
+          (Đã bỏ hoàn toàn chữ t=0, t=1, VTCP u=... theo đúng yêu cầu) */
+    function drawSim2(time) {
+      const g = setupHiDPI(sim2);
+      if (!g) return;
+      const { ctx: c, w: cw, h: ch } = g;
+      c.clearRect(0, 0, cw, ch);
+
+      // Lưới không gian nhẹ
+      c.save();
+      c.strokeStyle = 'rgba(45, 212, 191, 0.07)';
+      c.lineWidth = 1;
+      for (let x = 28; x < cw; x += 36) {
+        c.beginPath(); c.moveTo(x, 0); c.lineTo(x, ch); c.stroke();
+      }
+      for (let y = 24; y < ch; y += 36) {
+        c.beginPath(); c.moveTo(0, y); c.lineTo(cw, y); c.stroke();
+      }
+      c.restore();
+
+      // Chuyển động lơ lửng rất nhẹ trong không gian
+      const floatA = reduced ? 0 : Math.sin(time * 1.2) * 2.5;
+      const floatB = reduced ? 0 : Math.cos(time * 1.1) * 2.5;
+
+      const A = { x: cw * 0.27, y: ch * 0.67 + floatA };
+      const B = { x: cw * 0.73, y: ch * 0.31 + floatB };
+      const dx = B.x - A.x;
+      const dy = B.y - A.y;
+
+      // Đường thẳng d kéo dài qua hai hành tinh A và B
+      const startPt = { x: A.x - dx * 0.44, y: A.y - dy * 0.44 };
+      const endPt   = { x: A.x + dx * 1.44, y: A.y + dy * 1.44 };
+
+      // Tia sáng mờ kéo dài hai đầu đường thẳng
+      c.save();
+      c.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+      c.lineWidth = 2;
+      c.setLineDash([6, 6]);
+      c.beginPath();
+      c.moveTo(startPt.x, startPt.y);
+      c.lineTo(endPt.x, endPt.y);
+      c.stroke();
+      c.restore();
+
+      // Đường thẳng chính nối xuyên qua A và B phát sáng
+      const lineGrad = c.createLinearGradient(startPt.x, startPt.y, endPt.x, endPt.y);
+      lineGrad.addColorStop(0, 'rgba(56, 189, 248, 0.18)');
+      lineGrad.addColorStop(0.28, '#38BDF8');
+      lineGrad.addColorStop(0.72, '#2DD4BF');
+      lineGrad.addColorStop(1, 'rgba(45, 212, 191, 0.18)');
+
+      c.save();
+      c.strokeStyle = lineGrad;
+      c.lineWidth = 3.2;
+      c.shadowColor = '#38BDF8';
+      c.shadowBlur = 14;
+      c.beginPath();
+      c.moveTo(startPt.x, startPt.y);
+      c.lineTo(endPt.x, endPt.y);
+      c.stroke();
+      c.restore();
+
+      // Hạt ánh sáng lướt dọc đường thẳng nối hai hành tinh A và B
+      const p = reduced ? 0.5 : (-0.2 + 1.4 * (0.5 + 0.5 * Math.sin(time * 0.95)));
+      const mx = A.x + dx * p;
+      const my = A.y + dy * p;
+
+      c.save();
+      c.fillStyle = '#FFFFFF';
+      c.shadowColor = '#7DD3FC';
+      c.shadowBlur = 14;
+      c.beginPath();
+      c.arc(mx, my, 3.8, 0, Math.PI * 2);
+      c.fill();
+      c.restore();
+
+      // Hành tinh nhỏ A (Cyan-Blue Planet)
+      drawMiniPlanet(c, A.x, A.y, 13, {
+        light: '#E0F2FE',
+        mid: '#38BDF8',
+        dark: '#0369A1',
+        glow: 'rgba(56, 189, 248, 0.28)'
+      }, false);
+
+      // Hành tinh nhỏ B có vành đai (Emerald-Teal Ringed Planet)
+      drawMiniPlanet(c, B.x, B.y, 14, {
+        light: '#CCFBF1',
+        mid: '#2DD4BF',
+        dark: '#0F766E',
+        glow: 'rgba(45, 212, 191, 0.28)',
+        ringBack: 'rgba(94, 234, 212, 0.35)',
+        ringFront: 'rgba(153, 246, 228, 0.85)'
+      }, true, -0.35);
+
+      // Nhãn điểm A và điểm B gọn gàng
+      c.save();
+      c.font = '700 15px "Space Grotesk", "Be Vietnam Pro", sans-serif';
+      c.fillStyle = '#E0F2FE';
+      c.shadowColor = 'rgba(7, 11, 20, 0.9)';
+      c.shadowBlur = 8;
+      c.fillText('A', A.x - 6, A.y + 32);
+
+      c.fillStyle = '#CCFBF1';
+      c.fillText('B', B.x - 6, B.y + 34);
+      c.restore();
+    }
+
+    /* 3. Hiệu ứng cuộn phóng to / thu nhỏ rõ nét giống như Landing Page (scale 0.76 -> 1.0, opacity 0.36 -> 1.0) */
+    function updateZoomBlocks() {
+      if (reduced) return;
+      const vh = window.innerHeight || 800;
+      const centerVh = vh * 0.5;
+
+      zoomBlocks.forEach(block => {
+        if (block.hidden) return;
+        const rect = block.getBoundingClientRect();
+        const blockCenter = rect.top + rect.height * 0.5;
+        const dist = Math.min(1, Math.abs(blockCenter - centerVh) / (vh * 0.78));
+        const focus = 0.5 * (1 + Math.cos(dist * Math.PI));
+        const scale = 0.76 + 0.24 * focus;
+        const opacity = 0.36 + 0.64 * focus;
+
+        block.style.transform = `scale(${scale.toFixed(4)})`;
+        block.style.opacity = opacity.toFixed(3);
+      });
+    }
+
+    function getBridgeProgress(el) {
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight || 800;
+      const startY = vh * 0.88;
+      const endY = vh * 0.22;
+      const raw = (startY - rect.top) / Math.max(1, startY - endY);
+      return Math.max(0, Math.min(1, raw));
+    }
+
+    function drawStar(c, sx, sy, ex, ey, prog, tailFrac, r, color, alpha, drawFlare) {
+      if (prog <= 0.01) return;
+      const p = Math.max(0, Math.min(1, prog));
+      const mx = sx + (ex - sx) * p;
+      const my = sy + (ey - sy) * p;
+      const tp = Math.max(0, p - tailFrac);
+      const tx = sx + (ex - sx) * tp;
+      const ty = sy + (ey - sy) * tp;
+
+      const grad = c.createLinearGradient(tx, ty, mx, my);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+      grad.addColorStop(0.55, color);
+      grad.addColorStop(1, '#FFFFFF');
+
+      c.save();
+      c.globalAlpha = alpha === undefined ? 1 : alpha;
+      c.strokeStyle = grad;
+      c.lineWidth = r * 0.85;
+      c.lineCap = 'round';
+      c.beginPath();
+      c.moveTo(tx, ty);
+      c.lineTo(mx, my);
+      c.stroke();
+
+      c.fillStyle = '#FFFFFF';
+      c.shadowColor = color;
+      c.shadowBlur = r * 3.8;
+      c.beginPath();
+      c.arc(mx, my, r, 0, Math.PI * 2);
+      c.fill();
+
+      if (drawFlare) {
+        c.strokeStyle = '#FFFFFF';
+        c.lineWidth = 1.1;
+        const arm = r * 2.3;
+        c.beginPath();
+        c.moveTo(mx - arm, my); c.lineTo(mx + arm, my);
+        c.moveTo(mx, my - arm); c.lineTo(mx, my + arm);
+        c.stroke();
+      }
+      c.restore();
+    }
+
+    const bridgeCompanions = [
+      { perpOffset: -30, lag: -0.06, tailLen: 0.14, r: 2.2, color: '#7DD3FC', alpha: 0.86 },
+      { perpOffset: 28,  lag: -0.11, tailLen: 0.12, r: 1.9, color: '#5EEAD4', alpha: 0.80 },
+      { perpOffset: -54, lag: -0.17, tailLen: 0.10, r: 1.5, color: '#BAE6FD', alpha: 0.65 },
+      { perpOffset: 50,  lag: -0.03, tailLen: 0.11, r: 1.7, color: '#FDE68A', alpha: 0.75 }
+    ];
+
+    function drawBridges(t) {
+      bridges.forEach((canvas, idx) => {
+        const g = setupHiDPI(canvas);
+        if (!g) return;
+        const { ctx: c, w: cw, h: ch } = g;
+        c.clearRect(0, 0, cw, ch);
+
+        const dir = canvas.getAttribute('data-dir') || 'ltr';
+        const targetId = canvas.getAttribute('data-target');
+        const prog = reduced ? 1 : getBridgeProgress(canvas);
+
+        if (targetId) {
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) targetEl.classList.toggle('is-connected', prog > 0.8);
+        }
+
+        const sx = dir === 'rtl' ? cw * 0.78 : cw * 0.22;
+        const sy = 16;
+        const ex = dir === 'rtl' ? cw * 0.22 : cw * 0.78;
+        const ey = ch - 16;
+        const dx = ex - sx;
+        const dy = ey - sy;
+        const len = Math.hypot(dx, dy) || 1;
+        const nx = -dy / len;
+        const ny = dx / len;
+
+        c.save();
+        c.strokeStyle = 'rgba(148, 163, 184, 0.2)';
+        c.lineWidth = 1.3;
+        c.setLineDash([6, 6]);
+        c.beginPath();
+        c.moveTo(sx, sy);
+        c.lineTo(ex, ey);
+        c.stroke();
+        c.restore();
+
+        c.fillStyle = '#38BDF8';
+        c.beginPath();
+        c.arc(sx, sy, 4.2, 0, Math.PI * 2);
+        c.fill();
+
+        if (prog > 0.01) {
+          const cx = sx + dx * prog;
+          const cy = sy + dy * prog;
+          const beam = c.createLinearGradient(sx, sy, cx, cy);
+          beam.addColorStop(0, 'rgba(56, 189, 248, 0.15)');
+          beam.addColorStop(0.6, '#38BDF8');
+          beam.addColorStop(1, '#2DD4BF');
+
+          c.save();
+          c.strokeStyle = beam;
+          c.lineWidth = 2.6;
+          c.shadowColor = '#38BDF8';
+          c.shadowBlur = 13;
+          c.beginPath();
+          c.moveTo(sx, sy);
+          c.lineTo(cx, cy);
+          c.stroke();
+          c.restore();
+
+          const starP = prog < 0.98 ? prog : ((t * 0.44 + idx * 0.35) % 1);
+          drawStar(c, sx, sy, ex, ey, starP, 0.28, 4.5, '#38BDF8', 1, true);
+
+          bridgeCompanions.forEach((comp, cIdx) => {
+            const wob = Math.sin(t * 2.3 + cIdx * 1.7) * 3.5;
+            const off = comp.perpOffset + wob;
+            const csx = sx + nx * off;
+            const csy = sy + ny * off;
+            const cex = ex + nx * off;
+            const cey = ey + ny * off;
+
+            const cProg = Math.max(0, Math.min(1, starP + comp.lag));
+            if (cProg > 0.02) {
+              c.save();
+              c.strokeStyle = comp.color;
+              c.globalAlpha = 0.14;
+              c.lineWidth = 1;
+              c.beginPath();
+              c.moveTo(csx, csy);
+              c.lineTo(csx + (cex - csx) * cProg, csy + (cey - csy) * cProg);
+              c.stroke();
+              c.restore();
+
+              drawStar(c, csx, csy, cex, cey, cProg, comp.tailLen, comp.r, comp.color, comp.alpha, false);
+            }
+          });
+
+          c.save();
+          for (let k = 1; k <= 6; k++) {
+            const dp = Math.max(0, starP - k * 0.038);
+            const px = sx + dx * dp + Math.sin(t * 4.4 + k * 2.1) * 7;
+            const py = sy + dy * dp + Math.cos(t * 3.7 + k * 1.9) * 5;
+            c.fillStyle = k % 2 === 0 ? '#BAE6FD' : '#5EEAD4';
+            c.globalAlpha = Math.max(0.12, 0.78 - k * 0.11);
+            c.beginPath();
+            c.arc(px, py, 1.6, 0, Math.PI * 2);
+            c.fill();
+          }
+          c.restore();
+        }
+
+        c.save();
+        c.fillStyle = prog > 0.9 ? '#2DD4BF' : '#0F172A';
+        c.strokeStyle = prog > 0.9 ? '#2DD4BF' : 'rgba(148, 163, 184, 0.45)';
+        c.lineWidth = 2.2;
+        if (prog > 0.9) {
+          c.shadowColor = '#2DD4BF';
+          c.shadowBlur = 14;
+        }
+        c.beginPath();
+        c.arc(ex, ey, 5.5, 0, Math.PI * 2);
+        c.fill();
+        c.stroke();
+        c.restore();
+      });
+    }
+
+    function loop(now) {
+      const t = now * 0.001;
+      updateZoomBlocks();
+      drawSim1(t);
+      drawSim2(t);
+      drawBridges(t);
+      if (!reduced) requestAnimationFrame(loop);
+    }
+
+    if (reduced) {
+      loop(0);
+    } else {
+      requestAnimationFrame(loop);
+    }
+  });
+  </script>
 </body>
 </html>

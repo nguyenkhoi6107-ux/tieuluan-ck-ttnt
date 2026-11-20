@@ -71,6 +71,41 @@
     </div>
   </div>
 
+  <div class="khoi" id="kien-thuc">
+    <h2>Kiến thức: vị trí tương đối của hai đường thẳng</h2>
+    <p>Trong không gian $Oxyz$, cho đường thẳng $d$ đi qua điểm $M$, có vectơ chỉ phương $\vec u$, và đường thẳng $d'$ đi qua điểm $M'$, có vectơ chỉ phương $\vec u'$.</p>
+    <table class="bang">
+      <tr><th>Vị trí tương đối</th><th>Điểm chung</th><th>Điều kiện</th></tr>
+      <tr><td>$d$ và $d'$ trùng nhau</td><td>vô số</td><td>$\vec u, \vec u'$ cùng phương và $M \in d'$</td></tr>
+      <tr><td>$d$ và $d'$ song song</td><td>không có</td><td>$\vec u, \vec u'$ cùng phương và $M \notin d'$</td></tr>
+      <tr><td>$d$ và $d'$ cắt nhau</td><td>đúng một</td><td>$\vec u, \vec u'$ không cùng phương và $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$</td></tr>
+      <tr><td>$d$ và $d'$ chéo nhau</td><td>không có, không cùng nằm trong một mặt phẳng</td><td>$[\vec u,\vec u']\cdot\overrightarrow{MM'} \ne 0$</td></tr>
+    </table>
+    <div class="chot">
+      <p><b>Quy trình hai bước.</b></p>
+      <p><b>Bước 1.</b> Xét $\vec u$ và $\vec u'$ có cùng phương không (tọa độ tỉ lệ, hay $[\vec u,\vec u'] = \vec 0$).</p>
+      <p><b>Bước 2.</b> Nếu cùng phương: lấy điểm $M \in d$, xét $M$ có thuộc $d'$ không. Thuộc thì hai đường thẳng trùng nhau, không thuộc thì song song.</p>
+      <p>Nếu không cùng phương: tính $[\vec u,\vec u']\cdot\overrightarrow{MM'}$. Bằng $0$ thì cắt nhau, khác $0$ thì chéo nhau.</p>
+    </div>
+    <div class="chu-y">
+      <p><b>Vì sao phải làm bước 1 trước?</b> Khi $\vec u, \vec u'$ cùng phương thì $[\vec u,\vec u'] = \vec 0$, nên tích $[\vec u,\vec u']\cdot\overrightarrow{MM'}$ luôn bằng $0$, kể cả khi hai đường thẳng song song. Chỉ nhìn vào tích này sẽ kết luận sai là "cắt nhau".</p>
+    </div>
+    <div class="chu-y">
+      <p><b>Ý nghĩa của điều kiện.</b> $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$ nghĩa là ba vectơ $\vec u, \vec u', \overrightarrow{MM'}$ đồng phẳng, tức $d$ và $d'$ cùng nằm trong một mặt phẳng. Khi $\vec u, \vec u'$ không cùng phương: hai đường thẳng cùng nằm trong một mặt phẳng thì cắt nhau, không cùng nằm trong mặt phẳng nào thì chéo nhau.</p>
+    </div>
+
+    <h3>Ví dụ 3</h3>
+    <p class="de-bai">Xét vị trí tương đối của hai đường thẳng $d: \begin{cases} x = 2 + t \\ y = -1 + 2t \\ z = 3 - t \end{cases}$ và $d': \begin{cases} x = 1 + 2s \\ y = s \\ z = 1 + s \end{cases}$.</p>
+    <button class="nut" data-hien="vd3">Xem lời giải</button>
+    <div class="hop" id="vd3" hidden>
+      <p>$d$ đi qua $M(2;-1;3)$, có $\vec u = (1;2;-1)$; $d'$ đi qua $M'(1;0;1)$, có $\vec u' = (2;1;1)$.</p>
+      <p><b>Bước 1.</b> $\dfrac{1}{2} \ne \dfrac{2}{1}$ nên $\vec u, \vec u'$ không cùng phương.</p>
+      <p><b>Bước 2.</b> $[\vec u,\vec u'] = (3;-3;-3)$, $\overrightarrow{MM'} = (-1;1;-2)$.</p>
+      $$[\vec u,\vec u']\cdot\overrightarrow{MM'} = -3 - 3 + 6 = 0.$$
+      <p>Vậy $d$ và $d'$ cắt nhau. Giải hệ $2 + t = 1 + 2s,\ -1 + 2t = s$ được $t = s = 1$, giao điểm là $(3;1;2)$.</p>
+    </div>
+  </div>
+
   <div class="khoi" id="phieu">
     <h2>Phiếu báo cáo của trạm</h2>
 
@@ -178,33 +213,11 @@
     </div>
   </div>
 
-  <div class="khoi" id="chot-kien-thuc">
-    <h2>Chốt kiến thức: vị trí tương đối của hai đường thẳng</h2>
-    <p class="phu">Giáo viên chốt sau khi các trạm báo cáo kết luận.</p>
-    <button class="nut chinh" data-hien="nd3-chot">Hiện phần chốt</button>
-    <div id="nd3-chot" hidden>
-      <p style="margin-top:14px">Trong không gian $Oxyz$, cho đường thẳng $d$ đi qua điểm $M$, có vectơ chỉ phương $\vec u$, và đường thẳng $d'$ đi qua điểm $M'$, có vectơ chỉ phương $\vec u'$.</p>
-      <table class="bang">
-        <tr><th>Vị trí tương đối</th><th>Điểm chung</th><th>Điều kiện</th></tr>
-        <tr><td>$d$ và $d'$ trùng nhau</td><td>vô số</td><td>$\vec u, \vec u'$ cùng phương và $M \in d'$</td></tr>
-        <tr><td>$d$ và $d'$ song song</td><td>không có</td><td>$\vec u, \vec u'$ cùng phương và $M \notin d'$</td></tr>
-        <tr><td>$d$ và $d'$ cắt nhau</td><td>đúng một</td><td>$\vec u, \vec u'$ không cùng phương và $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$</td></tr>
-        <tr><td>$d$ và $d'$ chéo nhau</td><td>không có, không cùng nằm trong một mặt phẳng</td><td>$[\vec u,\vec u']\cdot\overrightarrow{MM'} \ne 0$</td></tr>
-      </table>
-      <div class="chot">
-        <p><b>Quy trình hai bước.</b></p>
-        <p><b>Bước 1.</b> Xét $\vec u$ và $\vec u'$ có cùng phương không (tọa độ tỉ lệ, hay $[\vec u,\vec u'] = \vec 0$).</p>
-        <p><b>Bước 2.</b> Nếu cùng phương: lấy điểm $M \in d$, xét $M$ có thuộc $d'$ không. Thuộc thì hai đường thẳng trùng nhau, không thuộc thì song song.</p>
-        <p>Nếu không cùng phương: tính $[\vec u,\vec u']\cdot\overrightarrow{MM'}$. Bằng $0$ thì cắt nhau, khác $0$ thì chéo nhau.</p>
-      </div>
-      <div class="chu-y">
-        <p><b>Vì sao phải làm bước 1 trước?</b> Khi $\vec u, \vec u'$ cùng phương thì $[\vec u,\vec u'] = \vec 0$, nên tích $[\vec u,\vec u']\cdot\overrightarrow{MM'}$ luôn bằng $0$, kể cả khi hai đường thẳng song song (như V1). Chỉ nhìn vào tích này sẽ kết luận sai là "cắt nhau".</p>
-      </div>
-      <div class="chu-y">
-        <p><b>Ý nghĩa của điều kiện.</b> $[\vec u,\vec u']\cdot\overrightarrow{MM'} = 0$ nghĩa là ba vectơ $\vec u, \vec u', \overrightarrow{MM'}$ đồng phẳng, tức $d$ và $d'$ cùng nằm trong một mặt phẳng. Khi $\vec u, \vec u'$ không cùng phương: hai đường thẳng cùng nằm trong một mặt phẳng thì cắt nhau, không cùng nằm trong mặt phẳng nào thì chéo nhau.</p>
-      </div>
-
-      <h3>Áp dụng vào tình huống</h3>
+  <div class="khoi" id="ket-luan-nd3">
+    <h2>Kết luận: báo động thật hay giả?</h2>
+    <p class="phu">Giáo viên mở sau khi các trạm báo cáo.</p>
+    <button class="nut chinh" data-hien="nd3-ket-luan">Hiện kết luận</button>
+    <div id="nd3-ket-luan" hidden>
       <table class="bang">
         <tr><th>Vệ tinh</th><th>Kết luận</th><th>Lí do</th></tr>
         <tr><td><span class="cham" style="background:var(--v1)"></span>V1</td><td>song song với T1</td><td>$\vec v_1 = -2\vec u$, $B(0;2;1) \notin$ T1</td></tr>
